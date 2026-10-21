@@ -1,0 +1,31 @@
+# --- Python / tooling ---
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.venv/
+venv/
+.env
+.DS_Store
+~$*
+
+# --- experiment outputs (download from Kaggle, never commit) ---
+outputs/
+results_*.zip
+checkpoint/
+checkpoints/
+*.pt
+*.bin
+*.safetensors
+wandb/
+
+# --- data: third-party dataset (research-use licence), share via a private Kaggle dataset ---
+data/
+
+# --- papers: copyrighted PDFs ---
+*.pdf
+referenced_papers/
+.referenced_papers_partial_old/
+
+# --- private, unpublished research material (this repo is public) ---
+notes/
+presentation/
