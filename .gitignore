@@ -18,9 +18,6 @@ checkpoints/
 *.safetensors
 wandb/
 
-# --- data: third-party dataset (research-use licence), share via a private Kaggle dataset ---
-data/
-
 # --- papers: copyrighted PDFs ---
 *.pdf
 referenced_papers/

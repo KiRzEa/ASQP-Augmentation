@@ -1,0 +1,41 @@
+{
+ "train": {
+  "sentences": 2135,
+  "quads": 6907,
+  "EA-IO": 424,
+  "EA-EO": 6045,
+  "IA-EO": 359,
+  "IA-IO": 79
+ },
+ "dev": {
+  "sentences": 221,
+  "quads": 777,
+  "EA-EO": 674,
+  "EA-IO": 48,
+  "IA-EO": 42,
+  "IA-IO": 13
+ },
+ "test": {
+  "sentences": 583,
+  "quads": 1930,
+  "EA-EO": 1674,
+  "IA-EO": 111,
+  "EA-IO": 124,
+  "IA-IO": 21
+ },
+ "changes": {
+  "dev: C1 truncated opinion": 2,
+  "test: C1 truncated opinion": 4,
+  "test: C2 duplicate quad": 1,
+  "test: C7 whitespace": 3,
+  "train: C1 truncated aspect": 1,
+  "train: C1 truncated opinion": 15,
+  "train: C1/C4 manual span fix": 2,
+  "train: C2 duplicate quad": 5,
+  "train: C3 conflicting polarity": 1,
+  "train: C5 duplicate sentence, DIFFERENT labels": 3,
+  "train: C5 duplicate sentence, same labels": 2,
+  "train: C6 sentence also in dev/test": 3,
+  "train: C7 whitespace": 4
+ }
+}

@@ -1,0 +1,47 @@
+split,line,rule,before,after
+train,23,C3 conflicting polarity,"['neutral', 'positive']",positive
+train,146,C1 truncated opinion,ngo,ngon
+train,205,C7 whitespace,"không gian ở đây phù hợp vs gia đình đi ăn cuối tuần , bàn ghế  lạ , phục vụ ok , đồ ăn thì bình thường","không gian ở đây phù hợp vs gia đình đi ăn cuối tuần , bàn ghế lạ , phục vụ ok , đồ ăn thì bình thường"
+train,228,C2 duplicate quad,"('FOOD#PRICES', 'giá', 'negative', 'cao')",removed
+train,356,C2 duplicate quad,"('SERVICE#GENERAL', 'thái độ', 'negative', 'không lịch sự')",removed
+train,375,C1 truncated opinion,đẹ,đẹp
+train,397,C7 whitespace,gà sốt mexican ngon chất lượng đồ ăn tốt không gian trang trí đẹp nên  giá cả của nhà hàng này không phải là rẻ,gà sốt mexican ngon chất lượng đồ ăn tốt không gian trang trí đẹp nên giá cả của nhà hàng này không phải là rẻ
+train,434,C1 truncated opinion,đa dạn,đa dạng
+train,494,C1 truncated opinion,phong ph,phong phú
+train,558,C2 duplicate quad,"('FOOD#QUALITY', 'nước chấm', 'positive', 'đậm đà')",removed
+train,579,C1/C4 manual span fix,opinion=giá,opinion=null
+train,591,C7 whitespace,"nhiều người nói giá ở đây cao giá có cao chút nhưng mình thấy đổi lại chất lượng dịch vu ở đây cũng ok,  không gian cũng ko tồi nữa chắc chắn se quay lại","nhiều người nói giá ở đây cao giá có cao chút nhưng mình thấy đổi lại chất lượng dịch vu ở đây cũng ok, không gian cũng ko tồi nữa chắc chắn se quay lại"
+train,693,C1 truncated opinion,ộng rãi sang trọng,rộng rãi sang trọng
+train,720,C1 truncated opinion,thoáng má,thoáng mát
+train,832,C1 truncated opinion,rộng rã,rộng rãi
+train,1295,C2 duplicate quad,"('RESTAURANT#GENERAL', 'khu', 'neutral', 'đông')",removed
+train,1352,C1 truncated opinion,tố,tốt
+train,1373,C1/C4 manual span fix,opinion=ồn,opinion=ổn
+train,1455,C1 truncated opinion,vui v,vui vẻ
+train,1570,C1 truncated opinion,vừa miện,vừa miệng
+train,1570,C1 truncated opinion,lịch s,lịch sự
+train,1585,C1 truncated opinion,không ngo,không ngon
+train,1779,C1 truncated opinion,thoải má,thoải mái
+train,1802,C1 truncated opinion,dễ thươn,dễ thương
+train,1869,C1 truncated opinion,bình thườn,bình thường
+train,1877,C2 duplicate quad,"('SERVICE#GENERAL', 'món ăn ra', 'positive', 'nhanh')",removed
+train,2025,C7 whitespace,menu đa dạng giá gốc tuy cao  nhưng đồ ăn xứng đáng,menu đa dạng giá gốc tuy cao nhưng đồ ăn xứng đáng
+train,2064,C1 truncated aspect,quá,quán
+dev,78,C1 truncated opinion,rộn,rộng
+dev,198,C1 truncated opinion,đẹp nhưng hơi nh,đẹp nhưng hơi nhỏ
+test,9,C2 duplicate quad,"('FOOD#PRICES', 'nem cua', 'neutral', 'null')",removed
+test,42,C7 whitespace,đồ ăn khá ngon giá cao  nhìn chung cũng ổn,đồ ăn khá ngon giá cao nhìn chung cũng ổn
+test,85,C1 truncated opinion,mề,mềm
+test,127,C7 whitespace,"bàn ghế  độc mình ấn tượng nhất là cái ống hút bằng cọng rau muống, giá khá cao nhân viên thân thiện","bàn ghế độc mình ấn tượng nhất là cái ống hút bằng cọng rau muống, giá khá cao nhân viên thân thiện"
+test,159,C7 whitespace,"đùi gà to sốt cay cay thịt bên trong ướp chưa thấm lắm, decor cũng hấp dẫn, phục vụ  chậm chắc do đông khách giá món mới hơi cao xíu ăn món mới nên đc free trà sữa nữa","đùi gà to sốt cay cay thịt bên trong ướp chưa thấm lắm, decor cũng hấp dẫn, phục vụ chậm chắc do đông khách giá món mới hơi cao xíu ăn món mới nên đc free trà sữa nữa"
+test,222,C1 truncated opinion,nhiệt tìn,nhiệt tình
+test,408,C1 truncated opinion,chật hẹ,chật hẹp
+test,574,C1 truncated opinion,tố,tốt
+train,"[295, 649]","C5 duplicate sentence, DIFFERENT labels",không gian sáng sủa rộng rãi có điều các bàn san sát nhau nên nhiều khi hơi ồn,all copies removed
+train,"[332, 2143]","C5 duplicate sentence, same labels",đồ ăn cũng ổn giá thì hơi chát nhé phục vụ chậm do đói nên t chung ăn k chụp đc ,kept line 332
+train,"[1112, 1641]","C5 duplicate sentence, same labels",tuy giá cao nhưng chất lượng nhân viên vui vẻ nhiệt tình,kept line 1112
+train,"[1215, 1779]","C5 duplicate sentence, DIFFERENT labels",đồ ăn khá ngon không gian thoải mái thoáng nhân viên vui vẻ mình thấy giá hơi ca,all copies removed
+train,"[1352, 2126]","C5 duplicate sentence, DIFFERENT labels",không gian rộng rãi thoáng mát chất lượng món ăn trung bình giá cả chấp nhận dc ,all copies removed
+train,299,C6 sentence also in dev/test,"Được cái không gian rộng rãi, Thức ăn tạm được",removed from train
+train,343,C6 sentence also in dev/test,- giá hơi cao so với các sushi khác nhưng bù lại chất lượng rất tốt.,removed from train
+train,558,C6 sentence also in dev/test,quán giá hơi cao đồ ăn rau sống sạch sẽ nước chấm đậm đà phục vụ rất chuyên nghi,removed from train
