@@ -10,6 +10,7 @@ Acceptance per target cell is written to <out>.verify_report.json.
 import argparse
 import collections
 import json
+import random
 import sys
 from pathlib import Path
 from types import SimpleNamespace
@@ -29,6 +30,9 @@ def main():
     ap.add_argument("--out", required=True)
     ap.add_argument("--threshold", type=float, default=0.8)
     ap.add_argument("--batch_size", type=int, default=64)
+    ap.add_argument("--target_n", type=int, default=0,
+                    help="after filtering, randomly keep exactly N reviews (same added amount for every method); 0 = keep all")
+    ap.add_argument("--seed", type=int, default=13)
     a = ap.parse_args()
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     tok = AutoTokenizer.from_pretrained(a.ckpt)
@@ -47,13 +51,19 @@ def main():
             f.write(json.dumps({"id": it["id"], "f1": f1, "kept": ok, "generation": p["generation"]}, ensure_ascii=False) + "\n")
             if ok:
                 kept.append({**it, "meta": {**it.get("meta", {}), "verify_f1": f1}})
+    n_passed = len(kept)
+    if a.target_n:
+        if n_passed < a.target_n:
+            print(f"WARNING: only {n_passed} reviews passed, fewer than --target_n {a.target_n}; generate more")
+        else:
+            kept = random.Random(a.seed).sample(kept, a.target_n)
     with open(a.out, "w", encoding="utf-8") as f:
         for it in kept:
             f.write(json.dumps(it, ensure_ascii=False) + "\n")
-    rep = {"input": a.inp, "n_in": len(items), "n_kept": len(kept), "threshold": a.threshold, "ckpt": a.ckpt,
+    rep = {"input": a.inp, "n_in": len(items), "n_passed": n_passed, "n_kept": len(kept), "target_n": a.target_n, "threshold": a.threshold, "ckpt": a.ckpt,
            "per_cell": {c: {**v, "acceptance": v["kept"] / (v["kept"] + v["rejected"])} for c, v in sorted(per_cell.items())}}
     json.dump(rep, open(Path(a.out).with_suffix(".verify_report.json"), "w"), indent=1)
-    print(f"kept {len(kept)} / {len(items)} ({100 * len(kept) / max(1, len(items)):.1f}%) at F1 >= {a.threshold}")
+    print(f"passed {n_passed} / {len(items)} ({100 * n_passed / max(1, len(items)):.1f}%) at F1 >= {a.threshold}; wrote {len(kept)}")
 
 
 if __name__ == "__main__":
