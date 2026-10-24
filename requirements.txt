@@ -1,0 +1,6 @@
+# Kaggle images already ship torch; install the rest with: pip install -r requirements.txt
+torch>=2.3
+transformers>=4.44,<5
+sentencepiece>=0.1.99
+protobuf
+numpy
