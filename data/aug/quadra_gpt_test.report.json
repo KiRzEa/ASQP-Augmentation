@@ -1,0 +1,213 @@
+{
+ "args": {
+  "train_path": "/Users/kietnt/Desktop/Workspace/DataAugmentation/data/restaurant_v1/train.jsonl",
+  "out": "data/aug/quadra_gpt_test.jsonl",
+  "ratio": 1.0,
+  "gamma": 0.05,
+  "eta": 0.5,
+  "kappa": 1.0,
+  "lam": 1.0,
+  "difficulty": null,
+  "p_sub": 0.5,
+  "p_single": 0.2,
+  "max_quads": 6,
+  "seed": 13,
+  "llm_model": "gpt-4.1-mini-2025-04-14",
+  "llm_temperature": 0.3,
+  "max_len_ratio": 1.4,
+  "llm_limit": 12
+ },
+ "n_train": 2135,
+ "n_generated": 2133,
+ "stats": {
+  "rejected_shared_aspect": 257,
+  "short_of_quota": 0,
+  "rejected_duplicate_or_ungrounded": 22,
+  "api_calls": 12,
+  "prompt_tokens": 3272,
+  "completion_tokens": 313,
+  "fusion_ok": 12
+ },
+ "cells": {
+  "DRINKS#STYLE&OPTIONS|neutral": {
+   "train": 15,
+   "allocated_reviews": 50,
+   "generated_quads": 71
+  },
+  "DRINKS#PRICES|positive": {
+   "train": 21,
+   "allocated_reviews": 50,
+   "generated_quads": 78
+  },
+  "DRINKS#STYLE&OPTIONS|negative": {
+   "train": 30,
+   "allocated_reviews": 50,
+   "generated_quads": 109
+  },
+  "DRINKS#PRICES|neutral": {
+   "train": 34,
+   "allocated_reviews": 51,
+   "generated_quads": 94
+  },
+  "RESTAURANT#MISCELLANEOUS|neutral": {
+   "train": 35,
+   "allocated_reviews": 52,
+   "generated_quads": 70
+  },
+  "DRINKS#QUALITY|negative": {
+   "train": 43,
+   "allocated_reviews": 52,
+   "generated_quads": 96
+  },
+  "FOOD#STYLE&OPTIONS|neutral": {
+   "train": 44,
+   "allocated_reviews": 53,
+   "generated_quads": 79
+  },
+  "FOOD#PRICES|positive": {
+   "train": 49,
+   "allocated_reviews": 53,
+   "generated_quads": 85
+  },
+  "LOCATION#GENERAL|neutral": {
+   "train": 59,
+   "allocated_reviews": 53,
+   "generated_quads": 88
+  },
+  "DRINKS#PRICES|negative": {
+   "train": 61,
+   "allocated_reviews": 54,
+   "generated_quads": 113
+  },
+  "RESTAURANT#PRICES|positive": {
+   "train": 62,
+   "allocated_reviews": 55,
+   "generated_quads": 94
+  },
+  "DRINKS#STYLE&OPTIONS|positive": {
+   "train": 66,
+   "allocated_reviews": 56,
+   "generated_quads": 157
+  },
+  "LOCATION#GENERAL|negative": {
+   "train": 74,
+   "allocated_reviews": 57,
+   "generated_quads": 124
+  },
+  "AMBIENCE#GENERAL|neutral": {
+   "train": 87,
+   "allocated_reviews": 57,
+   "generated_quads": 119
+  },
+  "RESTAURANT#GENERAL|negative": {
+   "train": 103,
+   "allocated_reviews": 57,
+   "generated_quads": 126
+  },
+  "DRINKS#QUALITY|positive": {
+   "train": 109,
+   "allocated_reviews": 58,
+   "generated_quads": 209
+  },
+  "SERVICE#GENERAL|neutral": {
+   "train": 111,
+   "allocated_reviews": 59,
+   "generated_quads": 117
+  },
+  "DRINKS#QUALITY|neutral": {
+   "train": 113,
+   "allocated_reviews": 60,
+   "generated_quads": 216
+  },
+  "FOOD#PRICES|neutral": {
+   "train": 119,
+   "allocated_reviews": 61,
+   "generated_quads": 124
+  },
+  "RESTAURANT#MISCELLANEOUS|negative": {
+   "train": 133,
+   "allocated_reviews": 62,
+   "generated_quads": 157
+  },
+  "RESTAURANT#MISCELLANEOUS|positive": {
+   "train": 145,
+   "allocated_reviews": 63,
+   "generated_quads": 146
+  },
+  "RESTAURANT#PRICES|neutral": {
+   "train": 148,
+   "allocated_reviews": 64,
+   "generated_quads": 142
+  },
+  "LOCATION#GENERAL|positive": {
+   "train": 160,
+   "allocated_reviews": 65,
+   "generated_quads": 219
+  },
+  "FOOD#STYLE&OPTIONS|negative": {
+   "train": 191,
+   "allocated_reviews": 65,
+   "generated_quads": 196
+  },
+  "FOOD#PRICES|negative": {
+   "train": 192,
+   "allocated_reviews": 67,
+   "generated_quads": 166
+  },
+  "FOOD#QUALITY|negative": {
+   "train": 201,
+   "allocated_reviews": 69,
+   "generated_quads": 211
+  },
+  "RESTAURANT#GENERAL|neutral": {
+   "train": 207,
+   "allocated_reviews": 70,
+   "generated_quads": 234
+  },
+  "RESTAURANT#GENERAL|positive": {
+   "train": 211,
+   "allocated_reviews": 73,
+   "generated_quads": 242
+  },
+  "AMBIENCE#GENERAL|negative": {
+   "train": 217,
+   "allocated_reviews": 75,
+   "generated_quads": 203
+  },
+  "FOOD#QUALITY|neutral": {
+   "train": 336,
+   "allocated_reviews": 68,
+   "generated_quads": 293
+  },
+  "RESTAURANT#PRICES|negative": {
+   "train": 395,
+   "allocated_reviews": 66,
+   "generated_quads": 297
+  },
+  "FOOD#STYLE&OPTIONS|positive": {
+   "train": 438,
+   "allocated_reviews": 66,
+   "generated_quads": 330
+  },
+  "SERVICE#GENERAL|negative": {
+   "train": 555,
+   "allocated_reviews": 63,
+   "generated_quads": 362
+  },
+  "AMBIENCE#GENERAL|positive": {
+   "train": 555,
+   "allocated_reviews": 60,
+   "generated_quads": 372
+  },
+  "SERVICE#GENERAL|positive": {
+   "train": 624,
+   "allocated_reviews": 61,
+   "generated_quads": 411
+  },
+  "FOOD#QUALITY|positive": {
+   "train": 964,
+   "allocated_reviews": 38,
+   "generated_quads": 613
+  }
+ }
+}
