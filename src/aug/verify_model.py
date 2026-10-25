@@ -34,7 +34,7 @@ def main():
                     help="after filtering, randomly keep exactly N reviews (same added amount for every method); 0 = keep all")
     ap.add_argument("--seed", type=int, default=13)
     a = ap.parse_args()
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    device = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")
     tok = AutoTokenizer.from_pretrained(a.ckpt)
     model = AutoModelForSeq2SeqLM.from_pretrained(a.ckpt).to(device)
     items = load_jsonl(a.inp)

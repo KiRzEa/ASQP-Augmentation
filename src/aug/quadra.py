@@ -23,6 +23,7 @@ import re
 import sys
 import time
 import urllib.request
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
@@ -229,19 +230,33 @@ def fuse(items, args, cache_path):
             r = json.loads(line)
             cache[r["key"]] = r
     out, stats = [], collections.Counter()
-    with open(cache_path, "a", encoding="utf-8") as cf:
-        for it in items:
-            span_set = sorted({q[f] for q in it["quads"] for f in ("aspect", "opinion") if q[f] != NULL})
-            prompt = PROMPT.format(spans="; ".join(f'"{s}"' for s in span_set), text=it["text"])
-            key = hashlib.sha256(f"{args.llm_model}|{args.llm_temperature}|{prompt}".encode()).hexdigest()
-            if key not in cache:
-                resp = openai_chat(args.llm_model, prompt, args.llm_temperature)
-                cache[key] = {"key": key, "model": args.llm_model, "resolved_model": resp.get("model"),
-                              "prompt": prompt, "output": resp["choices"][0]["message"]["content"].strip(),
-                              "usage": resp.get("usage", {}), "time": time.strftime("%Y-%m-%d %H:%M:%S")}
-                cf.write(json.dumps(cache[key], ensure_ascii=False) + "\n")
-                cf.flush()
-                stats["api_calls"] += 1
+    jobs = []
+    for it in items:
+        span_set = sorted({q[f] for q in it["quads"] for f in ("aspect", "opinion") if q[f] != NULL})
+        prompt = PROMPT.format(spans="; ".join(f'"{s}"' for s in span_set), text=it["text"])
+        key = hashlib.sha256(f"{args.llm_model}|{args.llm_temperature}|{prompt}".encode()).hexdigest()
+        jobs.append((it, prompt, key))
+    todo = {key: prompt for _, prompt, key in jobs if key not in cache}
+
+    def call(kp):
+        key, prompt = kp
+        resp = openai_chat(args.llm_model, prompt, args.llm_temperature)
+        return {"key": key, "model": args.llm_model, "resolved_model": resp.get("model"), "prompt": prompt,
+                "output": resp["choices"][0]["message"]["content"].strip(), "usage": resp.get("usage", {}),
+                "time": time.strftime("%Y-%m-%d %H:%M:%S")}
+
+    print(f"LLM: {len(jobs)} reviews, {len(jobs) - len(todo)} cached, {len(todo)} API calls with {args.llm_workers} workers",
+          flush=True)
+    with open(cache_path, "a", encoding="utf-8") as cf, ThreadPoolExecutor(args.llm_workers) as pool:
+        for i, rec in enumerate(pool.map(call, todo.items()), 1):
+            cache[rec["key"]] = rec
+            cf.write(json.dumps(rec, ensure_ascii=False) + "\n")
+            cf.flush()
+            stats["api_calls"] += 1
+            if i % 200 == 0:
+                print(f"  {i}/{len(todo)} calls", flush=True)
+    for it, prompt, key in jobs:
+        if True:
             rec = cache[key]
             for k in ("prompt_tokens", "completion_tokens"):
                 stats[k] += rec["usage"].get(k, 0)
@@ -302,6 +317,7 @@ def main():
     ap.add_argument("--llm_temperature", type=float, default=0.3)
     ap.add_argument("--max_len_ratio", type=float, default=1.4, help="reject fusions longer than this × the rule text (in syllables)")
     ap.add_argument("--llm_limit", type=int, default=0, help="fuse only the first N samples (test)")
+    ap.add_argument("--llm_workers", type=int, default=8, help="parallel API calls")
     a = ap.parse_args()
     rng = random.Random(a.seed)
     train = load_jsonl(a.train_path)
