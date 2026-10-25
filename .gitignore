@@ -26,3 +26,5 @@ referenced_papers/
 # --- private, unpublished research material (this repo is public) ---
 notes/
 presentation/
+session_*.zip
+session_*.log
