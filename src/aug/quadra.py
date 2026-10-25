@@ -127,7 +127,7 @@ def recompose(train, alloc, args, rng):
                 if q[f] != NULL:
                     spans[(cell(q), f)][q[f]].add(1)
     span_list = {k: sorted(v) for k, v in spans.items()}
-    under = {c for c, k in alloc.items() if k > 0}
+    under = sorted(c for c, k in alloc.items() if k > 0)  # sorted: set order depends on PYTHONHASHSEED
     seen = {it["text"] for it in train}
     out, stats = [], collections.Counter()
     for c, k in sorted(alloc.items(), key=lambda kv: -kv[1]):

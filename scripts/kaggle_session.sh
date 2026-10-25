@@ -45,12 +45,18 @@ for job in "$@"; do
         > "$VDIR.log" 2>&1 &
       VPID=$!
     fi
-    python src/aug/quadra.py --difficulty data/aug/difficulty.json --ratio 1.5 --out data/aug/quadra_rule.jsonl 2>&1 | tee -a "$LOG"
-    if [[ -n "${OPENAI_API_KEY:-}" ]]; then
-      python src/aug/quadra.py --difficulty data/aug/difficulty.json --ratio 1.5 --out data/aug/quadra_gpt.jsonl \
-        --llm_model gpt-4.1-mini-2025-04-14 2>&1 | tee -a "$LOG"
+    # Candidates: reuse the committed files (fixed data for the paper); REGEN=1 generates new ones.
+    if [[ -n "${REGEN:-}" || ! -f data/aug/quadra_gpt.jsonl ]]; then
+      if [[ -n "${OPENAI_API_KEY:-}" ]]; then
+        python src/aug/quadra.py --difficulty data/aug/difficulty.json --ratio 1.5 --out data/aug/quadra_gpt.jsonl \
+          --llm_model gpt-4.1-mini-2025-04-14 2>&1 | tee -a "$LOG"
+        python src/aug/pre_fusion.py data/aug/quadra_gpt.jsonl data/aug/quadra_rule.jsonl 2>&1 | tee -a "$LOG"
+      else
+        python src/aug/quadra.py --difficulty data/aug/difficulty.json --ratio 1.5 --out data/aug/quadra_rule.jsonl 2>&1 | tee -a "$LOG"
+        echo "OPENAI_API_KEY not set: rules-only variant generated, GPT variant skipped" | tee -a "$LOG"
+      fi
     else
-      echo "OPENAI_API_KEY not set: skipping the GPT variant" | tee -a "$LOG"
+      echo "using committed candidates data/aug/quadra_gpt.jsonl and quadra_rule.jsonl" | tee -a "$LOG"
     fi
     [[ -n "$VPID" ]] && wait "$VPID"
     if [[ ! -f "$CKPT/config.json" ]]; then
