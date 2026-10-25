@@ -33,25 +33,29 @@
 HF_HUB_OFFLINE=1 python3 src/train_paraphrase.py --output_dir /tmp/smoke --seeds 42 --limit 8 --epochs 2 --cpu
 ```
 
-## QUADRA (our method)
-Steps 1, 3 and LLM fusion run on CPU (locally, OpenAI key in `.env`); steps 2 and 4b need a GPU (Kaggle).
+## Sessions: one Kaggle command → one zip
+```bash
+git clone https://github.com/KiRzEa/ASQP-Augmentation.git && cd ASQP-Augmentation && pip install -q -r requirements.txt
+bash scripts/kaggle_session.sh <name> <job> [<job> ...]     # → session_<name>.zip
+```
+Jobs: `none` (baseline), `prep` (QUADRA difficulty + verifier), `<run>=<aug.jsonl>` (any augmentation method).
+Download `session_<name>.zip`, then locally: `cd <repo> && unzip -o session_<name>.zip`.
 
-1. **Kaggle, once** — difficulty + verifier (~3 h on 2×T4):
+| Session | Command | Status |
+|---|---|---|
+| s1 | `bash scripts/kaggle_session.sh s1 none prep` | done (2026-10-25) |
+| s2 | `bash scripts/kaggle_session.sh s2 quadra_rule=data/aug/quadra_rule_v.jsonl quadra_gpt=data/aug/quadra_gpt_v.jsonl` | after local step |
+
+## QUADRA (our method)
+1. Kaggle `prep` (in s1): 5-fold out-of-fold F1 per cell → `data/aug/difficulty.json`; verifier = Paraphrase
+   seed 42 on the full train set with checkpoint → `outputs/verifier/seed_42/checkpoint`.
+2. Local (CPU, OpenAI key in `.env`): generate 1.5× candidates, then keep exactly |train| reviews that the
+   verifier re-extracts correctly; commit and push the verified files.
    ```bash
-   bash scripts/kaggle_quadra_prep.sh
-   ```
-   Download `results_quadra_prep.zip` (contains `data/aug/difficulty.json`) and the verifier checkpoint
-   `outputs/verifier/seed_42/checkpoint` (save it as a Kaggle dataset/output for step 3).
-2. **Local** — generate candidates (frequency × difficulty budget, recomposition, GPT fusion):
-   ```bash
-   python3 src/aug/quadra.py --difficulty data/aug/difficulty.json --out data/aug/quadra_rule.jsonl
-   python3 src/aug/quadra.py --difficulty data/aug/difficulty.json --out data/aug/quadra_gpt.jsonl \
+   python3 src/aug/quadra.py --difficulty data/aug/difficulty.json --ratio 1.5 --out data/aug/quadra_rule.jsonl
+   python3 src/aug/quadra.py --difficulty data/aug/difficulty.json --ratio 1.5 --out data/aug/quadra_gpt.jsonl \
        --llm_model gpt-4.1-mini-2025-04-14
+   for v in rule gpt; do python3 src/aug/verify_model.py --ckpt outputs/verifier/seed_42/checkpoint \
+       --in data/aug/quadra_$v.jsonl --out data/aug/quadra_${v}_v.jsonl --target_n 2135; done
    ```
-   Commit and push the two `.jsonl` files (+ `.report.json`; the `.llm_cache.jsonl` keeps every prompt/answer).
-3. **Kaggle** — model-based check, then train with the same protocol as every method:
-   ```bash
-   python src/aug/verify_model.py --ckpt <verifier checkpoint> --in data/aug/quadra_gpt.jsonl --out data/aug/quadra_gpt_v.jsonl
-   bash scripts/kaggle_paraphrase.sh para_quadra_gpt --aug_path data/aug/quadra_gpt_v.jsonl
-   ```
-   Same for the rule-only variant (`quadra_rule.jsonl` → `para_quadra_rule`).
+3. Kaggle s2: train both verified sets with the baseline protocol (5 seeds).

@@ -25,6 +25,8 @@ echo "exit codes: gpu0=$RC0 gpu1=$RC1"
 
 python src/summarize_runs.py "$OUT" --json "$OUT/summary_test.json"
 python src/summarize_runs.py "$OUT" --split dev --json "$OUT/summary_dev.json"
-# results to download: predictions, metrics, configs, logs (no checkpoints)
-(cd outputs && zip -qr "../results_${RUN}.zip" "$RUN" -x "*/checkpoint/*")
-echo "packed results_${RUN}.zip"
+# results to download: predictions, metrics, configs, logs (no checkpoints); paths relative to the repo root
+if [[ -z "${NOZIP:-}" ]]; then
+  zip -qr "results_${RUN}.zip" "$OUT" -x "*/checkpoint/*"
+  echo "packed results_${RUN}.zip (unzip in the repo root)"
+fi

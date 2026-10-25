@@ -22,5 +22,4 @@ P1=$!
 wait $P0; wait $P1
 
 python src/aug/kfold.py difficulty --runs outputs/kfold --out data/aug/difficulty.json
-(zip -qr results_quadra_prep.zip data/aug/difficulty.json outputs/kfold outputs/verifier/seed_42/*.json* outputs_kfold_gpu*.log)
 echo "difficulty: data/aug/difficulty.json; verifier checkpoint: outputs/verifier/seed_42/checkpoint"
