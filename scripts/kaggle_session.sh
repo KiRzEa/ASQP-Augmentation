@@ -21,6 +21,7 @@ set -uo pipefail
 SESSION=${1:?session name}; shift
 cd "$(dirname "$0")/.."
 FILES=()
+mkdir -p outputs data/aug   # outputs/ is git-ignored, so it does not exist in a fresh clone
 LOG=session_${SESSION}.log
 echo "session $SESSION started $(date -u)" | tee "$LOG"
 
@@ -52,6 +53,12 @@ for job in "$@"; do
       echo "OPENAI_API_KEY not set: skipping the GPT variant" | tee -a "$LOG"
     fi
     [[ -n "$VPID" ]] && wait "$VPID"
+    if [[ ! -f "$CKPT/config.json" ]]; then
+      echo "ERROR: no verifier checkpoint at $CKPT; last lines of $VDIR.log:" | tee -a "$LOG"
+      tail -n 30 "$VDIR.log" 2>/dev/null | tee -a "$LOG"
+      FILES+=(data/aug); [[ -f "$VDIR.log" ]] && FILES+=("$VDIR.log")
+      continue
+    fi
     python src/aug/verify_model.py --ckpt "$CKPT" --in /dev/null --out /dev/null --card_only > "data/aug/verifier_card_${SESSION}.json"
     for v in rule gpt; do
       [[ -f data/aug/quadra_$v.jsonl ]] || continue
