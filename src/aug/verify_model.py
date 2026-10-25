@@ -9,6 +9,7 @@ Acceptance per target cell is written to <out>.verify_report.json.
 """
 import argparse
 import collections
+import hashlib
 import json
 import random
 import sys
@@ -23,6 +24,34 @@ from asqp_common import load_jsonl, prf  # noqa: E402
 from train_paraphrase import predict  # noqa: E402
 
 
+def sha256_file(path):
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(1 << 20), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def verifier_card(ckpt):
+    """Everything needed to identify and report the verifier: weights hash + its training run's record."""
+    ckpt = Path(ckpt)
+    weights = next((ckpt / n for n in ("model.safetensors", "pytorch_model.bin") if (ckpt / n).exists()), None)
+    card = {"ckpt_path": str(ckpt), "weights_file": weights.name if weights else None,
+            "weights_sha256": sha256_file(weights) if weights else None}
+    run_dir = ckpt.parent
+    if (run_dir / "run_config.json").exists():
+        c = json.load(open(run_dir / "run_config.json"))
+        card.update({k: c.get(k) for k in ("seed", "best_epoch", "optimizer_steps", "epochs_run", "n_train", "n_aug",
+                                           "data_sha256", "gpu", "versions", "seconds_total", "hostname")})
+        card["train_args"] = {k: c["args"].get(k) for k in ("model_name", "lr", "batch_size", "epochs", "patience",
+                                                             "train_path", "aug_path")}
+    if (run_dir / "metrics.json").exists():
+        m = json.load(open(run_dir / "metrics.json"))
+        card.update({"dev_quad_f1": m["dev"]["quad"]["f1"], "test_quad_f1": m["test"]["quad"]["f1"],
+                     "dev_relaxed_f1": m["dev"]["relaxed_quad"]["f1"]})
+    return card
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--ckpt", required=True)
@@ -33,7 +62,11 @@ def main():
     ap.add_argument("--target_n", type=int, default=0,
                     help="after filtering, randomly keep exactly N reviews (same added amount for every method); 0 = keep all")
     ap.add_argument("--seed", type=int, default=13)
+    ap.add_argument("--card_only", action="store_true", help="only print the verifier card (no verification)")
     a = ap.parse_args()
+    if a.card_only:
+        print(json.dumps(verifier_card(a.ckpt), indent=1))
+        return
     device = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")
     tok = AutoTokenizer.from_pretrained(a.ckpt)
     model = AutoModelForSeq2SeqLM.from_pretrained(a.ckpt).to(device)
@@ -60,7 +93,8 @@ def main():
     with open(a.out, "w", encoding="utf-8") as f:
         for it in kept:
             f.write(json.dumps(it, ensure_ascii=False) + "\n")
-    rep = {"input": a.inp, "n_in": len(items), "n_passed": n_passed, "n_kept": len(kept), "target_n": a.target_n, "threshold": a.threshold, "ckpt": a.ckpt,
+    rep = {"verifier": verifier_card(a.ckpt), "input": a.inp, "input_sha256": sha256_file(a.inp),
+           "output_sha256": sha256_file(a.out), "n_in": len(items), "n_passed": n_passed, "n_kept": len(kept), "target_n": a.target_n, "threshold": a.threshold, "ckpt": a.ckpt,
            "per_cell": {c: {**v, "acceptance": v["kept"] / (v["kept"] + v["rejected"])} for c, v in sorted(per_cell.items())}}
     json.dump(rep, open(Path(a.out).with_suffix(".verify_report.json"), "w"), indent=1)
     print(f"passed {n_passed} / {len(items)} ({100 * n_passed / max(1, len(items)):.1f}%) at F1 >= {a.threshold}; wrote {len(kept)}")

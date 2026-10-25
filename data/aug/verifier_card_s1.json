@@ -1,0 +1,36 @@
+{
+ "ckpt_path": "outputs/verifier/seed_42/checkpoint",
+ "weights_file": "model.safetensors",
+ "weights_sha256": "c0605501cac1dd6e41c3da5b9350381065a19f7d140320cccfbd462808cb5bf7",
+ "seed": 42,
+ "best_epoch": 13,
+ "optimizer_steps": 2412,
+ "epochs_run": 18,
+ "n_train": 2135,
+ "n_aug": 0,
+ "data_sha256": {
+  "/kaggle/working/ASQP-Augmentation/data/restaurant_v1/train.jsonl": "70817da60c9cbacfdac338c3e226c8cbd9fa36e5cf6090ea939bcfd957aa2893",
+  "/kaggle/working/ASQP-Augmentation/data/restaurant_v1/dev.jsonl": "92271d03c514a322133274b11ac55ec797c2b3baba85e117c7d41cdc0022ab60",
+  "/kaggle/working/ASQP-Augmentation/data/restaurant_v1/test.jsonl": "af473471041942de23d7fd76ea46bf3bfac74841ca321121d87aba67a5d52c08"
+ },
+ "gpu": "Tesla T4",
+ "versions": {
+  "python": "3.13.15",
+  "torch": "2.11.0+cu128",
+  "transformers": "4.57.6"
+ },
+ "seconds_total": 2671.6645891666412,
+ "hostname": "29f60151198f",
+ "train_args": {
+  "model_name": "VietAI/vit5-base",
+  "lr": 0.0003,
+  "batch_size": 16,
+  "epochs": 20,
+  "patience": 5,
+  "train_path": "/kaggle/working/ASQP-Augmentation/data/restaurant_v1/train.jsonl",
+  "aug_path": []
+ },
+ "dev_quad_f1": 64.65459423205903,
+ "test_quad_f1": 61.07688186445218,
+ "dev_relaxed_f1": 70.82494969818913
+}

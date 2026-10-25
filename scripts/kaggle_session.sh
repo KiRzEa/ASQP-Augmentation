@@ -33,12 +33,15 @@ for job in "$@"; do
     bash scripts/kaggle_quadra_prep.sh 2>&1 | tee -a "$LOG"
     FILES+=(data/aug/difficulty.json outputs/kfold outputs/verifier outputs_kfold_gpu0.log outputs_kfold_gpu1.log)
   elif [[ "$job" == "quadra_data" ]]; then
+    # Verifier: VERIFIER_CKPT (e.g. the s1 checkpoint attached as Kaggle input) if given, else train one in
+    # outputs/verifier_<session> (own folder, so unzipping never overwrites another session's verifier).
     NTRAIN=$(wc -l < data/restaurant_v1/train.jsonl)
-    CKPT=outputs/verifier/seed_42/checkpoint
+    VDIR=outputs/verifier_${SESSION}
+    CKPT=${VERIFIER_CKPT:-$VDIR/seed_42/checkpoint}
     VPID=""
     if [[ ! -d "$CKPT" ]]; then
-      CUDA_VISIBLE_DEVICES=0 python src/train_paraphrase.py --output_dir outputs/verifier --seeds 42 --keep_ckpt \
-        > outputs_verifier.log 2>&1 &
+      CUDA_VISIBLE_DEVICES=0 python src/train_paraphrase.py --output_dir "$VDIR" --seeds 42 --keep_ckpt \
+        > "$VDIR.log" 2>&1 &
       VPID=$!
     fi
     python src/aug/quadra.py --difficulty data/aug/difficulty.json --ratio 1.5 --out data/aug/quadra_rule.jsonl 2>&1 | tee -a "$LOG"
@@ -49,13 +52,14 @@ for job in "$@"; do
       echo "OPENAI_API_KEY not set: skipping the GPT variant" | tee -a "$LOG"
     fi
     [[ -n "$VPID" ]] && wait "$VPID"
+    python src/aug/verify_model.py --ckpt "$CKPT" --in /dev/null --out /dev/null --card_only > "data/aug/verifier_card_${SESSION}.json"
     for v in rule gpt; do
       [[ -f data/aug/quadra_$v.jsonl ]] || continue
       CUDA_VISIBLE_DEVICES=0 python src/aug/verify_model.py --ckpt "$CKPT" --in data/aug/quadra_$v.jsonl \
         --out data/aug/quadra_${v}_v.jsonl --target_n "$NTRAIN" 2>&1 | tee -a "$LOG"
     done
-    FILES+=(data/aug outputs/verifier/seed_42/metrics.json outputs/verifier/seed_42/run_config.json)
-    [[ -f outputs_verifier.log ]] && FILES+=(outputs_verifier.log)
+    FILES+=(data/aug)
+    [[ -d "$VDIR" ]] && FILES+=("$VDIR" "$VDIR.log")   # checkpoint weights excluded below; hash is in the card
   elif [[ "$job" == *=* ]]; then
     name=${job%%=*}; aug=${job#*=}
     [[ -f "$aug" ]] || { echo "missing $aug" | tee -a "$LOG"; continue; }
@@ -68,5 +72,5 @@ done
 
 echo "session $SESSION finished $(date -u)" | tee -a "$LOG"
 rm -f "session_${SESSION}.zip"
-zip -qr "session_${SESSION}.zip" "${FILES[@]}" "$LOG" -x "outputs/kfold/*/checkpoint/*"
+zip -qr "session_${SESSION}.zip" "${FILES[@]}" "$LOG" -x "outputs/kfold/*/checkpoint/*" -x "outputs/verifier_*/seed_*/checkpoint/*"
 echo "packed session_${SESSION}.zip ($(du -h "session_${SESSION}.zip" | cut -f1)) with: ${FILES[*]}"
