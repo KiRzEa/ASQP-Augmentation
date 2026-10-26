@@ -1,0 +1,229 @@
+{
+ "verifier": {
+  "ckpt_path": "outputs/verifier_s2/seed_42/checkpoint",
+  "weights_file": "model.safetensors",
+  "weights_sha256": "b18458bd171fccc40f2e7a1a0d46d6bdacaa66db3ed047bc1ac5c6c72604fd4c",
+  "seed": 42,
+  "best_epoch": 9,
+  "optimizer_steps": 1876,
+  "epochs_run": 14,
+  "n_train": 2135,
+  "n_aug": 0,
+  "data_sha256": {
+   "/kaggle/working/ASQP-Augmentation/data/restaurant_v1/train.jsonl": "70817da60c9cbacfdac338c3e226c8cbd9fa36e5cf6090ea939bcfd957aa2893",
+   "/kaggle/working/ASQP-Augmentation/data/restaurant_v1/dev.jsonl": "92271d03c514a322133274b11ac55ec797c2b3baba85e117c7d41cdc0022ab60",
+   "/kaggle/working/ASQP-Augmentation/data/restaurant_v1/test.jsonl": "af473471041942de23d7fd76ea46bf3bfac74841ca321121d87aba67a5d52c08"
+  },
+  "gpu": "Tesla T4",
+  "versions": {
+   "python": "3.13.15",
+   "torch": "2.11.0+cu128",
+   "transformers": "4.57.6"
+  },
+  "seconds_total": 2039.1363310813904,
+  "hostname": "d1521ece3f2a",
+  "train_args": {
+   "model_name": "VietAI/vit5-base",
+   "lr": 0.0003,
+   "batch_size": 16,
+   "epochs": 20,
+   "patience": 5,
+   "train_path": "/kaggle/working/ASQP-Augmentation/data/restaurant_v1/train.jsonl",
+   "aug_path": []
+  },
+  "dev_quad_f1": 62.857142857142854,
+  "test_quad_f1": 60.35598705501618,
+  "dev_relaxed_f1": 69.93197278911565
+ },
+ "input": "data/aug/quadra_rule.jsonl",
+ "input_sha256": "c5f0af2ed9f3c6ed2595a8349e8b045b581328f3262fd65a455f41ad4974c53c",
+ "output_sha256": "ef8855abfd2d4c6429e1fc40d78238b53ca929cb5af348bd3f338332121f4d72",
+ "n_in": 3200,
+ "n_passed": 1300,
+ "n_kept": 1300,
+ "target_n": 2135,
+ "threshold": 0.8,
+ "ckpt": "outputs/verifier_s2/seed_42/checkpoint",
+ "per_cell": {
+  "AMBIENCE#GENERAL|negative": {
+   "kept": 46,
+   "rejected": 49,
+   "acceptance": 0.4842105263157895
+  },
+  "AMBIENCE#GENERAL|neutral": {
+   "rejected": 36,
+   "kept": 40,
+   "acceptance": 0.5263157894736842
+  },
+  "AMBIENCE#GENERAL|positive": {
+   "rejected": 42,
+   "kept": 37,
+   "acceptance": 0.46835443037974683
+  },
+  "DRINKS#PRICES|negative": {
+   "rejected": 47,
+   "kept": 28,
+   "acceptance": 0.37333333333333335
+  },
+  "DRINKS#PRICES|neutral": {
+   "rejected": 65,
+   "kept": 24,
+   "acceptance": 0.2696629213483146
+  },
+  "DRINKS#PRICES|positive": {
+   "kept": 18,
+   "rejected": 60,
+   "acceptance": 0.23076923076923078
+  },
+  "DRINKS#QUALITY|negative": {
+   "rejected": 44,
+   "kept": 34,
+   "acceptance": 0.4358974358974359
+  },
+  "DRINKS#QUALITY|neutral": {
+   "rejected": 46,
+   "kept": 33,
+   "acceptance": 0.4177215189873418
+  },
+  "DRINKS#QUALITY|positive": {
+   "kept": 30,
+   "rejected": 53,
+   "acceptance": 0.3614457831325301
+  },
+  "DRINKS#STYLE&OPTIONS|negative": {
+   "rejected": 62,
+   "kept": 23,
+   "acceptance": 0.27058823529411763
+  },
+  "DRINKS#STYLE&OPTIONS|neutral": {
+   "rejected": 78,
+   "kept": 21,
+   "acceptance": 0.21212121212121213
+  },
+  "DRINKS#STYLE&OPTIONS|positive": {
+   "rejected": 51,
+   "kept": 37,
+   "acceptance": 0.42045454545454547
+  },
+  "FOOD#PRICES|negative": {
+   "rejected": 54,
+   "kept": 41,
+   "acceptance": 0.43157894736842106
+  },
+  "FOOD#PRICES|neutral": {
+   "kept": 34,
+   "rejected": 64,
+   "acceptance": 0.3469387755102041
+  },
+  "FOOD#PRICES|positive": {
+   "kept": 21,
+   "rejected": 58,
+   "acceptance": 0.26582278481012656
+  },
+  "FOOD#QUALITY|negative": {
+   "kept": 51,
+   "rejected": 54,
+   "acceptance": 0.4857142857142857
+  },
+  "FOOD#QUALITY|neutral": {
+   "kept": 51,
+   "rejected": 45,
+   "acceptance": 0.53125
+  },
+  "FOOD#QUALITY|positive": {
+   "kept": 23,
+   "rejected": 30,
+   "acceptance": 0.4339622641509434
+  },
+  "FOOD#STYLE&OPTIONS|negative": {
+   "rejected": 54,
+   "kept": 46,
+   "acceptance": 0.46
+  },
+  "FOOD#STYLE&OPTIONS|neutral": {
+   "rejected": 78,
+   "kept": 23,
+   "acceptance": 0.22772277227722773
+  },
+  "FOOD#STYLE&OPTIONS|positive": {
+   "rejected": 63,
+   "kept": 35,
+   "acceptance": 0.35714285714285715
+  },
+  "LOCATION#GENERAL|negative": {
+   "rejected": 44,
+   "kept": 42,
+   "acceptance": 0.4883720930232558
+  },
+  "LOCATION#GENERAL|neutral": {
+   "rejected": 58,
+   "kept": 38,
+   "acceptance": 0.3958333333333333
+  },
+  "LOCATION#GENERAL|positive": {
+   "kept": 38,
+   "rejected": 46,
+   "acceptance": 0.4523809523809524
+  },
+  "RESTAURANT#GENERAL|negative": {
+   "rejected": 45,
+   "kept": 38,
+   "acceptance": 0.4578313253012048
+  },
+  "RESTAURANT#GENERAL|neutral": {
+   "rejected": 52,
+   "kept": 49,
+   "acceptance": 0.48514851485148514
+  },
+  "RESTAURANT#GENERAL|positive": {
+   "kept": 52,
+   "rejected": 70,
+   "acceptance": 0.4262295081967213
+  },
+  "RESTAURANT#MISCELLANEOUS|negative": {
+   "kept": 45,
+   "rejected": 51,
+   "acceptance": 0.46875
+  },
+  "RESTAURANT#MISCELLANEOUS|neutral": {
+   "rejected": 51,
+   "kept": 36,
+   "acceptance": 0.41379310344827586
+  },
+  "RESTAURANT#MISCELLANEOUS|positive": {
+   "rejected": 59,
+   "kept": 45,
+   "acceptance": 0.4326923076923077
+  },
+  "RESTAURANT#PRICES|negative": {
+   "rejected": 50,
+   "kept": 36,
+   "acceptance": 0.4186046511627907
+  },
+  "RESTAURANT#PRICES|neutral": {
+   "rejected": 53,
+   "kept": 46,
+   "acceptance": 0.46464646464646464
+  },
+  "RESTAURANT#PRICES|positive": {
+   "rejected": 47,
+   "kept": 34,
+   "acceptance": 0.41975308641975306
+  },
+  "SERVICE#GENERAL|negative": {
+   "rejected": 43,
+   "kept": 42,
+   "acceptance": 0.49411764705882355
+  },
+  "SERVICE#GENERAL|neutral": {
+   "kept": 34,
+   "rejected": 49,
+   "acceptance": 0.40963855421686746
+  },
+  "SERVICE#GENERAL|positive": {
+   "rejected": 49,
+   "kept": 29,
+   "acceptance": 0.3717948717948718
+  }
+ }
+}
