@@ -65,6 +65,7 @@ def parse_args():
     ap.add_argument("--keep_ckpt", action="store_true")
     ap.add_argument("--limit", type=int, default=0, help="smoke test: use only the first N examples of each split")
     ap.add_argument("--cpu", action="store_true")
+    ap.add_argument("--log_every", type=int, default=50, help="log progress every N optimiser steps")
     return ap.parse_args()
 
 
@@ -147,6 +148,7 @@ def run_seed(seed, args, data, device, out_dir):
     scaler = torch.amp.GradScaler("cuda", enabled=args.fp16 and device.type == "cuda")
     if device.type == "cuda":
         torch.cuda.reset_peak_memory_stats(device)
+    log.info(f"device {device}" + (f" ({torch.cuda.get_device_name(device)})" if device.type == "cuda" else " — NO GPU"))
     log.info(f"train {len(data['train'])} + aug {len(data['train_all']) - len(data['train'])} = {len(train)} examples, "
              f"{steps_per_epoch} steps/epoch, {total_steps} steps, truncated src {src_trunc} tgt {tgt_trunc}")
 
@@ -165,6 +167,10 @@ def run_seed(seed, args, data, device, out_dir):
                 torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
                 scaler.step(opt); scaler.update(); opt.zero_grad(set_to_none=True); sched.step()
                 step += 1
+                if step % args.log_every == 0:
+                    el = time.time() - t0
+                    log.info(f"epoch {epoch} step {step}/{total_steps} loss {np.mean(losses[-50:]):.4f} "
+                             f"elapsed {el / 60:.1f} min, eta {el / step * (total_steps - step) / 60:.1f} min")
                 if step >= total_steps:
                     break
         rec = {"epoch": epoch, "step": step, "train_loss": float(np.mean(losses)), "lr": sched.get_last_lr()[0],
