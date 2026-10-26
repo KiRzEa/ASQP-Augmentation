@@ -33,20 +33,23 @@
 HF_HUB_OFFLINE=1 python3 src/train_paraphrase.py --output_dir /tmp/smoke --seeds 42 --limit 8 --epochs 2 --cpu
 ```
 
-## Sessions: one Kaggle command → one zip
+## Rounds and sessions
+The plan lives in `experiments/plan.json`: **round** (one experimental question) → **session** (one Kaggle run,
+≤ 12 h) → **jobs**. Runs keep fixed names (`outputs/para_<run>/seed_<s>/`); each session also writes
+`outputs/_sessions/<round>_<session>/` (session.log, jobs.txt, commit.txt).
+
+On Kaggle (GPU T4 ×2, Save & Run All):
 ```bash
 git clone https://github.com/KiRzEa/ASQP-Augmentation.git && cd ASQP-Augmentation && pip install -q -r requirements.txt
-bash scripts/kaggle_session.sh <name> <job> [<job> ...]     # → session_<name>.zip
+bash scripts/kaggle_session.sh r3 s1          # → results_r3_s1.zip
 ```
-Jobs: `none` (baseline), `prep` (QUADRA difficulty + verifier), `<run>=<aug.jsonl>` (any augmentation method).
-Download `session_<name>.zip`, then locally: `cd <repo> && unzip -o session_<name>.zip`.
-
-| Session | Command | Status |
-|---|---|---|
-| s1 | `bash scripts/kaggle_session.sh s1 none prep` | done (2026-10-25) |
-| s2 | `bash scripts/kaggle_session.sh s2 quadra_data quadra_gpt=data/aug/quadra_gpt_v.jsonl` | done (2026-10-26) |
-| s3 | `bash scripts/kaggle_session.sh s3 quadra_gpt_none=data/aug/quadra_gpt_none.jsonl quadra_gpt_target=data/aug/quadra_gpt_target.jsonl` | next |
-| s4 | `bash scripts/kaggle_session.sh s4 quadra_rule_none=data/aug/quadra_rule_none.jsonl quadra_rule_target=data/aug/quadra_rule_target.jsonl` | after s3 |
+Locally:
+```bash
+unzip -o results_r3_s1.zip && mv results_r3_s1.zip outputs/_zips_archive/
+python3 src/report_rounds.py                  # → experiments/README.md (local only; results are unpublished)
+```
+To add work: add a round or session to `experiments/plan.json`, commit, push, run it on Kaggle.
+Ad hoc runs still work: `bash scripts/kaggle_session.sh <name> <job> [<job> ...]`.
 
 ## QUADRA (our method)
 1. Kaggle `prep` (in s1): 5-fold out-of-fold F1 per cell → `data/aug/difficulty.json`; verifier = Paraphrase

@@ -1,0 +1,41 @@
+{
+  "_doc": "Experiment plan: rounds -> Kaggle sessions -> jobs. Run one session with: bash scripts/kaggle_session.sh <round> <session>. Jobs: none | prep | quadra_data | <run>=<aug.jsonl>. A job <run>=<file> writes outputs/para_<run>. Status and results: experiments/README.md.",
+  "rounds": {
+    "r1": {
+      "goal": "Baseline Paraphrase (ViT5-base) without augmentation; QUADRA preparation (5-fold difficulty, verifier).",
+      "status": "done 2026-10-25",
+      "sessions": {
+        "s1": [
+          "none",
+          "prep"
+        ]
+      },
+      "legacy_name": "s1"
+    },
+    "r2": {
+      "goal": "QUADRA v1: GPT fusion + verifier filter (quad F1 >= 0.8 on all quads).",
+      "status": "done 2026-10-26",
+      "sessions": {
+        "s1": [
+          "quadra_data",
+          "quadra_gpt=data/aug/quadra_gpt_v.jsonl"
+        ]
+      },
+      "legacy_name": "s2 (rerun)"
+    },
+    "r3": {
+      "goal": "QUADRA filtering: no model verification vs target-cell verification, GPT and rules-only, 2,135 reviews each.",
+      "status": "planned",
+      "sessions": {
+        "s1": [
+          "quadra_gpt_none=data/aug/quadra_gpt_none.jsonl",
+          "quadra_gpt_target=data/aug/quadra_gpt_target.jsonl"
+        ],
+        "s2": [
+          "quadra_rule_none=data/aug/quadra_rule_none.jsonl",
+          "quadra_rule_target=data/aug/quadra_rule_target.jsonl"
+        ]
+      }
+    }
+  }
+}

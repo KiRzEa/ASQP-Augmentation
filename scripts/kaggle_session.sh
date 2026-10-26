@@ -1,29 +1,44 @@
 #!/usr/bin/env bash
-# One Kaggle session = one command = one zip.
+# One Kaggle session = one command = one zip. Sessions are defined in experiments/plan.json (round -> session -> jobs).
 #
-#   bash scripts/kaggle_session.sh <session_name> <job> [<job> ...]
+#   bash scripts/kaggle_session.sh <round> <session>          e.g. bash scripts/kaggle_session.sh r3 s1
+#   bash scripts/kaggle_session.sh <name> <job> [<job> ...]   ad hoc (jobs on the command line)
 #
 # Jobs (run in the order given, each on both GPUs):
 #   none                       Paraphrase baseline, no augmentation      -> outputs/para_none
 #   <name>=<aug.jsonl>         Paraphrase + augmented data, 5 seeds      -> outputs/para_<name>
 #   prep                       QUADRA prep: 5-fold difficulty + verifier -> data/aug/difficulty.json, outputs/kfold,
 #                              outputs/verifier (checkpoint included in the zip, ~0.9 GB)
-#   quadra_data                QUADRA data on the GPU machine: train the verifier if no checkpoint is present (GPU 0)
-#                              while generating 1.5x candidates (rules + GPT fusion, needs OPENAI_API_KEY), then keep
-#                              exactly |train| verified reviews -> data/aug/quadra_{rule,gpt}_v.jsonl (+ reports, cache)
-# Examples:
-#   bash scripts/kaggle_session.sh s1 none prep
-#   bash scripts/kaggle_session.sh s2 quadra_data quadra_gpt=data/aug/quadra_gpt_v.jsonl quadra_rule=data/aug/quadra_rule_v.jsonl
+#   quadra_data                QUADRA candidates + verification (verifier trained in-session if needed)
 #
-# Result: session_<session_name>.zip in the repo root. Paths inside are relative to the repo root, so locally:
-#   cd <repo> && unzip -o session_<session_name>.zip
+# Result: results_<round>_<session>.zip (paths relative to the repo root) containing the runs and
+# outputs/_sessions/<round>_<session>/ (session.log, git commit, jobs). Locally: cd <repo> && unzip -o <zip>
 set -uo pipefail
-SESSION=${1:?session name}; shift
 cd "$(dirname "$0")/.."
+A1=${1:?"usage: kaggle_session.sh <round> <session> | <name> <job>..."}; shift
+if [[ $# -eq 1 ]] && python - "$A1" "$1" <<'PY'
+import json, sys
+r, s = sys.argv[1], sys.argv[2]
+plan = json.load(open("experiments/plan.json"))["rounds"]
+sys.exit(0 if r in plan and s in plan[r]["sessions"] else 1)
+PY
+then
+  SESSION="${A1}_$1"
+  JOBS=()
+  while IFS= read -r line; do [[ -n "$line" ]] && JOBS+=("$line"); done < <(python -c \
+    "import json,sys;print('\n'.join(json.load(open('experiments/plan.json'))['rounds'][sys.argv[1]]['sessions'][sys.argv[2]]))" "$A1" "$1")
+else
+  SESSION="$A1"; JOBS=("$@")
+fi
+[[ ${#JOBS[@]} -gt 0 ]] || { echo "no jobs for $SESSION"; exit 1; }  # bash 3.2-safe below
 FILES=()
-mkdir -p outputs data/aug   # outputs/ is git-ignored, so it does not exist in a fresh clone
-LOG=session_${SESSION}.log
-echo "session $SESSION started $(date -u)" | tee "$LOG"
+mkdir -p outputs data/aug "outputs/_sessions/$SESSION"   # outputs/ is git-ignored, so it does not exist in a fresh clone
+LOG=outputs/_sessions/$SESSION/session.log
+ZIP=results_${SESSION}.zip
+echo "session $SESSION started $(date -u); commit $(git rev-parse --short HEAD 2>/dev/null); jobs: ${JOBS[*]}" | tee "$LOG"
+printf '%s\n' "${JOBS[@]}" > "outputs/_sessions/$SESSION/jobs.txt"
+git rev-parse HEAD > "outputs/_sessions/$SESSION/commit.txt" 2>/dev/null
+FILES+=("outputs/_sessions/$SESSION")
 
 # GPU check: stop instead of silently training on CPU (set ALLOW_CPU=1 to override)
 nvidia-smi --query-gpu=index,name,memory.total --format=csv,noheader 2>&1 | sed "s/^/[gpu] /" | tee -a "$LOG"
@@ -35,12 +50,12 @@ if [[ "$NGPU" -lt 1 && -z "${ALLOW_CPU:-}" ]]; then
 fi
 
 pack() {  # update the zip after every job, so a timeout keeps finished work
-  zip -qr "session_${SESSION}.zip" ${FILES[@]+"${FILES[@]}"} "$LOG" -x "outputs/kfold/*/checkpoint/*" -x "outputs/verifier_*/seed_*/checkpoint/*"
-  echo "[pack] session_${SESSION}.zip updated ($(du -h "session_${SESSION}.zip" | cut -f1))" | tee -a "$LOG"
+  zip -qr "$ZIP" ${FILES[@]+"${FILES[@]}"} -x "outputs/kfold/*/checkpoint/*" -x "outputs/verifier_*/seed_*/checkpoint/*"
+  echo "[pack] $ZIP updated ($(du -h "$ZIP" | cut -f1))" | tee -a "$LOG"
 }
-rm -f "session_${SESSION}.zip"
+rm -f "$ZIP"
 
-for job in "$@"; do
+for job in "${JOBS[@]}"; do
   JSTART=$(date +%s)
   echo "=== job: $job  started $(date -u)" | tee -a "$LOG"
   if [[ "$job" == "none" ]]; then
@@ -102,5 +117,5 @@ for job in "$@"; do
   pack
 done
 
-echo "session $SESSION finished $(date -u); download session_${SESSION}.zip" | tee -a "$LOG"
+echo "session $SESSION finished $(date -u); download $ZIP" | tee -a "$LOG"
 pack
