@@ -29,3 +29,4 @@ presentation/
 session_*.zip
 session_*.log
 experiments/README.md
+runs_inbox/*.zip

@@ -1,0 +1,26 @@
+{
+  "_doc": "Rounds of experiments. Each target = one run (outputs/<run>/seed_<s>/) trained once per seed, or a one-off command job. Plan sessions with: python3 scripts/kaggle_queue.py plan --round <r>",
+  "seeds": [42, 123, 2024, 7, 99],
+  "rounds": {
+    "r1": {
+      "goal": "Baseline Paraphrase (ViT5-base) without augmentation; QUADRA preparation (5-fold difficulty, verifier).",
+      "status": "done 2026-10-25 (ran before the queue existed: kaggle_session.sh s1 none prep)",
+      "targets": [{"run": "para_none"}]
+    },
+    "r2": {
+      "goal": "QUADRA v1: GPT fusion + verifier filter (quad F1 >= 0.8 on all quads).",
+      "status": "done 2026-10-26 (ran before the queue existed: kaggle_session.sh s2 quadra_data quadra_gpt=...)",
+      "targets": [{"run": "para_quadra_gpt", "aug": "data/aug/quadra_gpt_v.jsonl"}]
+    },
+    "r3": {
+      "goal": "QUADRA filtering: no model verification vs target-cell verification, GPT and rules-only, 2,135 reviews each.",
+      "status": "planned",
+      "targets": [
+        {"run": "para_quadra_gpt_none", "aug": "data/aug/quadra_gpt_none.jsonl"},
+        {"run": "para_quadra_gpt_target", "aug": "data/aug/quadra_gpt_target.jsonl"},
+        {"run": "para_quadra_rule_none", "aug": "data/aug/quadra_rule_none.jsonl"},
+        {"run": "para_quadra_rule_target", "aug": "data/aug/quadra_rule_target.jsonl"}
+      ]
+    }
+  }
+}

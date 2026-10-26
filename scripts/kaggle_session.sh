@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# LEGACY (rounds r1, r2). New rounds use scripts/kaggle_queue.py + scripts/run_kaggle.sh (one job = run x seed).
 # One Kaggle session = one command = one zip. Sessions are defined in experiments/plan.json (round -> session -> jobs).
 #
 #   bash scripts/kaggle_session.sh <round> <session>          e.g. bash scripts/kaggle_session.sh r3 s1

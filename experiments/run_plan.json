@@ -1,0 +1,304 @@
+{
+ "round": "r3",
+ "budget_hours": 10.5,
+ "gpus": 2,
+ "min_per_example": 0.019612263300270515,
+ "n_calibrated": 10,
+ "created": "2026-10-26 23:54",
+ "sessions": [
+  {
+   "session": 1,
+   "jobs": [
+    "para_quadra_gpt_none:s42",
+    "para_quadra_gpt_none:s123",
+    "para_quadra_gpt_none:s2024",
+    "para_quadra_gpt_none:s7",
+    "para_quadra_gpt_none:s99",
+    "para_quadra_gpt_target:s42",
+    "para_quadra_gpt_target:s123",
+    "para_quadra_gpt_target:s2024",
+    "para_quadra_gpt_target:s7",
+    "para_quadra_gpt_target:s99",
+    "para_quadra_rule_none:s42",
+    "para_quadra_rule_none:s123",
+    "para_quadra_rule_none:s2024",
+    "para_quadra_rule_none:s7"
+   ],
+   "est_hours": 9.76
+  },
+  {
+   "session": 2,
+   "jobs": [
+    "para_quadra_rule_none:s99",
+    "para_quadra_rule_target:s42",
+    "para_quadra_rule_target:s123",
+    "para_quadra_rule_target:s2024",
+    "para_quadra_rule_target:s7",
+    "para_quadra_rule_target:s99"
+   ],
+   "est_hours": 4.19
+  }
+ ],
+ "jobs": {
+  "para_quadra_gpt_none:s42": {
+   "id": "para_quadra_gpt_none:s42",
+   "run": "para_quadra_gpt_none",
+   "seed": 42,
+   "aug": "data/aug/quadra_gpt_none.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_gpt_none --seeds 42 --aug_path data/aug/quadra_gpt_none.jsonl",
+   "examples": 4270,
+   "outputs": [
+    "outputs/para_quadra_gpt_none/seed_42"
+   ],
+   "done": "outputs/para_quadra_gpt_none/seed_42/test_predictions.jsonl",
+   "est_min": 83.7
+  },
+  "para_quadra_gpt_none:s123": {
+   "id": "para_quadra_gpt_none:s123",
+   "run": "para_quadra_gpt_none",
+   "seed": 123,
+   "aug": "data/aug/quadra_gpt_none.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_gpt_none --seeds 123 --aug_path data/aug/quadra_gpt_none.jsonl",
+   "examples": 4270,
+   "outputs": [
+    "outputs/para_quadra_gpt_none/seed_123"
+   ],
+   "done": "outputs/para_quadra_gpt_none/seed_123/test_predictions.jsonl",
+   "est_min": 83.7
+  },
+  "para_quadra_gpt_none:s2024": {
+   "id": "para_quadra_gpt_none:s2024",
+   "run": "para_quadra_gpt_none",
+   "seed": 2024,
+   "aug": "data/aug/quadra_gpt_none.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_gpt_none --seeds 2024 --aug_path data/aug/quadra_gpt_none.jsonl",
+   "examples": 4270,
+   "outputs": [
+    "outputs/para_quadra_gpt_none/seed_2024"
+   ],
+   "done": "outputs/para_quadra_gpt_none/seed_2024/test_predictions.jsonl",
+   "est_min": 83.7
+  },
+  "para_quadra_gpt_none:s7": {
+   "id": "para_quadra_gpt_none:s7",
+   "run": "para_quadra_gpt_none",
+   "seed": 7,
+   "aug": "data/aug/quadra_gpt_none.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_gpt_none --seeds 7 --aug_path data/aug/quadra_gpt_none.jsonl",
+   "examples": 4270,
+   "outputs": [
+    "outputs/para_quadra_gpt_none/seed_7"
+   ],
+   "done": "outputs/para_quadra_gpt_none/seed_7/test_predictions.jsonl",
+   "est_min": 83.7
+  },
+  "para_quadra_gpt_none:s99": {
+   "id": "para_quadra_gpt_none:s99",
+   "run": "para_quadra_gpt_none",
+   "seed": 99,
+   "aug": "data/aug/quadra_gpt_none.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_gpt_none --seeds 99 --aug_path data/aug/quadra_gpt_none.jsonl",
+   "examples": 4270,
+   "outputs": [
+    "outputs/para_quadra_gpt_none/seed_99"
+   ],
+   "done": "outputs/para_quadra_gpt_none/seed_99/test_predictions.jsonl",
+   "est_min": 83.7
+  },
+  "para_quadra_gpt_target:s42": {
+   "id": "para_quadra_gpt_target:s42",
+   "run": "para_quadra_gpt_target",
+   "seed": 42,
+   "aug": "data/aug/quadra_gpt_target.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_gpt_target --seeds 42 --aug_path data/aug/quadra_gpt_target.jsonl",
+   "examples": 4270,
+   "outputs": [
+    "outputs/para_quadra_gpt_target/seed_42"
+   ],
+   "done": "outputs/para_quadra_gpt_target/seed_42/test_predictions.jsonl",
+   "est_min": 83.7
+  },
+  "para_quadra_gpt_target:s123": {
+   "id": "para_quadra_gpt_target:s123",
+   "run": "para_quadra_gpt_target",
+   "seed": 123,
+   "aug": "data/aug/quadra_gpt_target.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_gpt_target --seeds 123 --aug_path data/aug/quadra_gpt_target.jsonl",
+   "examples": 4270,
+   "outputs": [
+    "outputs/para_quadra_gpt_target/seed_123"
+   ],
+   "done": "outputs/para_quadra_gpt_target/seed_123/test_predictions.jsonl",
+   "est_min": 83.7
+  },
+  "para_quadra_gpt_target:s2024": {
+   "id": "para_quadra_gpt_target:s2024",
+   "run": "para_quadra_gpt_target",
+   "seed": 2024,
+   "aug": "data/aug/quadra_gpt_target.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_gpt_target --seeds 2024 --aug_path data/aug/quadra_gpt_target.jsonl",
+   "examples": 4270,
+   "outputs": [
+    "outputs/para_quadra_gpt_target/seed_2024"
+   ],
+   "done": "outputs/para_quadra_gpt_target/seed_2024/test_predictions.jsonl",
+   "est_min": 83.7
+  },
+  "para_quadra_gpt_target:s7": {
+   "id": "para_quadra_gpt_target:s7",
+   "run": "para_quadra_gpt_target",
+   "seed": 7,
+   "aug": "data/aug/quadra_gpt_target.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_gpt_target --seeds 7 --aug_path data/aug/quadra_gpt_target.jsonl",
+   "examples": 4270,
+   "outputs": [
+    "outputs/para_quadra_gpt_target/seed_7"
+   ],
+   "done": "outputs/para_quadra_gpt_target/seed_7/test_predictions.jsonl",
+   "est_min": 83.7
+  },
+  "para_quadra_gpt_target:s99": {
+   "id": "para_quadra_gpt_target:s99",
+   "run": "para_quadra_gpt_target",
+   "seed": 99,
+   "aug": "data/aug/quadra_gpt_target.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_gpt_target --seeds 99 --aug_path data/aug/quadra_gpt_target.jsonl",
+   "examples": 4270,
+   "outputs": [
+    "outputs/para_quadra_gpt_target/seed_99"
+   ],
+   "done": "outputs/para_quadra_gpt_target/seed_99/test_predictions.jsonl",
+   "est_min": 83.7
+  },
+  "para_quadra_rule_none:s42": {
+   "id": "para_quadra_rule_none:s42",
+   "run": "para_quadra_rule_none",
+   "seed": 42,
+   "aug": "data/aug/quadra_rule_none.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_rule_none --seeds 42 --aug_path data/aug/quadra_rule_none.jsonl",
+   "examples": 4270,
+   "outputs": [
+    "outputs/para_quadra_rule_none/seed_42"
+   ],
+   "done": "outputs/para_quadra_rule_none/seed_42/test_predictions.jsonl",
+   "est_min": 83.7
+  },
+  "para_quadra_rule_none:s123": {
+   "id": "para_quadra_rule_none:s123",
+   "run": "para_quadra_rule_none",
+   "seed": 123,
+   "aug": "data/aug/quadra_rule_none.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_rule_none --seeds 123 --aug_path data/aug/quadra_rule_none.jsonl",
+   "examples": 4270,
+   "outputs": [
+    "outputs/para_quadra_rule_none/seed_123"
+   ],
+   "done": "outputs/para_quadra_rule_none/seed_123/test_predictions.jsonl",
+   "est_min": 83.7
+  },
+  "para_quadra_rule_none:s2024": {
+   "id": "para_quadra_rule_none:s2024",
+   "run": "para_quadra_rule_none",
+   "seed": 2024,
+   "aug": "data/aug/quadra_rule_none.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_rule_none --seeds 2024 --aug_path data/aug/quadra_rule_none.jsonl",
+   "examples": 4270,
+   "outputs": [
+    "outputs/para_quadra_rule_none/seed_2024"
+   ],
+   "done": "outputs/para_quadra_rule_none/seed_2024/test_predictions.jsonl",
+   "est_min": 83.7
+  },
+  "para_quadra_rule_none:s7": {
+   "id": "para_quadra_rule_none:s7",
+   "run": "para_quadra_rule_none",
+   "seed": 7,
+   "aug": "data/aug/quadra_rule_none.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_rule_none --seeds 7 --aug_path data/aug/quadra_rule_none.jsonl",
+   "examples": 4270,
+   "outputs": [
+    "outputs/para_quadra_rule_none/seed_7"
+   ],
+   "done": "outputs/para_quadra_rule_none/seed_7/test_predictions.jsonl",
+   "est_min": 83.7
+  },
+  "para_quadra_rule_none:s99": {
+   "id": "para_quadra_rule_none:s99",
+   "run": "para_quadra_rule_none",
+   "seed": 99,
+   "aug": "data/aug/quadra_rule_none.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_rule_none --seeds 99 --aug_path data/aug/quadra_rule_none.jsonl",
+   "examples": 4270,
+   "outputs": [
+    "outputs/para_quadra_rule_none/seed_99"
+   ],
+   "done": "outputs/para_quadra_rule_none/seed_99/test_predictions.jsonl",
+   "est_min": 83.7
+  },
+  "para_quadra_rule_target:s42": {
+   "id": "para_quadra_rule_target:s42",
+   "run": "para_quadra_rule_target",
+   "seed": 42,
+   "aug": "data/aug/quadra_rule_target.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_rule_target --seeds 42 --aug_path data/aug/quadra_rule_target.jsonl",
+   "examples": 4270,
+   "outputs": [
+    "outputs/para_quadra_rule_target/seed_42"
+   ],
+   "done": "outputs/para_quadra_rule_target/seed_42/test_predictions.jsonl",
+   "est_min": 83.7
+  },
+  "para_quadra_rule_target:s123": {
+   "id": "para_quadra_rule_target:s123",
+   "run": "para_quadra_rule_target",
+   "seed": 123,
+   "aug": "data/aug/quadra_rule_target.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_rule_target --seeds 123 --aug_path data/aug/quadra_rule_target.jsonl",
+   "examples": 4270,
+   "outputs": [
+    "outputs/para_quadra_rule_target/seed_123"
+   ],
+   "done": "outputs/para_quadra_rule_target/seed_123/test_predictions.jsonl",
+   "est_min": 83.7
+  },
+  "para_quadra_rule_target:s2024": {
+   "id": "para_quadra_rule_target:s2024",
+   "run": "para_quadra_rule_target",
+   "seed": 2024,
+   "aug": "data/aug/quadra_rule_target.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_rule_target --seeds 2024 --aug_path data/aug/quadra_rule_target.jsonl",
+   "examples": 4270,
+   "outputs": [
+    "outputs/para_quadra_rule_target/seed_2024"
+   ],
+   "done": "outputs/para_quadra_rule_target/seed_2024/test_predictions.jsonl",
+   "est_min": 83.7
+  },
+  "para_quadra_rule_target:s7": {
+   "id": "para_quadra_rule_target:s7",
+   "run": "para_quadra_rule_target",
+   "seed": 7,
+   "aug": "data/aug/quadra_rule_target.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_rule_target --seeds 7 --aug_path data/aug/quadra_rule_target.jsonl",
+   "examples": 4270,
+   "outputs": [
+    "outputs/para_quadra_rule_target/seed_7"
+   ],
+   "done": "outputs/para_quadra_rule_target/seed_7/test_predictions.jsonl",
+   "est_min": 83.7
+  },
+  "para_quadra_rule_target:s99": {
+   "id": "para_quadra_rule_target:s99",
+   "run": "para_quadra_rule_target",
+   "seed": 99,
+   "aug": "data/aug/quadra_rule_target.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_rule_target --seeds 99 --aug_path data/aug/quadra_rule_target.jsonl",
+   "examples": 4270,
+   "outputs": [
+    "outputs/para_quadra_rule_target/seed_99"
+   ],
+   "done": "outputs/para_quadra_rule_target/seed_99/test_predictions.jsonl",
+   "est_min": 83.7
+  }
+ }
+}

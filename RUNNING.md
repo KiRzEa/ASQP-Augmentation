@@ -33,23 +33,29 @@
 HF_HUB_OFFLINE=1 python3 src/train_paraphrase.py --output_dir /tmp/smoke --seeds 42 --limit 8 --epochs 2 --cpu
 ```
 
-## Rounds and sessions
-The plan lives in `experiments/plan.json`: **round** (one experimental question) → **session** (one Kaggle run,
-≤ 12 h) → **jobs**. Runs keep fixed names (`outputs/para_<run>/seed_<s>/`); each session also writes
-`outputs/_sessions/<round>_<session>/` (session.log, jobs.txt, commit.txt).
+## Rounds, jobs, sessions (same workflow as ACSA / fox-repro)
+- **Round** = one experimental question, its targets in `experiments/rounds.json`.
+- **Job** = one run × one seed (`outputs/<run>/seed_<s>/`), the unit that is planned, timed and resumed.
+- **Session** = one Kaggle run (≤ 10.5 h on 2 × T4), packed automatically from the round's unfinished jobs.
 
-On Kaggle (GPU T4 ×2, Save & Run All):
 ```bash
-git clone https://github.com/KiRzEa/ASQP-Augmentation.git && cd ASQP-Augmentation && pip install -q -r requirements.txt
-bash scripts/kaggle_session.sh r3 s1          # → results_r3_s1.zip
+# local
+python3 scripts/kaggle_queue.py list                         # done / to run / estimated minutes per round
+python3 scripts/kaggle_queue.py plan --round r3              # -> experiments/run_plan.json (calibrated from outputs/_job_times/)
+git add experiments && git commit -m "Plan r3" && git push
+
+# Kaggle (GPU T4 x2, Internet on, Save & Run All), session N of the plan
+git clone https://github.com/KiRzEa/ASQP-Augmentation.git && cd ASQP-Augmentation
+bash scripts/run_kaggle.sh 1                                 # -> results_r3_s1.zip, re-packed after every job
+
+# local, after downloading the zip(s) into runs_inbox/
+python3 scripts/kaggle_queue.py ingest                       # unzip into outputs/, archive the zip (idempotent)
+python3 src/report_rounds.py                                 # -> experiments/README.md (local only)
 ```
-Locally:
-```bash
-unzip -o results_r3_s1.zip && mv results_r3_s1.zip outputs/_zips_archive/
-python3 src/report_rounds.py                  # → experiments/README.md (local only; results are unpublished)
-```
-To add work: add a round or session to `experiments/plan.json`, commit, push, run it on Kaggle.
-Ad hoc runs still work: `bash scripts/kaggle_session.sh <name> <job> [<job> ...]`.
+On Kaggle each GPU runs one job at a time (longest first); a job that no longer fits the budget is skipped and
+stays in the plan for the next session (re-plan after ingesting). Per job: log in `outputs/_logs/`, measured
+minutes in `outputs/_job_times/<round>_s<N>.tsv` (used by `plan` for the next estimates).
+Legacy: `scripts/kaggle_session.sh` (r1, r2) — kept for the `prep` and `quadra_data` jobs.
 
 ## QUADRA (our method)
 1. Kaggle `prep` (in s1): 5-fold out-of-fold F1 per cell → `data/aug/difficulty.json`; verifier = Paraphrase
