@@ -1,0 +1,301 @@
+{
+ "input": "data/aug/quadra_gpt.jsonl",
+ "preds": null,
+ "mode": "none",
+ "threshold": null,
+ "n_candidates": 3200,
+ "n_accepted": 3200,
+ "n_written": 2135,
+ "n_filled_from_rejected": 0,
+ "quads_written": 6726,
+ "per_cell": {
+  "AMBIENCE#GENERAL|negative": {
+   "generated": 95,
+   "accepted": 95,
+   "acceptance": 1.0,
+   "quota": 63,
+   "kept_accepted": 63,
+   "kept_filled_from_rejected": 0
+  },
+  "AMBIENCE#GENERAL|neutral": {
+   "generated": 76,
+   "accepted": 76,
+   "acceptance": 1.0,
+   "quota": 51,
+   "kept_accepted": 51,
+   "kept_filled_from_rejected": 0
+  },
+  "AMBIENCE#GENERAL|positive": {
+   "generated": 79,
+   "accepted": 79,
+   "acceptance": 1.0,
+   "quota": 53,
+   "kept_accepted": 53,
+   "kept_filled_from_rejected": 0
+  },
+  "DRINKS#PRICES|negative": {
+   "generated": 75,
+   "accepted": 75,
+   "acceptance": 1.0,
+   "quota": 50,
+   "kept_accepted": 50,
+   "kept_filled_from_rejected": 0
+  },
+  "DRINKS#PRICES|neutral": {
+   "generated": 89,
+   "accepted": 89,
+   "acceptance": 1.0,
+   "quota": 59,
+   "kept_accepted": 59,
+   "kept_filled_from_rejected": 0
+  },
+  "DRINKS#PRICES|positive": {
+   "generated": 78,
+   "accepted": 78,
+   "acceptance": 1.0,
+   "quota": 52,
+   "kept_accepted": 52,
+   "kept_filled_from_rejected": 0
+  },
+  "DRINKS#QUALITY|negative": {
+   "generated": 78,
+   "accepted": 78,
+   "acceptance": 1.0,
+   "quota": 52,
+   "kept_accepted": 52,
+   "kept_filled_from_rejected": 0
+  },
+  "DRINKS#QUALITY|neutral": {
+   "generated": 79,
+   "accepted": 79,
+   "acceptance": 1.0,
+   "quota": 53,
+   "kept_accepted": 53,
+   "kept_filled_from_rejected": 0
+  },
+  "DRINKS#QUALITY|positive": {
+   "generated": 83,
+   "accepted": 83,
+   "acceptance": 1.0,
+   "quota": 55,
+   "kept_accepted": 55,
+   "kept_filled_from_rejected": 0
+  },
+  "DRINKS#STYLE&OPTIONS|negative": {
+   "generated": 85,
+   "accepted": 85,
+   "acceptance": 1.0,
+   "quota": 57,
+   "kept_accepted": 57,
+   "kept_filled_from_rejected": 0
+  },
+  "DRINKS#STYLE&OPTIONS|neutral": {
+   "generated": 99,
+   "accepted": 99,
+   "acceptance": 1.0,
+   "quota": 66,
+   "kept_accepted": 66,
+   "kept_filled_from_rejected": 0
+  },
+  "DRINKS#STYLE&OPTIONS|positive": {
+   "generated": 88,
+   "accepted": 88,
+   "acceptance": 1.0,
+   "quota": 59,
+   "kept_accepted": 59,
+   "kept_filled_from_rejected": 0
+  },
+  "FOOD#PRICES|negative": {
+   "generated": 95,
+   "accepted": 95,
+   "acceptance": 1.0,
+   "quota": 63,
+   "kept_accepted": 63,
+   "kept_filled_from_rejected": 0
+  },
+  "FOOD#PRICES|neutral": {
+   "generated": 98,
+   "accepted": 98,
+   "acceptance": 1.0,
+   "quota": 65,
+   "kept_accepted": 65,
+   "kept_filled_from_rejected": 0
+  },
+  "FOOD#PRICES|positive": {
+   "generated": 79,
+   "accepted": 79,
+   "acceptance": 1.0,
+   "quota": 53,
+   "kept_accepted": 53,
+   "kept_filled_from_rejected": 0
+  },
+  "FOOD#QUALITY|negative": {
+   "generated": 105,
+   "accepted": 105,
+   "acceptance": 1.0,
+   "quota": 70,
+   "kept_accepted": 70,
+   "kept_filled_from_rejected": 0
+  },
+  "FOOD#QUALITY|neutral": {
+   "generated": 96,
+   "accepted": 96,
+   "acceptance": 1.0,
+   "quota": 64,
+   "kept_accepted": 64,
+   "kept_filled_from_rejected": 0
+  },
+  "FOOD#QUALITY|positive": {
+   "generated": 53,
+   "accepted": 53,
+   "acceptance": 1.0,
+   "quota": 35,
+   "kept_accepted": 35,
+   "kept_filled_from_rejected": 0
+  },
+  "FOOD#STYLE&OPTIONS|negative": {
+   "generated": 100,
+   "accepted": 100,
+   "acceptance": 1.0,
+   "quota": 67,
+   "kept_accepted": 67,
+   "kept_filled_from_rejected": 0
+  },
+  "FOOD#STYLE&OPTIONS|neutral": {
+   "generated": 101,
+   "accepted": 101,
+   "acceptance": 1.0,
+   "quota": 68,
+   "kept_accepted": 68,
+   "kept_filled_from_rejected": 0
+  },
+  "FOOD#STYLE&OPTIONS|positive": {
+   "generated": 98,
+   "accepted": 98,
+   "acceptance": 1.0,
+   "quota": 65,
+   "kept_accepted": 65,
+   "kept_filled_from_rejected": 0
+  },
+  "LOCATION#GENERAL|negative": {
+   "generated": 86,
+   "accepted": 86,
+   "acceptance": 1.0,
+   "quota": 57,
+   "kept_accepted": 57,
+   "kept_filled_from_rejected": 0
+  },
+  "LOCATION#GENERAL|neutral": {
+   "generated": 96,
+   "accepted": 96,
+   "acceptance": 1.0,
+   "quota": 64,
+   "kept_accepted": 64,
+   "kept_filled_from_rejected": 0
+  },
+  "LOCATION#GENERAL|positive": {
+   "generated": 84,
+   "accepted": 84,
+   "acceptance": 1.0,
+   "quota": 56,
+   "kept_accepted": 56,
+   "kept_filled_from_rejected": 0
+  },
+  "RESTAURANT#GENERAL|negative": {
+   "generated": 83,
+   "accepted": 83,
+   "acceptance": 1.0,
+   "quota": 55,
+   "kept_accepted": 55,
+   "kept_filled_from_rejected": 0
+  },
+  "RESTAURANT#GENERAL|neutral": {
+   "generated": 101,
+   "accepted": 101,
+   "acceptance": 1.0,
+   "quota": 68,
+   "kept_accepted": 68,
+   "kept_filled_from_rejected": 0
+  },
+  "RESTAURANT#GENERAL|positive": {
+   "generated": 122,
+   "accepted": 122,
+   "acceptance": 1.0,
+   "quota": 82,
+   "kept_accepted": 82,
+   "kept_filled_from_rejected": 0
+  },
+  "RESTAURANT#MISCELLANEOUS|negative": {
+   "generated": 96,
+   "accepted": 96,
+   "acceptance": 1.0,
+   "quota": 64,
+   "kept_accepted": 64,
+   "kept_filled_from_rejected": 0
+  },
+  "RESTAURANT#MISCELLANEOUS|neutral": {
+   "generated": 87,
+   "accepted": 87,
+   "acceptance": 1.0,
+   "quota": 58,
+   "kept_accepted": 58,
+   "kept_filled_from_rejected": 0
+  },
+  "RESTAURANT#MISCELLANEOUS|positive": {
+   "generated": 104,
+   "accepted": 104,
+   "acceptance": 1.0,
+   "quota": 70,
+   "kept_accepted": 70,
+   "kept_filled_from_rejected": 0
+  },
+  "RESTAURANT#PRICES|negative": {
+   "generated": 86,
+   "accepted": 86,
+   "acceptance": 1.0,
+   "quota": 57,
+   "kept_accepted": 57,
+   "kept_filled_from_rejected": 0
+  },
+  "RESTAURANT#PRICES|neutral": {
+   "generated": 99,
+   "accepted": 99,
+   "acceptance": 1.0,
+   "quota": 66,
+   "kept_accepted": 66,
+   "kept_filled_from_rejected": 0
+  },
+  "RESTAURANT#PRICES|positive": {
+   "generated": 81,
+   "accepted": 81,
+   "acceptance": 1.0,
+   "quota": 54,
+   "kept_accepted": 54,
+   "kept_filled_from_rejected": 0
+  },
+  "SERVICE#GENERAL|negative": {
+   "generated": 85,
+   "accepted": 85,
+   "acceptance": 1.0,
+   "quota": 57,
+   "kept_accepted": 57,
+   "kept_filled_from_rejected": 0
+  },
+  "SERVICE#GENERAL|neutral": {
+   "generated": 83,
+   "accepted": 83,
+   "acceptance": 1.0,
+   "quota": 55,
+   "kept_accepted": 55,
+   "kept_filled_from_rejected": 0
+  },
+  "SERVICE#GENERAL|positive": {
+   "generated": 78,
+   "accepted": 78,
+   "acceptance": 1.0,
+   "quota": 52,
+   "kept_accepted": 52,
+   "kept_filled_from_rejected": 0
+  }
+ }
+}

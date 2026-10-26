@@ -44,7 +44,9 @@ Download `session_<name>.zip`, then locally: `cd <repo> && unzip -o session_<nam
 | Session | Command | Status |
 |---|---|---|
 | s1 | `bash scripts/kaggle_session.sh s1 none prep` | done (2026-10-25) |
-| s2 | `bash scripts/kaggle_session.sh s2 quadra_rule=data/aug/quadra_rule_v.jsonl quadra_gpt=data/aug/quadra_gpt_v.jsonl` | after local step |
+| s2 | `bash scripts/kaggle_session.sh s2 quadra_data quadra_gpt=data/aug/quadra_gpt_v.jsonl` | done (2026-10-26) |
+| s3 | `bash scripts/kaggle_session.sh s3 quadra_gpt_none=data/aug/quadra_gpt_none.jsonl quadra_gpt_target=data/aug/quadra_gpt_target.jsonl` | next |
+| s4 | `bash scripts/kaggle_session.sh s4 quadra_rule_none=data/aug/quadra_rule_none.jsonl quadra_rule_target=data/aug/quadra_rule_target.jsonl` | after s3 |
 
 ## QUADRA (our method)
 1. Kaggle `prep` (in s1): 5-fold out-of-fold F1 per cell → `data/aug/difficulty.json`; verifier = Paraphrase
