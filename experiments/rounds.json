@@ -35,6 +35,32 @@
         {"run": "para_quadra_gpt_v1068", "aug": "data/aug/quadra_gpt_v1068.jsonl"},
         {"run": "para_quadra_gpt_v_2stage", "aug": "data/aug/quadra_gpt_v.jsonl", "args": "--aug_stage pretrain --pretrain_epochs 3"}
       ]
+    },
+    "r5": {
+      "goal": "DA baselines on the same backbone: ADA (pattern, category, joint), random concatenation and duplication controls, span-safe EDA, span substitution, GPT paraphrase, GPT quad-to-text; plus the ViT5 quad-to-text generator job (data for r6).",
+      "openai_key": "no on Kaggle (GPT sets llm_para / llm_q2t were generated locally and committed)",
+      "status": "planned",
+      "targets": [
+        {"id": "genda_gen", "command": "python -u src/aug/genda.py --out data/aug/genda.jsonl", "est_min": 75,
+         "outputs": ["data/aug/genda.jsonl", "data/aug/genda.report.json"], "done": "data/aug/genda.jsonl"},
+        {"run": "para_ada_pattern", "aug": "data/aug/ada_pattern.jsonl"},
+        {"run": "para_ada_category", "aug": "data/aug/ada_category.jsonl"},
+        {"run": "para_ada_joint", "aug": "data/aug/ada_joint.jsonl"},
+        {"run": "para_concat", "aug": "data/aug/concat.jsonl"},
+        {"run": "para_dup", "aug": "data/aug/dup.jsonl"},
+        {"run": "para_eda", "aug": "data/aug/eda.jsonl"},
+        {"run": "para_spansub", "aug": "data/aug/spansub.jsonl"},
+        {"run": "para_llm_para", "aug": "data/aug/llm_para.jsonl"},
+        {"run": "para_llm_q2t", "aug": "data/aug/llm_q2t.jsonl"}
+      ]
+    },
+    "r6": {
+      "goal": "ViT5 quad-to-text (GenDA-style) baseline: needs data/aug/genda.jsonl from r5 (ingest + commit first).",
+      "openai_key": "no",
+      "status": "planned (after r5 genda_gen)",
+      "targets": [
+        {"run": "para_genda", "aug": "data/aug/genda.jsonl"}
+      ]
     }
   }
 }

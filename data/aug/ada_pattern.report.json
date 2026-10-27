@@ -1,0 +1,238 @@
+{
+ "strategy": "pattern",
+ "gamma": 0.05,
+ "eta": 0.4,
+ "kappa": 2.0,
+ "seed": 13,
+ "max_passes": 20,
+ "n_train": 2135,
+ "n_aug": 10630,
+ "quads_aug": 91207,
+ "passes": [
+  {
+   "pass": 1,
+   "augmentable": 2135,
+   "made": 1966
+  },
+  {
+   "pass": 2,
+   "augmentable": 1510,
+   "made": 803
+  },
+  {
+   "pass": 3,
+   "augmentable": 999,
+   "made": 998
+  },
+  {
+   "pass": 4,
+   "augmentable": 999,
+   "made": 794
+  },
+  {
+   "pass": 5,
+   "augmentable": 781,
+   "made": 631
+  },
+  {
+   "pass": 6,
+   "augmentable": 617,
+   "made": 569
+  },
+  {
+   "pass": 7,
+   "augmentable": 488,
+   "made": 487
+  },
+  {
+   "pass": 8,
+   "augmentable": 488,
+   "made": 488
+  },
+  {
+   "pass": 9,
+   "augmentable": 488,
+   "made": 487
+  },
+  {
+   "pass": 10,
+   "augmentable": 488,
+   "made": 488
+  },
+  {
+   "pass": 11,
+   "augmentable": 488,
+   "made": 408
+  },
+  {
+   "pass": 12,
+   "augmentable": 418,
+   "made": 320
+  },
+  {
+   "pass": 13,
+   "augmentable": 355,
+   "made": 319
+  },
+  {
+   "pass": 14,
+   "augmentable": 300,
+   "made": 299
+  },
+  {
+   "pass": 15,
+   "augmentable": 300,
+   "made": 300
+  },
+  {
+   "pass": 16,
+   "augmentable": 300,
+   "made": 298
+  },
+  {
+   "pass": 17,
+   "augmentable": 300,
+   "made": 272
+  },
+  {
+   "pass": 18,
+   "augmentable": 260,
+   "made": 258
+  },
+  {
+   "pass": 19,
+   "augmentable": 260,
+   "made": 220
+  },
+  {
+   "pass": 20,
+   "augmentable": 225,
+   "made": 225
+  }
+ ],
+ "n_pattern_classes": 70,
+ "category_counts": {
+  "FOOD#QUALITY": {
+   "raw": 1501,
+   "final": 22690,
+   "pos": 1
+  },
+  "SERVICE#GENERAL": {
+   "raw": 1290,
+   "final": 15769,
+   "pos": 2
+  },
+  "AMBIENCE#GENERAL": {
+   "raw": 859,
+   "final": 12966,
+   "pos": 3
+  },
+  "FOOD#STYLE&OPTIONS": {
+   "raw": 673,
+   "final": 11798,
+   "pos": 4
+  },
+  "RESTAURANT#PRICES": {
+   "raw": 605,
+   "final": 7559,
+   "pos": 5
+  },
+  "RESTAURANT#GENERAL": {
+   "raw": 521,
+   "final": 7277,
+   "pos": 6
+  },
+  "FOOD#PRICES": {
+   "raw": 360,
+   "final": 4459,
+   "pos": 7
+  },
+  "RESTAURANT#MISCELLANEOUS": {
+   "raw": 313,
+   "final": 4800,
+   "pos": 8
+  },
+  "LOCATION#GENERAL": {
+   "raw": 293,
+   "final": 4473,
+   "pos": 9
+  },
+  "DRINKS#QUALITY": {
+   "raw": 265,
+   "final": 3499,
+   "pos": 10
+  },
+  "DRINKS#PRICES": {
+   "raw": 116,
+   "final": 1297,
+   "pos": 11
+  },
+  "DRINKS#STYLE&OPTIONS": {
+   "raw": 111,
+   "final": 1527,
+   "pos": 12
+  }
+ },
+ "pattern_counts_top": {
+  "[[[1, [1]], [1, [1]]], [1, 1]]": {
+   "raw": 625,
+   "final": 1690
+  },
+  "[[[1, [1]], [1, [1]], [1, [1]]], [1, 1, 1]]": {
+   "raw": 511,
+   "final": 1633
+  },
+  "[[[1, [1]], [1, [1]], [1, [1]], [1, [1]]], [1, 1, 1, 1]]": {
+   "raw": 218,
+   "final": 1577
+  },
+  "[[[1, [1]], [2, [1, 1]]], [1, 1, 1]]": {
+   "raw": 164,
+   "final": 1524
+  },
+  "[[[1, [1]], [1, [1]], [2, [1, 1]]], [1, 1, 1, 1]]": {
+   "raw": 129,
+   "final": 1474
+  },
+  "[[[1, [1]], [1, [2]], [1, [2]]], [1, 2]]": {
+   "raw": 70,
+   "final": 1428
+  },
+  "[[[1, [1]], [1, [1]], [1, [1]], [1, [1]], [1, [1]]], [1, 1, 1, 1, 1]]": {
+   "raw": 63,
+   "final": 1381
+  },
+  "[[[1, [1]], [1, [1]], [1, [1]], [2, [1, 1]]], [1, 1, 1, 1, 1]]": {
+   "raw": 55,
+   "final": 1338
+  },
+  "[[[2, [1, 1]]], [1, 1]]": {
+   "raw": 40,
+   "final": 1298
+  },
+  "[[[1, [1]], [1, [1]], [1, [2]], [1, [2]]], [1, 1, 2]]": {
+   "raw": 35,
+   "final": 1259
+  },
+  "[[[1, [1]], [1, [1]], [1, [1]], [1, [1]], [2, [1, 1]]], [1, 1, 1, 1, 1, 1]]": {
+   "raw": 18,
+   "final": 725
+  },
+  "[[[1, [1]], [1, [1]], [1, [1]], [1, [2]], [1, [2]]], [1, 1, 1, 2]]": {
+   "raw": 17,
+   "final": 668
+  },
+  "[[[1, [1]], [1, [1]], [1, [1]], [1, [1]], [1, [1]], [1, [1]]], [1, 1, 1, 1, 1, 1]]": {
+   "raw": 15,
+   "final": 571
+  },
+  "[[[1, [1]], [1, [1]], [1, [1]], [1, [1]], [1, [1]], [2, [1, 1]]], [1, 1, 1, 1, 1, 1, 1]]": {
+   "raw": 12,
+   "final": 453
+  },
+  "[[[1, [1]], [3, [1, 1, 1]]], [1, 1, 1, 1]]": {
+   "raw": 12,
+   "final": 503
+  }
+ }
+}

@@ -1,0 +1,16 @@
+{
+ "method": "quad2text",
+ "llm_model": "gpt-4.1-mini-2025-04-14",
+ "temperature": 0.7,
+ "seed": 13,
+ "n": 2135,
+ "candidates_used": 2783,
+ "quads": 6914,
+ "stats": {
+  "api_calls": 2758,
+  "prompt_tokens": 522795,
+  "completion_tokens": 61121,
+  "kept": 2135,
+  "rejected_spans_not_found": 142
+ }
+}

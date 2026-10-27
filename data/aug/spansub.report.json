@@ -1,0 +1,13 @@
+{
+ "method": "spansub",
+ "seed": 13,
+ "n": 2135,
+ "quads": 6925,
+ "alpha": null,
+ "p_sub": 0.5,
+ "attempts": 2273,
+ "stats": {
+  "spansub": 2135,
+  "failed": 138
+ }
+}

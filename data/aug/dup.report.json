@@ -1,0 +1,12 @@
+{
+ "method": "dup",
+ "seed": 13,
+ "n": 2135,
+ "quads": 6907,
+ "alpha": null,
+ "p_sub": null,
+ "attempts": 2135,
+ "stats": {
+  "dup": 2135
+ }
+}

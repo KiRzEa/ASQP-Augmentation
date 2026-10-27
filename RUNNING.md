@@ -66,6 +66,16 @@ os.environ["OPENAI_API_KEY"] = UserSecretsClient().get_secret("OPENAI_API_KEY")
 ```
 Never type the key into a notebook cell.
 
+## Augmentation baselines (data committed in data/aug/, each with .report.json)
+Where each step runs: rule/CPU and GPT steps locally (OpenAI key in `.env`); model steps on Kaggle.
+```bash
+python3 src/aug/ada.py --strategy {pattern|category|joint} --out data/aug/ada_<s>.jsonl   # local, CPU
+python3 src/aug/baselines.py {dup|eda|spansub} --out data/aug/<m>.jsonl                     # local, CPU
+python3 src/aug/baselines.py concat --n 3632 --out data/aug/concat.jsonl                     # local, CPU
+python3 src/aug/llm_aug.py {paraphrase|quad2text} --out data/aug/llm_{para|q2t}.jsonl        # local, GPT
+python -u src/aug/genda.py --out data/aug/genda.jsonl                                       # Kaggle (job genda_gen, r5)
+```
+
 ## QUADRA (our method)
 1. Kaggle `prep` (in s1): 5-fold out-of-fold F1 per cell → `data/aug/difficulty.json`; verifier = Paraphrase
    seed 42 on the full train set with checkpoint → `outputs/verifier/seed_42/checkpoint`.

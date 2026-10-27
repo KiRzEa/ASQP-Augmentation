@@ -3,8 +3,8 @@
 Uses the verifier predictions saved by verify_model.py (<out>.verify_preds.jsonl), so every selection mode
 relies on the same verifier and needs no GPU.
 
-    python src/aug/select.py --in data/aug/quadra_gpt.jsonl --mode none   --out data/aug/quadra_gpt_none.jsonl
-    python src/aug/select.py --in data/aug/quadra_gpt.jsonl --mode target --preds data/aug/quadra_gpt_v.verify_preds.jsonl \
+    python src/aug/select_aug.py --in data/aug/quadra_gpt.jsonl --mode none   --out data/aug/quadra_gpt_none.jsonl
+    python src/aug/select_aug.py --in data/aug/quadra_gpt.jsonl --mode target --preds data/aug/quadra_gpt_v.verify_preds.jsonl \
         --out data/aug/quadra_gpt_target.jsonl
 
 Modes

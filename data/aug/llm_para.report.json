@@ -1,0 +1,17 @@
+{
+ "method": "paraphrase",
+ "llm_model": "gpt-4.1-mini-2025-04-14",
+ "temperature": 0.7,
+ "seed": 13,
+ "n": 2135,
+ "candidates_used": 2783,
+ "quads": 6895,
+ "stats": {
+  "api_calls": 2783,
+  "prompt_tokens": 492493,
+  "completion_tokens": 81912,
+  "kept": 2135,
+  "rejected_spans_not_found": 60,
+  "rejected_too_long": 12
+ }
+}
