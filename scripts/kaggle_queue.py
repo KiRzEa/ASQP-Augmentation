@@ -101,7 +101,8 @@ def cmd_list(a):
         jobs = expand(r, rounds)
         done = [j for j in jobs.values() if j["done"] and (ROOT / j["done"]).exists()]
         todo = [j for j in jobs.values() if j not in done]
-        print(f"\n{r}: {rounds['rounds'][r]['goal']}\n  done {len(done)}, to run {len(todo)}, "
+        print(f"\n{r}: {rounds['rounds'][r]['goal']}\n  OpenAI key: {rounds['rounds'][r].get('openai_key', '?')}"
+              f"\n  done {len(done)}, to run {len(todo)}, "
               f"~{sum(estimate(j, mpe) for j in todo) / 60:.1f} GPU-h")
         for j in todo:
             print(f"    {j['id']:40s} ~{estimate(j, mpe):5.0f} min")
@@ -169,6 +170,12 @@ def cmd_run(a):
     print(f"[gpu] {ngpu} CUDA device(s): {names}", flush=True)
     if ngpu == 0 and not os.environ.get("ALLOW_CPU"):
         sys.exit("ERROR: no GPU. Kaggle: Settings -> Accelerator -> GPU T4 x2 (also for Save & Run All).")
+    key_rule = json.load(open(ROUNDS))["rounds"][plan["round"]].get("openai_key", "no")
+    print(f"[openai] round {plan['round']} needs OPENAI_API_KEY: {key_rule}; "
+          f"set in this session: {'yes' if os.environ.get('OPENAI_API_KEY') else 'no'}", flush=True)
+    if key_rule.startswith("yes") and not os.environ.get("OPENAI_API_KEY"):
+        sys.exit("ERROR: this round needs OPENAI_API_KEY. Kaggle: Add-ons -> Secrets -> OPENAI_API_KEY, "
+                 "then export it before run_kaggle.sh (see RUNNING.md).")
     budget = (a.budget_hours or plan["budget_hours"]) * 60
     sess_dir = ROOT / f"outputs/_sessions/{tag}"
     sess_dir.mkdir(parents=True, exist_ok=True)

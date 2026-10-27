@@ -41,12 +41,12 @@ HF_HUB_OFFLINE=1 python3 src/train_paraphrase.py --output_dir /tmp/smoke --seeds
 ```bash
 # local
 python3 scripts/kaggle_queue.py list                         # done / to run / estimated minutes per round
-python3 scripts/kaggle_queue.py plan --round r3              # -> experiments/run_plan.json (calibrated from outputs/_job_times/)
-git add experiments && git commit -m "Plan r3" && git push
+python3 scripts/kaggle_queue.py plan --round r4              # -> experiments/run_plan.json (calibrated from outputs/_job_times/)
+git add experiments && git commit -m "Plan r4" && git push
 
 # Kaggle (GPU T4 x2, Internet on, Save & Run All), session N of the plan
 git clone https://github.com/KiRzEa/ASQP-Augmentation.git && cd ASQP-Augmentation
-bash scripts/run_kaggle.sh 1                                 # -> results_r3_s1.zip, re-packed after every job
+bash scripts/run_kaggle.sh 1                                 # -> results_r4_s1.zip, re-packed after every job
 
 # local, after downloading the zip(s) into runs_inbox/
 python3 scripts/kaggle_queue.py ingest                       # unzip into outputs/, archive the zip (idempotent)
@@ -56,6 +56,15 @@ On Kaggle each GPU runs one job at a time (longest first); a job that no longer 
 stays in the plan for the next session (re-plan after ingesting). Per job: log in `outputs/_logs/`, measured
 minutes in `outputs/_job_times/<round>_s<N>.tsv` (used by `plan` for the next estimates).
 Legacy: `scripts/kaggle_session.sh` (r1, r2) — kept for the `prep` and `quadra_data` jobs.
+
+OpenAI key: each round in `rounds.json` states `openai_key` (also shown by `list`; `run` stops early if a round
+needs a key that is not set). Only rounds that generate data with GPT need it; training rounds do not.
+On Kaggle: Add-ons → Secrets → `OPENAI_API_KEY`, then in a cell before `run_kaggle.sh`:
+```python
+import os; from kaggle_secrets import UserSecretsClient
+os.environ["OPENAI_API_KEY"] = UserSecretsClient().get_secret("OPENAI_API_KEY")
+```
+Never type the key into a notebook cell.
 
 ## QUADRA (our method)
 1. Kaggle `prep` (in s1): 5-fold out-of-fold F1 per cell → `data/aug/difficulty.json`; verifier = Paraphrase

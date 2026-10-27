@@ -1,25 +1,39 @@
 {
-  "_doc": "Rounds of experiments. Each target = one run (outputs/<run>/seed_<s>/) trained once per seed, or a one-off command job. Plan sessions with: python3 scripts/kaggle_queue.py plan --round <r>",
+  "_doc": "Rounds of experiments. openai_key = whether a session of this round needs OPENAI_API_KEY (Kaggle Secrets). Each target = one run (outputs/<run>/seed_<s>/) trained once per seed, or a one-off command job. Plan sessions with: python3 scripts/kaggle_queue.py plan --round <r>",
   "seeds": [42, 123, 2024, 7, 99],
   "rounds": {
     "r1": {
       "goal": "Baseline Paraphrase (ViT5-base) without augmentation; QUADRA preparation (5-fold difficulty, verifier).",
+      "openai_key": "no",
       "status": "done 2026-10-25 (ran before the queue existed: kaggle_session.sh s1 none prep)",
       "targets": [{"run": "para_none"}]
     },
     "r2": {
       "goal": "QUADRA v1: GPT fusion + verifier filter (quad F1 >= 0.8 on all quads).",
+      "openai_key": "yes (GPT fusion when the candidates were generated; now committed in data/aug, reruns need no key)",
       "status": "done 2026-10-26 (ran before the queue existed: kaggle_session.sh s2 quadra_data quadra_gpt=...)",
       "targets": [{"run": "para_quadra_gpt", "aug": "data/aug/quadra_gpt_v.jsonl"}]
     },
     "r3": {
       "goal": "QUADRA filtering: no model verification vs target-cell verification, GPT and rules-only, 2,135 reviews each.",
-      "status": "planned",
+      "openai_key": "no (selection from committed candidates)",
+      "status": "done 2026-10-27 (queue sessions s1 14 jobs, s2 6 jobs)",
       "targets": [
         {"run": "para_quadra_gpt_none", "aug": "data/aug/quadra_gpt_none.jsonl"},
         {"run": "para_quadra_gpt_target", "aug": "data/aug/quadra_gpt_target.jsonl"},
         {"run": "para_quadra_rule_none", "aug": "data/aug/quadra_rule_none.jsonl"},
         {"run": "para_quadra_rule_target", "aug": "data/aug/quadra_rule_target.jsonl"}
+      ]
+    },
+    "r4": {
+      "goal": "QUADRA diagnosis: rules vs GPT at equal filter and size (1,192), amount sweep of the r2 set (534, 1,068 nested; 1,192 = r2), two-stage training (aug first, then gold).",
+      "openai_key": "no (all data committed: subsets made with src/aug/subsample.py)",
+      "status": "planned",
+      "targets": [
+        {"run": "para_quadra_rule_v1192", "aug": "data/aug/quadra_rule_v1192.jsonl"},
+        {"run": "para_quadra_gpt_v534", "aug": "data/aug/quadra_gpt_v534.jsonl"},
+        {"run": "para_quadra_gpt_v1068", "aug": "data/aug/quadra_gpt_v1068.jsonl"},
+        {"run": "para_quadra_gpt_v_2stage", "aug": "data/aug/quadra_gpt_v.jsonl", "args": "--aug_stage pretrain --pretrain_epochs 3"}
       ]
     }
   }

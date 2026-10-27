@@ -1,304 +1,298 @@
 {
- "round": "r3",
+ "round": "r4",
  "budget_hours": 10.5,
  "gpus": 2,
- "min_per_example": 0.019612263300270515,
- "n_calibrated": 10,
- "created": "2026-10-26 23:54",
+ "min_per_example": 0.017184542903178803,
+ "n_calibrated": 30,
+ "created": "2026-10-28 00:04",
  "sessions": [
   {
    "session": 1,
    "jobs": [
-    "para_quadra_gpt_none:s42",
-    "para_quadra_gpt_none:s123",
-    "para_quadra_gpt_none:s2024",
-    "para_quadra_gpt_none:s7",
-    "para_quadra_gpt_none:s99",
-    "para_quadra_gpt_target:s42",
-    "para_quadra_gpt_target:s123",
-    "para_quadra_gpt_target:s2024",
-    "para_quadra_gpt_target:s7",
-    "para_quadra_gpt_target:s99",
-    "para_quadra_rule_none:s42",
-    "para_quadra_rule_none:s123",
-    "para_quadra_rule_none:s2024",
-    "para_quadra_rule_none:s7"
+    "para_quadra_rule_v1192:s42",
+    "para_quadra_rule_v1192:s123",
+    "para_quadra_rule_v1192:s2024",
+    "para_quadra_rule_v1192:s7",
+    "para_quadra_rule_v1192:s99",
+    "para_quadra_gpt_v_2stage:s42",
+    "para_quadra_gpt_v_2stage:s123",
+    "para_quadra_gpt_v_2stage:s2024",
+    "para_quadra_gpt_v_2stage:s7",
+    "para_quadra_gpt_v_2stage:s99",
+    "para_quadra_gpt_v1068:s42",
+    "para_quadra_gpt_v1068:s123",
+    "para_quadra_gpt_v1068:s2024",
+    "para_quadra_gpt_v1068:s7",
+    "para_quadra_gpt_v1068:s99",
+    "para_quadra_gpt_v534:s42",
+    "para_quadra_gpt_v534:s123",
+    "para_quadra_gpt_v534:s2024",
+    "para_quadra_gpt_v534:s7",
+    "para_quadra_gpt_v534:s99"
    ],
-   "est_hours": 9.76
-  },
-  {
-   "session": 2,
-   "jobs": [
-    "para_quadra_rule_none:s99",
-    "para_quadra_rule_target:s42",
-    "para_quadra_rule_target:s123",
-    "para_quadra_rule_target:s2024",
-    "para_quadra_rule_target:s7",
-    "para_quadra_rule_target:s99"
-   ],
-   "est_hours": 4.19
+   "est_hours": 9.05
   }
  ],
  "jobs": {
-  "para_quadra_gpt_none:s42": {
-   "id": "para_quadra_gpt_none:s42",
-   "run": "para_quadra_gpt_none",
+  "para_quadra_rule_v1192:s42": {
+   "id": "para_quadra_rule_v1192:s42",
+   "run": "para_quadra_rule_v1192",
    "seed": 42,
-   "aug": "data/aug/quadra_gpt_none.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_gpt_none --seeds 42 --aug_path data/aug/quadra_gpt_none.jsonl",
-   "examples": 4270,
+   "aug": "data/aug/quadra_rule_v1192.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_rule_v1192 --seeds 42 --aug_path data/aug/quadra_rule_v1192.jsonl",
+   "examples": 3327,
    "outputs": [
-    "outputs/para_quadra_gpt_none/seed_42"
+    "outputs/para_quadra_rule_v1192/seed_42"
    ],
-   "done": "outputs/para_quadra_gpt_none/seed_42/test_predictions.jsonl",
-   "est_min": 83.7
+   "done": "outputs/para_quadra_rule_v1192/seed_42/test_predictions.jsonl",
+   "est_min": 57.2
   },
-  "para_quadra_gpt_none:s123": {
-   "id": "para_quadra_gpt_none:s123",
-   "run": "para_quadra_gpt_none",
+  "para_quadra_rule_v1192:s123": {
+   "id": "para_quadra_rule_v1192:s123",
+   "run": "para_quadra_rule_v1192",
    "seed": 123,
-   "aug": "data/aug/quadra_gpt_none.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_gpt_none --seeds 123 --aug_path data/aug/quadra_gpt_none.jsonl",
-   "examples": 4270,
+   "aug": "data/aug/quadra_rule_v1192.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_rule_v1192 --seeds 123 --aug_path data/aug/quadra_rule_v1192.jsonl",
+   "examples": 3327,
    "outputs": [
-    "outputs/para_quadra_gpt_none/seed_123"
+    "outputs/para_quadra_rule_v1192/seed_123"
    ],
-   "done": "outputs/para_quadra_gpt_none/seed_123/test_predictions.jsonl",
-   "est_min": 83.7
+   "done": "outputs/para_quadra_rule_v1192/seed_123/test_predictions.jsonl",
+   "est_min": 57.2
   },
-  "para_quadra_gpt_none:s2024": {
-   "id": "para_quadra_gpt_none:s2024",
-   "run": "para_quadra_gpt_none",
+  "para_quadra_rule_v1192:s2024": {
+   "id": "para_quadra_rule_v1192:s2024",
+   "run": "para_quadra_rule_v1192",
    "seed": 2024,
-   "aug": "data/aug/quadra_gpt_none.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_gpt_none --seeds 2024 --aug_path data/aug/quadra_gpt_none.jsonl",
-   "examples": 4270,
+   "aug": "data/aug/quadra_rule_v1192.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_rule_v1192 --seeds 2024 --aug_path data/aug/quadra_rule_v1192.jsonl",
+   "examples": 3327,
    "outputs": [
-    "outputs/para_quadra_gpt_none/seed_2024"
+    "outputs/para_quadra_rule_v1192/seed_2024"
    ],
-   "done": "outputs/para_quadra_gpt_none/seed_2024/test_predictions.jsonl",
-   "est_min": 83.7
+   "done": "outputs/para_quadra_rule_v1192/seed_2024/test_predictions.jsonl",
+   "est_min": 57.2
   },
-  "para_quadra_gpt_none:s7": {
-   "id": "para_quadra_gpt_none:s7",
-   "run": "para_quadra_gpt_none",
+  "para_quadra_rule_v1192:s7": {
+   "id": "para_quadra_rule_v1192:s7",
+   "run": "para_quadra_rule_v1192",
    "seed": 7,
-   "aug": "data/aug/quadra_gpt_none.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_gpt_none --seeds 7 --aug_path data/aug/quadra_gpt_none.jsonl",
-   "examples": 4270,
+   "aug": "data/aug/quadra_rule_v1192.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_rule_v1192 --seeds 7 --aug_path data/aug/quadra_rule_v1192.jsonl",
+   "examples": 3327,
    "outputs": [
-    "outputs/para_quadra_gpt_none/seed_7"
+    "outputs/para_quadra_rule_v1192/seed_7"
    ],
-   "done": "outputs/para_quadra_gpt_none/seed_7/test_predictions.jsonl",
-   "est_min": 83.7
+   "done": "outputs/para_quadra_rule_v1192/seed_7/test_predictions.jsonl",
+   "est_min": 57.2
   },
-  "para_quadra_gpt_none:s99": {
-   "id": "para_quadra_gpt_none:s99",
-   "run": "para_quadra_gpt_none",
+  "para_quadra_rule_v1192:s99": {
+   "id": "para_quadra_rule_v1192:s99",
+   "run": "para_quadra_rule_v1192",
    "seed": 99,
-   "aug": "data/aug/quadra_gpt_none.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_gpt_none --seeds 99 --aug_path data/aug/quadra_gpt_none.jsonl",
-   "examples": 4270,
+   "aug": "data/aug/quadra_rule_v1192.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_rule_v1192 --seeds 99 --aug_path data/aug/quadra_rule_v1192.jsonl",
+   "examples": 3327,
    "outputs": [
-    "outputs/para_quadra_gpt_none/seed_99"
+    "outputs/para_quadra_rule_v1192/seed_99"
    ],
-   "done": "outputs/para_quadra_gpt_none/seed_99/test_predictions.jsonl",
-   "est_min": 83.7
+   "done": "outputs/para_quadra_rule_v1192/seed_99/test_predictions.jsonl",
+   "est_min": 57.2
   },
-  "para_quadra_gpt_target:s42": {
-   "id": "para_quadra_gpt_target:s42",
-   "run": "para_quadra_gpt_target",
+  "para_quadra_gpt_v534:s42": {
+   "id": "para_quadra_gpt_v534:s42",
+   "run": "para_quadra_gpt_v534",
    "seed": 42,
-   "aug": "data/aug/quadra_gpt_target.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_gpt_target --seeds 42 --aug_path data/aug/quadra_gpt_target.jsonl",
-   "examples": 4270,
+   "aug": "data/aug/quadra_gpt_v534.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_gpt_v534 --seeds 42 --aug_path data/aug/quadra_gpt_v534.jsonl",
+   "examples": 2669,
    "outputs": [
-    "outputs/para_quadra_gpt_target/seed_42"
+    "outputs/para_quadra_gpt_v534/seed_42"
    ],
-   "done": "outputs/para_quadra_gpt_target/seed_42/test_predictions.jsonl",
-   "est_min": 83.7
+   "done": "outputs/para_quadra_gpt_v534/seed_42/test_predictions.jsonl",
+   "est_min": 45.9
   },
-  "para_quadra_gpt_target:s123": {
-   "id": "para_quadra_gpt_target:s123",
-   "run": "para_quadra_gpt_target",
+  "para_quadra_gpt_v534:s123": {
+   "id": "para_quadra_gpt_v534:s123",
+   "run": "para_quadra_gpt_v534",
    "seed": 123,
-   "aug": "data/aug/quadra_gpt_target.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_gpt_target --seeds 123 --aug_path data/aug/quadra_gpt_target.jsonl",
-   "examples": 4270,
+   "aug": "data/aug/quadra_gpt_v534.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_gpt_v534 --seeds 123 --aug_path data/aug/quadra_gpt_v534.jsonl",
+   "examples": 2669,
    "outputs": [
-    "outputs/para_quadra_gpt_target/seed_123"
+    "outputs/para_quadra_gpt_v534/seed_123"
    ],
-   "done": "outputs/para_quadra_gpt_target/seed_123/test_predictions.jsonl",
-   "est_min": 83.7
+   "done": "outputs/para_quadra_gpt_v534/seed_123/test_predictions.jsonl",
+   "est_min": 45.9
   },
-  "para_quadra_gpt_target:s2024": {
-   "id": "para_quadra_gpt_target:s2024",
-   "run": "para_quadra_gpt_target",
+  "para_quadra_gpt_v534:s2024": {
+   "id": "para_quadra_gpt_v534:s2024",
+   "run": "para_quadra_gpt_v534",
    "seed": 2024,
-   "aug": "data/aug/quadra_gpt_target.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_gpt_target --seeds 2024 --aug_path data/aug/quadra_gpt_target.jsonl",
-   "examples": 4270,
+   "aug": "data/aug/quadra_gpt_v534.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_gpt_v534 --seeds 2024 --aug_path data/aug/quadra_gpt_v534.jsonl",
+   "examples": 2669,
    "outputs": [
-    "outputs/para_quadra_gpt_target/seed_2024"
+    "outputs/para_quadra_gpt_v534/seed_2024"
    ],
-   "done": "outputs/para_quadra_gpt_target/seed_2024/test_predictions.jsonl",
-   "est_min": 83.7
+   "done": "outputs/para_quadra_gpt_v534/seed_2024/test_predictions.jsonl",
+   "est_min": 45.9
   },
-  "para_quadra_gpt_target:s7": {
-   "id": "para_quadra_gpt_target:s7",
-   "run": "para_quadra_gpt_target",
+  "para_quadra_gpt_v534:s7": {
+   "id": "para_quadra_gpt_v534:s7",
+   "run": "para_quadra_gpt_v534",
    "seed": 7,
-   "aug": "data/aug/quadra_gpt_target.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_gpt_target --seeds 7 --aug_path data/aug/quadra_gpt_target.jsonl",
-   "examples": 4270,
+   "aug": "data/aug/quadra_gpt_v534.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_gpt_v534 --seeds 7 --aug_path data/aug/quadra_gpt_v534.jsonl",
+   "examples": 2669,
    "outputs": [
-    "outputs/para_quadra_gpt_target/seed_7"
+    "outputs/para_quadra_gpt_v534/seed_7"
    ],
-   "done": "outputs/para_quadra_gpt_target/seed_7/test_predictions.jsonl",
-   "est_min": 83.7
+   "done": "outputs/para_quadra_gpt_v534/seed_7/test_predictions.jsonl",
+   "est_min": 45.9
   },
-  "para_quadra_gpt_target:s99": {
-   "id": "para_quadra_gpt_target:s99",
-   "run": "para_quadra_gpt_target",
+  "para_quadra_gpt_v534:s99": {
+   "id": "para_quadra_gpt_v534:s99",
+   "run": "para_quadra_gpt_v534",
    "seed": 99,
-   "aug": "data/aug/quadra_gpt_target.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_gpt_target --seeds 99 --aug_path data/aug/quadra_gpt_target.jsonl",
-   "examples": 4270,
+   "aug": "data/aug/quadra_gpt_v534.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_gpt_v534 --seeds 99 --aug_path data/aug/quadra_gpt_v534.jsonl",
+   "examples": 2669,
    "outputs": [
-    "outputs/para_quadra_gpt_target/seed_99"
+    "outputs/para_quadra_gpt_v534/seed_99"
    ],
-   "done": "outputs/para_quadra_gpt_target/seed_99/test_predictions.jsonl",
-   "est_min": 83.7
+   "done": "outputs/para_quadra_gpt_v534/seed_99/test_predictions.jsonl",
+   "est_min": 45.9
   },
-  "para_quadra_rule_none:s42": {
-   "id": "para_quadra_rule_none:s42",
-   "run": "para_quadra_rule_none",
+  "para_quadra_gpt_v1068:s42": {
+   "id": "para_quadra_gpt_v1068:s42",
+   "run": "para_quadra_gpt_v1068",
    "seed": 42,
-   "aug": "data/aug/quadra_rule_none.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_rule_none --seeds 42 --aug_path data/aug/quadra_rule_none.jsonl",
-   "examples": 4270,
+   "aug": "data/aug/quadra_gpt_v1068.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_gpt_v1068 --seeds 42 --aug_path data/aug/quadra_gpt_v1068.jsonl",
+   "examples": 3203,
    "outputs": [
-    "outputs/para_quadra_rule_none/seed_42"
+    "outputs/para_quadra_gpt_v1068/seed_42"
    ],
-   "done": "outputs/para_quadra_rule_none/seed_42/test_predictions.jsonl",
-   "est_min": 83.7
+   "done": "outputs/para_quadra_gpt_v1068/seed_42/test_predictions.jsonl",
+   "est_min": 55.0
   },
-  "para_quadra_rule_none:s123": {
-   "id": "para_quadra_rule_none:s123",
-   "run": "para_quadra_rule_none",
+  "para_quadra_gpt_v1068:s123": {
+   "id": "para_quadra_gpt_v1068:s123",
+   "run": "para_quadra_gpt_v1068",
    "seed": 123,
-   "aug": "data/aug/quadra_rule_none.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_rule_none --seeds 123 --aug_path data/aug/quadra_rule_none.jsonl",
-   "examples": 4270,
+   "aug": "data/aug/quadra_gpt_v1068.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_gpt_v1068 --seeds 123 --aug_path data/aug/quadra_gpt_v1068.jsonl",
+   "examples": 3203,
    "outputs": [
-    "outputs/para_quadra_rule_none/seed_123"
+    "outputs/para_quadra_gpt_v1068/seed_123"
    ],
-   "done": "outputs/para_quadra_rule_none/seed_123/test_predictions.jsonl",
-   "est_min": 83.7
+   "done": "outputs/para_quadra_gpt_v1068/seed_123/test_predictions.jsonl",
+   "est_min": 55.0
   },
-  "para_quadra_rule_none:s2024": {
-   "id": "para_quadra_rule_none:s2024",
-   "run": "para_quadra_rule_none",
+  "para_quadra_gpt_v1068:s2024": {
+   "id": "para_quadra_gpt_v1068:s2024",
+   "run": "para_quadra_gpt_v1068",
    "seed": 2024,
-   "aug": "data/aug/quadra_rule_none.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_rule_none --seeds 2024 --aug_path data/aug/quadra_rule_none.jsonl",
-   "examples": 4270,
+   "aug": "data/aug/quadra_gpt_v1068.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_gpt_v1068 --seeds 2024 --aug_path data/aug/quadra_gpt_v1068.jsonl",
+   "examples": 3203,
    "outputs": [
-    "outputs/para_quadra_rule_none/seed_2024"
+    "outputs/para_quadra_gpt_v1068/seed_2024"
    ],
-   "done": "outputs/para_quadra_rule_none/seed_2024/test_predictions.jsonl",
-   "est_min": 83.7
+   "done": "outputs/para_quadra_gpt_v1068/seed_2024/test_predictions.jsonl",
+   "est_min": 55.0
   },
-  "para_quadra_rule_none:s7": {
-   "id": "para_quadra_rule_none:s7",
-   "run": "para_quadra_rule_none",
+  "para_quadra_gpt_v1068:s7": {
+   "id": "para_quadra_gpt_v1068:s7",
+   "run": "para_quadra_gpt_v1068",
    "seed": 7,
-   "aug": "data/aug/quadra_rule_none.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_rule_none --seeds 7 --aug_path data/aug/quadra_rule_none.jsonl",
-   "examples": 4270,
+   "aug": "data/aug/quadra_gpt_v1068.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_gpt_v1068 --seeds 7 --aug_path data/aug/quadra_gpt_v1068.jsonl",
+   "examples": 3203,
    "outputs": [
-    "outputs/para_quadra_rule_none/seed_7"
+    "outputs/para_quadra_gpt_v1068/seed_7"
    ],
-   "done": "outputs/para_quadra_rule_none/seed_7/test_predictions.jsonl",
-   "est_min": 83.7
+   "done": "outputs/para_quadra_gpt_v1068/seed_7/test_predictions.jsonl",
+   "est_min": 55.0
   },
-  "para_quadra_rule_none:s99": {
-   "id": "para_quadra_rule_none:s99",
-   "run": "para_quadra_rule_none",
+  "para_quadra_gpt_v1068:s99": {
+   "id": "para_quadra_gpt_v1068:s99",
+   "run": "para_quadra_gpt_v1068",
    "seed": 99,
-   "aug": "data/aug/quadra_rule_none.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_rule_none --seeds 99 --aug_path data/aug/quadra_rule_none.jsonl",
-   "examples": 4270,
+   "aug": "data/aug/quadra_gpt_v1068.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_gpt_v1068 --seeds 99 --aug_path data/aug/quadra_gpt_v1068.jsonl",
+   "examples": 3203,
    "outputs": [
-    "outputs/para_quadra_rule_none/seed_99"
+    "outputs/para_quadra_gpt_v1068/seed_99"
    ],
-   "done": "outputs/para_quadra_rule_none/seed_99/test_predictions.jsonl",
-   "est_min": 83.7
+   "done": "outputs/para_quadra_gpt_v1068/seed_99/test_predictions.jsonl",
+   "est_min": 55.0
   },
-  "para_quadra_rule_target:s42": {
-   "id": "para_quadra_rule_target:s42",
-   "run": "para_quadra_rule_target",
+  "para_quadra_gpt_v_2stage:s42": {
+   "id": "para_quadra_gpt_v_2stage:s42",
+   "run": "para_quadra_gpt_v_2stage",
    "seed": 42,
-   "aug": "data/aug/quadra_rule_target.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_rule_target --seeds 42 --aug_path data/aug/quadra_rule_target.jsonl",
-   "examples": 4270,
+   "aug": "data/aug/quadra_gpt_v.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_gpt_v_2stage --seeds 42 --aug_path data/aug/quadra_gpt_v.jsonl --aug_stage pretrain --pretrain_epochs 3",
+   "examples": 3327,
    "outputs": [
-    "outputs/para_quadra_rule_target/seed_42"
+    "outputs/para_quadra_gpt_v_2stage/seed_42"
    ],
-   "done": "outputs/para_quadra_rule_target/seed_42/test_predictions.jsonl",
-   "est_min": 83.7
+   "done": "outputs/para_quadra_gpt_v_2stage/seed_42/test_predictions.jsonl",
+   "est_min": 57.2
   },
-  "para_quadra_rule_target:s123": {
-   "id": "para_quadra_rule_target:s123",
-   "run": "para_quadra_rule_target",
+  "para_quadra_gpt_v_2stage:s123": {
+   "id": "para_quadra_gpt_v_2stage:s123",
+   "run": "para_quadra_gpt_v_2stage",
    "seed": 123,
-   "aug": "data/aug/quadra_rule_target.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_rule_target --seeds 123 --aug_path data/aug/quadra_rule_target.jsonl",
-   "examples": 4270,
+   "aug": "data/aug/quadra_gpt_v.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_gpt_v_2stage --seeds 123 --aug_path data/aug/quadra_gpt_v.jsonl --aug_stage pretrain --pretrain_epochs 3",
+   "examples": 3327,
    "outputs": [
-    "outputs/para_quadra_rule_target/seed_123"
+    "outputs/para_quadra_gpt_v_2stage/seed_123"
    ],
-   "done": "outputs/para_quadra_rule_target/seed_123/test_predictions.jsonl",
-   "est_min": 83.7
+   "done": "outputs/para_quadra_gpt_v_2stage/seed_123/test_predictions.jsonl",
+   "est_min": 57.2
   },
-  "para_quadra_rule_target:s2024": {
-   "id": "para_quadra_rule_target:s2024",
-   "run": "para_quadra_rule_target",
+  "para_quadra_gpt_v_2stage:s2024": {
+   "id": "para_quadra_gpt_v_2stage:s2024",
+   "run": "para_quadra_gpt_v_2stage",
    "seed": 2024,
-   "aug": "data/aug/quadra_rule_target.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_rule_target --seeds 2024 --aug_path data/aug/quadra_rule_target.jsonl",
-   "examples": 4270,
+   "aug": "data/aug/quadra_gpt_v.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_gpt_v_2stage --seeds 2024 --aug_path data/aug/quadra_gpt_v.jsonl --aug_stage pretrain --pretrain_epochs 3",
+   "examples": 3327,
    "outputs": [
-    "outputs/para_quadra_rule_target/seed_2024"
+    "outputs/para_quadra_gpt_v_2stage/seed_2024"
    ],
-   "done": "outputs/para_quadra_rule_target/seed_2024/test_predictions.jsonl",
-   "est_min": 83.7
+   "done": "outputs/para_quadra_gpt_v_2stage/seed_2024/test_predictions.jsonl",
+   "est_min": 57.2
   },
-  "para_quadra_rule_target:s7": {
-   "id": "para_quadra_rule_target:s7",
-   "run": "para_quadra_rule_target",
+  "para_quadra_gpt_v_2stage:s7": {
+   "id": "para_quadra_gpt_v_2stage:s7",
+   "run": "para_quadra_gpt_v_2stage",
    "seed": 7,
-   "aug": "data/aug/quadra_rule_target.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_rule_target --seeds 7 --aug_path data/aug/quadra_rule_target.jsonl",
-   "examples": 4270,
+   "aug": "data/aug/quadra_gpt_v.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_gpt_v_2stage --seeds 7 --aug_path data/aug/quadra_gpt_v.jsonl --aug_stage pretrain --pretrain_epochs 3",
+   "examples": 3327,
    "outputs": [
-    "outputs/para_quadra_rule_target/seed_7"
+    "outputs/para_quadra_gpt_v_2stage/seed_7"
    ],
-   "done": "outputs/para_quadra_rule_target/seed_7/test_predictions.jsonl",
-   "est_min": 83.7
+   "done": "outputs/para_quadra_gpt_v_2stage/seed_7/test_predictions.jsonl",
+   "est_min": 57.2
   },
-  "para_quadra_rule_target:s99": {
-   "id": "para_quadra_rule_target:s99",
-   "run": "para_quadra_rule_target",
+  "para_quadra_gpt_v_2stage:s99": {
+   "id": "para_quadra_gpt_v_2stage:s99",
+   "run": "para_quadra_gpt_v_2stage",
    "seed": 99,
-   "aug": "data/aug/quadra_rule_target.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_rule_target --seeds 99 --aug_path data/aug/quadra_rule_target.jsonl",
-   "examples": 4270,
+   "aug": "data/aug/quadra_gpt_v.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_quadra_gpt_v_2stage --seeds 99 --aug_path data/aug/quadra_gpt_v.jsonl --aug_stage pretrain --pretrain_epochs 3",
+   "examples": 3327,
    "outputs": [
-    "outputs/para_quadra_rule_target/seed_99"
+    "outputs/para_quadra_gpt_v_2stage/seed_99"
    ],
-   "done": "outputs/para_quadra_rule_target/seed_99/test_predictions.jsonl",
-   "est_min": 83.7
+   "done": "outputs/para_quadra_gpt_v_2stage/seed_99/test_predictions.jsonl",
+   "est_min": 57.2
   }
  }
 }

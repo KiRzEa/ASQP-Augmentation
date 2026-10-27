@@ -4,6 +4,11 @@ Every augmentation method is evaluated with this same script: only --aug_path ch
 
     python src/train_paraphrase.py --output_dir outputs/para_none --seeds 42,123,2024,7,99
     python src/train_paraphrase.py --output_dir outputs/para_ada --aug_path data/aug/ada.jsonl
+    python src/train_paraphrase.py --output_dir outputs/para_ada_2stage --aug_path data/aug/ada.jsonl --aug_stage pretrain
+
+--aug_stage mixed (default) trains on train + aug shuffled together. --aug_stage pretrain first trains
+--pretrain_epochs epochs on the augmented data only (own optimiser and linear schedule, no dev selection),
+then trains on the gold train set exactly as without augmentation (fresh optimiser, dev selection, early stop).
 
 Per seed, <output_dir>/seed_<s>/ gets:
   test_predictions.jsonl, dev_predictions.jsonl  id, text, gold, pred, raw generation, invalid segments
@@ -41,6 +46,9 @@ def parse_args():
     ap = argparse.ArgumentParser()
     ap.add_argument("--train_path", default=str(ROOT / "data/restaurant_v1/train.jsonl"))
     ap.add_argument("--aug_path", action="append", default=[], help="augmented JSONL added to train; repeatable")
+    ap.add_argument("--aug_stage", choices=["mixed", "pretrain"], default="mixed",
+                    help="mixed: train on train + aug; pretrain: aug only first, then train only")
+    ap.add_argument("--pretrain_epochs", type=int, default=3, help="epochs on aug data with --aug_stage pretrain")
     ap.add_argument("--dev_path", default=str(ROOT / "data/restaurant_v1/dev.jsonl"))
     ap.add_argument("--test_path", default=str(ROOT / "data/restaurant_v1/test.jsonl"))
     ap.add_argument("--output_dir", required=True)
@@ -130,7 +138,9 @@ def run_seed(seed, args, data, device, out_dir):
     tok = AutoTokenizer.from_pretrained(args.model_name)
     model = AutoModelForSeq2SeqLM.from_pretrained(args.model_name).to(device)
 
-    train = [{"text": x["text"], "target": quads_to_target(x["quads"])} for x in data["train_all"]]
+    pretrain = args.aug_stage == "pretrain" and len(data["train_all"]) > len(data["train"])
+    stage2 = data["train"] if pretrain else data["train_all"]
+    train = [{"text": x["text"], "target": quads_to_target(x["quads"])} for x in stage2]
     src_trunc = sum(len(tok(x["text"]).input_ids) > args.max_source_len for x in train)
     tgt_trunc = sum(len(tok(x["target"]).input_ids) > args.max_target_len for x in train)
     gen = torch.Generator().manual_seed(seed)
@@ -149,8 +159,42 @@ def run_seed(seed, args, data, device, out_dir):
     if device.type == "cuda":
         torch.cuda.reset_peak_memory_stats(device)
     log.info(f"device {device}" + (f" ({torch.cuda.get_device_name(device)})" if device.type == "cuda" else " — NO GPU"))
-    log.info(f"train {len(data['train'])} + aug {len(data['train_all']) - len(data['train'])} = {len(train)} examples, "
+    log.info(f"train {len(data['train'])} + aug {len(data['train_all']) - len(data['train'])} ({args.aug_stage}); "
+             f"{len(train)} examples in the main stage, "
              f"{steps_per_epoch} steps/epoch, {total_steps} steps, truncated src {src_trunc} tgt {tgt_trunc}")
+
+    pre_history, pre_steps = [], 0
+    if pretrain:  # stage 1: augmented data only, fixed number of epochs, no dev selection
+        aug = [{"text": x["text"], "target": quads_to_target(x["quads"])} for x in data["train_all"][len(data["train"]):]]
+        pre_loader = DataLoader(aug, batch_size=args.batch_size, shuffle=True, generator=gen, collate_fn=make_collate(tok, args))
+        pre_total = max(1, len(pre_loader) // args.grad_accum) * args.pretrain_epochs
+        pre_opt = torch.optim.AdamW(params, lr=args.lr)
+        pre_sched = get_linear_schedule_with_warmup(pre_opt, int(args.warmup_ratio * pre_total), pre_total)
+        log.info(f"stage 1: {len(aug)} augmented examples, {args.pretrain_epochs} epochs, {pre_total} steps")
+        for epoch in range(1, args.pretrain_epochs + 1):
+            model.train()
+            te, losses = time.time(), []
+            for i, batch in enumerate(pre_loader):
+                batch = {k: v.to(device) for k, v in batch.items()}
+                with torch.autocast(device_type=device.type, dtype=torch.float16, enabled=args.fp16 and device.type == "cuda"):
+                    loss = model(**batch).loss / args.grad_accum
+                scaler.scale(loss).backward()
+                losses.append(loss.item() * args.grad_accum)
+                if (i + 1) % args.grad_accum == 0:
+                    scaler.unscale_(pre_opt)
+                    torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
+                    scaler.step(pre_opt); scaler.update(); pre_opt.zero_grad(set_to_none=True); pre_sched.step()
+                    pre_steps += 1
+                    if pre_steps % args.log_every == 0:
+                        log.info(f"stage 1 epoch {epoch} step {pre_steps}/{pre_total} loss {np.mean(losses[-50:]):.4f} "
+                                 f"elapsed {(time.time() - t0) / 60:.1f} min")
+            rec = {"stage": "pretrain", "epoch": epoch, "step": pre_steps, "train_loss": float(np.mean(losses)),
+                   "train_seconds": time.time() - te}
+            pre_history.append(rec)
+            log.info(json.dumps(rec))
+        del pre_opt, pre_sched
+        opt.zero_grad(set_to_none=True)
+        log.info(f"stage 2: {len(train)} gold examples")
 
     history, best, best_f1, best_epoch, bad, step = [], None, -1.0, 0, 0, 0
     for epoch in range(1, epochs + 1):
@@ -196,10 +240,10 @@ def run_seed(seed, args, data, device, out_dir):
     metrics = {"seed": seed, "best_epoch": best_epoch, "dev": score(dev_pred), "test": score(test_pred)}
     write_jsonl(out_dir / "dev_predictions.jsonl", dev_pred)
     write_jsonl(out_dir / "test_predictions.jsonl", test_pred)
-    json.dump(history, open(out_dir / "history.json", "w"), indent=1)
+    json.dump(pre_history + history, open(out_dir / "history.json", "w"), indent=1)
     json.dump(metrics, open(out_dir / "metrics.json", "w"), indent=1)
     cfg = {
-        "args": vars(args), "seed": seed, "best_epoch": best_epoch, "optimizer_steps": step,
+        "args": vars(args), "seed": seed, "best_epoch": best_epoch, "optimizer_steps": step, "pretrain_steps": pre_steps,
         "epochs_run": len(history), "steps_per_epoch": steps_per_epoch,
         "n_train": len(data["train"]), "n_aug": len(data["train_all"]) - len(data["train"]), "n_train_total": len(train),
         "truncated_source": src_trunc, "truncated_target": tgt_trunc,
