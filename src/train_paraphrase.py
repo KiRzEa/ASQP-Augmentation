@@ -17,10 +17,13 @@ Per seed, <output_dir>/seed_<s>/ gets:
   run_config.json   all arguments, data hashes and sizes, package versions, GPU, timings, peak memory,
                     best epoch, optimiser steps, truncation counts
   train.log
-A seed whose metrics.json and test_predictions.jsonl exist is skipped (resume). Checkpoints are not kept
+A seed whose metrics.json and test_predictions.jsonl exist is skipped (resume). On CUDA out-of-memory the seed
+restarts from scratch with half the batch and twice the gradient accumulation (recorded in run_config.json
+"oom_fallbacks"). Checkpoints are not kept
 unless --keep_ckpt.
 """
 import argparse
+import gc
 import hashlib
 import json
 import logging
@@ -58,7 +61,8 @@ def parse_args():
     ap.add_argument("--epochs", type=int, default=20)
     ap.add_argument("--max_steps", type=int, default=0, help="if > 0, train exactly this many optimiser steps (step-matched control)")
     ap.add_argument("--batch_size", type=int, default=16)
-    ap.add_argument("--grad_accum", type=int, default=1)
+    ap.add_argument("--grad_accum", type=int, default=1,
+                    help="micro-batches per step; --batch_size 8 --grad_accum 2 = effective 16 with half the memory")
     ap.add_argument("--eval_batch_size", type=int, default=32)
     ap.add_argument("--lr", type=float, default=3e-4)
     ap.add_argument("--weight_decay", type=float, default=0.0)
@@ -73,6 +77,9 @@ def parse_args():
     ap.add_argument("--keep_ckpt", action="store_true")
     ap.add_argument("--limit", type=int, default=0, help="smoke test: use only the first N examples of each split")
     ap.add_argument("--cpu", action="store_true")
+    ap.add_argument("--min_batch_size", type=int, default=2,
+                    help="on CUDA out-of-memory the seed restarts with half the batch and twice --grad_accum "
+                         "(same effective batch and steps) until this batch size; 0 = no retry")
     ap.add_argument("--log_every", type=int, default=50, help="log progress every N optimiser steps")
     return ap.parse_args()
 
@@ -199,6 +206,7 @@ def run_seed(seed, args, data, device, out_dir):
     history, best, best_f1, best_epoch, bad, step = [], None, -1.0, 0, 0, 0
     for epoch in range(1, epochs + 1):
         model.train()
+        opt.zero_grad(set_to_none=True)  # drop a partial accumulation left from the previous epoch
         te, losses = time.time(), []
         for i, batch in enumerate(loader):
             batch = {k: v.to(device) for k, v in batch.items()}
@@ -253,6 +261,7 @@ def run_seed(seed, args, data, device, out_dir):
         "versions": {"python": platform.python_version(), "torch": torch.__version__,
                      "transformers": __import__("transformers").__version__},
         "command": " ".join(sys.argv), "hostname": platform.node(),
+        "oom_fallbacks": getattr(args, "oom_fallbacks", []),
     }
     json.dump(cfg, open(out_dir / "run_config.json", "w"), indent=1)
     if args.keep_ckpt:
@@ -280,7 +289,28 @@ def main():
         if (d / "metrics.json").exists() and (d / "test_predictions.jsonl").exists():
             print(f"seed {seed}: already done, skipped")
             continue
-        run_seed(seed, args, data, device, d)
+        while True:
+            oom = False
+            try:
+                run_seed(seed, args, data, device, d)
+            except torch.cuda.OutOfMemoryError:
+                oom = True
+            if not oom:
+                break
+            gc.collect()
+            torch.cuda.empty_cache()
+            if not args.min_batch_size or args.batch_size // 2 < args.min_batch_size:
+                raise SystemExit(f"seed {seed}: CUDA out of memory at batch {args.batch_size}, no smaller batch allowed")
+            old = (args.batch_size, args.grad_accum, args.eval_batch_size)
+            args.batch_size, args.grad_accum = args.batch_size // 2, args.grad_accum * 2
+            args.eval_batch_size = max(1, args.eval_batch_size // 2)
+            args.oom_fallbacks = getattr(args, "oom_fallbacks", []) + [
+                {"seed": seed, "from": {"batch_size": old[0], "grad_accum": old[1], "eval_batch_size": old[2]},
+                 "to": {"batch_size": args.batch_size, "grad_accum": args.grad_accum,
+                        "eval_batch_size": args.eval_batch_size}}]
+            print(f"seed {seed}: CUDA out of memory -> restarting the seed with batch {args.batch_size} x "
+                  f"grad_accum {args.grad_accum} (effective {args.batch_size * args.grad_accum}), "
+                  f"eval batch {args.eval_batch_size}", flush=True)
 
 
 if __name__ == "__main__":

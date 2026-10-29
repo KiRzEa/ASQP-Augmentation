@@ -1,10 +1,10 @@
 {
- "round": "r5",
+ "round": "r6",
  "budget_hours": 10.5,
  "gpus": 2,
- "min_per_example": 0.017184542903178803,
- "n_calibrated": 30,
- "created": "2026-10-28 00:33",
+ "min_per_example": 0.017289742782950368,
+ "n_calibrated": 60,
+ "created": "2026-10-29 09:51",
  "sessions": [
   {
    "session": 1,
@@ -16,7 +16,7 @@
     "para_ada_category:s42",
     "para_ada_category:s123"
    ],
-   "est_hours": 9.36
+   "est_hours": 9.41
   },
   {
    "session": 2,
@@ -30,10 +30,10 @@
     "para_ada_joint:s2024",
     "para_ada_joint:s7",
     "para_ada_joint:s99",
-    "genda_gen",
-    "para_dup:s42"
+    "para_genda:s42",
+    "para_genda:s123"
    ],
-   "est_hours": 10.27
+   "est_hours": 10.33
   },
   {
    "session": 3,
@@ -43,636 +43,338 @@
     "para_concat:s2024",
     "para_concat:s7",
     "para_concat:s99",
-    "para_dup:s123",
-    "para_dup:s2024",
-    "para_dup:s7",
-    "para_dup:s99",
-    "para_eda:s42",
-    "para_eda:s123",
-    "para_eda:s2024",
-    "para_eda:s7",
-    "para_eda:s99"
+    "para_genda:s2024",
+    "para_genda:s7",
+    "para_genda:s99"
    ],
-   "est_hours": 9.85
-  },
-  {
-   "session": 4,
-   "jobs": [
-    "para_spansub:s42",
-    "para_spansub:s123",
-    "para_spansub:s2024",
-    "para_spansub:s7",
-    "para_spansub:s99",
-    "para_llm_para:s42",
-    "para_llm_para:s123",
-    "para_llm_para:s2024",
-    "para_llm_para:s7",
-    "para_llm_para:s99",
-    "para_llm_q2t:s42",
-    "para_llm_q2t:s123",
-    "para_llm_q2t:s2024",
-    "para_llm_q2t:s7",
-    "para_llm_q2t:s99"
-   ],
-   "est_hours": 9.79
+   "est_hours": 6.22
   }
  ],
  "jobs": {
-  "genda_gen": {
-   "id": "genda_gen",
-   "command": "python -u src/aug/genda.py --out data/aug/genda.jsonl",
-   "est_min": 75,
-   "outputs": [
-    "data/aug/genda.jsonl",
-    "data/aug/genda.report.json"
-   ],
-   "done": "data/aug/genda.jsonl",
-   "examples": null
-  },
   "para_ada_pattern:s42": {
    "id": "para_ada_pattern:s42",
    "run": "para_ada_pattern",
    "seed": 42,
    "aug": "data/aug/ada_pattern.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_ada_pattern --seeds 42 --aug_path data/aug/ada_pattern.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_ada_pattern --seeds 42 --aug_path data/aug/ada_pattern.jsonl --batch_size 8 --grad_accum 2",
    "examples": 12765,
    "outputs": [
     "outputs/para_ada_pattern/seed_42"
    ],
    "done": "outputs/para_ada_pattern/seed_42/test_predictions.jsonl",
-   "est_min": 219.4
+   "est_min": 220.7
   },
   "para_ada_pattern:s123": {
    "id": "para_ada_pattern:s123",
    "run": "para_ada_pattern",
    "seed": 123,
    "aug": "data/aug/ada_pattern.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_ada_pattern --seeds 123 --aug_path data/aug/ada_pattern.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_ada_pattern --seeds 123 --aug_path data/aug/ada_pattern.jsonl --batch_size 8 --grad_accum 2",
    "examples": 12765,
    "outputs": [
     "outputs/para_ada_pattern/seed_123"
    ],
    "done": "outputs/para_ada_pattern/seed_123/test_predictions.jsonl",
-   "est_min": 219.4
+   "est_min": 220.7
   },
   "para_ada_pattern:s2024": {
    "id": "para_ada_pattern:s2024",
    "run": "para_ada_pattern",
    "seed": 2024,
    "aug": "data/aug/ada_pattern.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_ada_pattern --seeds 2024 --aug_path data/aug/ada_pattern.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_ada_pattern --seeds 2024 --aug_path data/aug/ada_pattern.jsonl --batch_size 8 --grad_accum 2",
    "examples": 12765,
    "outputs": [
     "outputs/para_ada_pattern/seed_2024"
    ],
    "done": "outputs/para_ada_pattern/seed_2024/test_predictions.jsonl",
-   "est_min": 219.4
+   "est_min": 220.7
   },
   "para_ada_pattern:s7": {
    "id": "para_ada_pattern:s7",
    "run": "para_ada_pattern",
    "seed": 7,
    "aug": "data/aug/ada_pattern.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_ada_pattern --seeds 7 --aug_path data/aug/ada_pattern.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_ada_pattern --seeds 7 --aug_path data/aug/ada_pattern.jsonl --batch_size 8 --grad_accum 2",
    "examples": 12765,
    "outputs": [
     "outputs/para_ada_pattern/seed_7"
    ],
    "done": "outputs/para_ada_pattern/seed_7/test_predictions.jsonl",
-   "est_min": 219.4
+   "est_min": 220.7
   },
   "para_ada_pattern:s99": {
    "id": "para_ada_pattern:s99",
    "run": "para_ada_pattern",
    "seed": 99,
    "aug": "data/aug/ada_pattern.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_ada_pattern --seeds 99 --aug_path data/aug/ada_pattern.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_ada_pattern --seeds 99 --aug_path data/aug/ada_pattern.jsonl --batch_size 8 --grad_accum 2",
    "examples": 12765,
    "outputs": [
     "outputs/para_ada_pattern/seed_99"
    ],
    "done": "outputs/para_ada_pattern/seed_99/test_predictions.jsonl",
-   "est_min": 219.4
+   "est_min": 220.7
   },
   "para_ada_category:s42": {
    "id": "para_ada_category:s42",
    "run": "para_ada_category",
    "seed": 42,
    "aug": "data/aug/ada_category.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_ada_category --seeds 42 --aug_path data/aug/ada_category.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_ada_category --seeds 42 --aug_path data/aug/ada_category.jsonl --batch_size 8 --grad_accum 2",
    "examples": 7142,
    "outputs": [
     "outputs/para_ada_category/seed_42"
    ],
    "done": "outputs/para_ada_category/seed_42/test_predictions.jsonl",
-   "est_min": 122.7
+   "est_min": 123.5
   },
   "para_ada_category:s123": {
    "id": "para_ada_category:s123",
    "run": "para_ada_category",
    "seed": 123,
    "aug": "data/aug/ada_category.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_ada_category --seeds 123 --aug_path data/aug/ada_category.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_ada_category --seeds 123 --aug_path data/aug/ada_category.jsonl --batch_size 8 --grad_accum 2",
    "examples": 7142,
    "outputs": [
     "outputs/para_ada_category/seed_123"
    ],
    "done": "outputs/para_ada_category/seed_123/test_predictions.jsonl",
-   "est_min": 122.7
+   "est_min": 123.5
   },
   "para_ada_category:s2024": {
    "id": "para_ada_category:s2024",
    "run": "para_ada_category",
    "seed": 2024,
    "aug": "data/aug/ada_category.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_ada_category --seeds 2024 --aug_path data/aug/ada_category.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_ada_category --seeds 2024 --aug_path data/aug/ada_category.jsonl --batch_size 8 --grad_accum 2",
    "examples": 7142,
    "outputs": [
     "outputs/para_ada_category/seed_2024"
    ],
    "done": "outputs/para_ada_category/seed_2024/test_predictions.jsonl",
-   "est_min": 122.7
+   "est_min": 123.5
   },
   "para_ada_category:s7": {
    "id": "para_ada_category:s7",
    "run": "para_ada_category",
    "seed": 7,
    "aug": "data/aug/ada_category.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_ada_category --seeds 7 --aug_path data/aug/ada_category.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_ada_category --seeds 7 --aug_path data/aug/ada_category.jsonl --batch_size 8 --grad_accum 2",
    "examples": 7142,
    "outputs": [
     "outputs/para_ada_category/seed_7"
    ],
    "done": "outputs/para_ada_category/seed_7/test_predictions.jsonl",
-   "est_min": 122.7
+   "est_min": 123.5
   },
   "para_ada_category:s99": {
    "id": "para_ada_category:s99",
    "run": "para_ada_category",
    "seed": 99,
    "aug": "data/aug/ada_category.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_ada_category --seeds 99 --aug_path data/aug/ada_category.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_ada_category --seeds 99 --aug_path data/aug/ada_category.jsonl --batch_size 8 --grad_accum 2",
    "examples": 7142,
    "outputs": [
     "outputs/para_ada_category/seed_99"
    ],
    "done": "outputs/para_ada_category/seed_99/test_predictions.jsonl",
-   "est_min": 122.7
+   "est_min": 123.5
   },
   "para_ada_joint:s42": {
    "id": "para_ada_joint:s42",
    "run": "para_ada_joint",
    "seed": 42,
    "aug": "data/aug/ada_joint.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_ada_joint --seeds 42 --aug_path data/aug/ada_joint.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_ada_joint --seeds 42 --aug_path data/aug/ada_joint.jsonl --batch_size 8 --grad_accum 2",
    "examples": 5767,
    "outputs": [
     "outputs/para_ada_joint/seed_42"
    ],
    "done": "outputs/para_ada_joint/seed_42/test_predictions.jsonl",
-   "est_min": 99.1
+   "est_min": 99.7
   },
   "para_ada_joint:s123": {
    "id": "para_ada_joint:s123",
    "run": "para_ada_joint",
    "seed": 123,
    "aug": "data/aug/ada_joint.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_ada_joint --seeds 123 --aug_path data/aug/ada_joint.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_ada_joint --seeds 123 --aug_path data/aug/ada_joint.jsonl --batch_size 8 --grad_accum 2",
    "examples": 5767,
    "outputs": [
     "outputs/para_ada_joint/seed_123"
    ],
    "done": "outputs/para_ada_joint/seed_123/test_predictions.jsonl",
-   "est_min": 99.1
+   "est_min": 99.7
   },
   "para_ada_joint:s2024": {
    "id": "para_ada_joint:s2024",
    "run": "para_ada_joint",
    "seed": 2024,
    "aug": "data/aug/ada_joint.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_ada_joint --seeds 2024 --aug_path data/aug/ada_joint.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_ada_joint --seeds 2024 --aug_path data/aug/ada_joint.jsonl --batch_size 8 --grad_accum 2",
    "examples": 5767,
    "outputs": [
     "outputs/para_ada_joint/seed_2024"
    ],
    "done": "outputs/para_ada_joint/seed_2024/test_predictions.jsonl",
-   "est_min": 99.1
+   "est_min": 99.7
   },
   "para_ada_joint:s7": {
    "id": "para_ada_joint:s7",
    "run": "para_ada_joint",
    "seed": 7,
    "aug": "data/aug/ada_joint.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_ada_joint --seeds 7 --aug_path data/aug/ada_joint.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_ada_joint --seeds 7 --aug_path data/aug/ada_joint.jsonl --batch_size 8 --grad_accum 2",
    "examples": 5767,
    "outputs": [
     "outputs/para_ada_joint/seed_7"
    ],
    "done": "outputs/para_ada_joint/seed_7/test_predictions.jsonl",
-   "est_min": 99.1
+   "est_min": 99.7
   },
   "para_ada_joint:s99": {
    "id": "para_ada_joint:s99",
    "run": "para_ada_joint",
    "seed": 99,
    "aug": "data/aug/ada_joint.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_ada_joint --seeds 99 --aug_path data/aug/ada_joint.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_ada_joint --seeds 99 --aug_path data/aug/ada_joint.jsonl --batch_size 8 --grad_accum 2",
    "examples": 5767,
    "outputs": [
     "outputs/para_ada_joint/seed_99"
    ],
    "done": "outputs/para_ada_joint/seed_99/test_predictions.jsonl",
-   "est_min": 99.1
+   "est_min": 99.7
   },
   "para_concat:s42": {
    "id": "para_concat:s42",
    "run": "para_concat",
    "seed": 42,
    "aug": "data/aug/concat.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_concat --seeds 42 --aug_path data/aug/concat.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_concat --seeds 42 --aug_path data/aug/concat.jsonl --batch_size 8 --grad_accum 2",
    "examples": 5767,
    "outputs": [
     "outputs/para_concat/seed_42"
    ],
    "done": "outputs/para_concat/seed_42/test_predictions.jsonl",
-   "est_min": 99.1
+   "est_min": 99.7
   },
   "para_concat:s123": {
    "id": "para_concat:s123",
    "run": "para_concat",
    "seed": 123,
    "aug": "data/aug/concat.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_concat --seeds 123 --aug_path data/aug/concat.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_concat --seeds 123 --aug_path data/aug/concat.jsonl --batch_size 8 --grad_accum 2",
    "examples": 5767,
    "outputs": [
     "outputs/para_concat/seed_123"
    ],
    "done": "outputs/para_concat/seed_123/test_predictions.jsonl",
-   "est_min": 99.1
+   "est_min": 99.7
   },
   "para_concat:s2024": {
    "id": "para_concat:s2024",
    "run": "para_concat",
    "seed": 2024,
    "aug": "data/aug/concat.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_concat --seeds 2024 --aug_path data/aug/concat.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_concat --seeds 2024 --aug_path data/aug/concat.jsonl --batch_size 8 --grad_accum 2",
    "examples": 5767,
    "outputs": [
     "outputs/para_concat/seed_2024"
    ],
    "done": "outputs/para_concat/seed_2024/test_predictions.jsonl",
-   "est_min": 99.1
+   "est_min": 99.7
   },
   "para_concat:s7": {
    "id": "para_concat:s7",
    "run": "para_concat",
    "seed": 7,
    "aug": "data/aug/concat.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_concat --seeds 7 --aug_path data/aug/concat.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_concat --seeds 7 --aug_path data/aug/concat.jsonl --batch_size 8 --grad_accum 2",
    "examples": 5767,
    "outputs": [
     "outputs/para_concat/seed_7"
    ],
    "done": "outputs/para_concat/seed_7/test_predictions.jsonl",
-   "est_min": 99.1
+   "est_min": 99.7
   },
   "para_concat:s99": {
    "id": "para_concat:s99",
    "run": "para_concat",
    "seed": 99,
    "aug": "data/aug/concat.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_concat --seeds 99 --aug_path data/aug/concat.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_concat --seeds 99 --aug_path data/aug/concat.jsonl --batch_size 8 --grad_accum 2",
    "examples": 5767,
    "outputs": [
     "outputs/para_concat/seed_99"
    ],
    "done": "outputs/para_concat/seed_99/test_predictions.jsonl",
-   "est_min": 99.1
+   "est_min": 99.7
   },
-  "para_dup:s42": {
-   "id": "para_dup:s42",
-   "run": "para_dup",
+  "para_genda:s42": {
+   "id": "para_genda:s42",
+   "run": "para_genda",
    "seed": 42,
-   "aug": "data/aug/dup.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_dup --seeds 42 --aug_path data/aug/dup.jsonl",
+   "aug": "data/aug/genda.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_genda --seeds 42 --aug_path data/aug/genda.jsonl",
    "examples": 4270,
    "outputs": [
-    "outputs/para_dup/seed_42"
+    "outputs/para_genda/seed_42"
    ],
-   "done": "outputs/para_dup/seed_42/test_predictions.jsonl",
-   "est_min": 73.4
+   "done": "outputs/para_genda/seed_42/test_predictions.jsonl",
+   "est_min": 73.8
   },
-  "para_dup:s123": {
-   "id": "para_dup:s123",
-   "run": "para_dup",
+  "para_genda:s123": {
+   "id": "para_genda:s123",
+   "run": "para_genda",
    "seed": 123,
-   "aug": "data/aug/dup.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_dup --seeds 123 --aug_path data/aug/dup.jsonl",
+   "aug": "data/aug/genda.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_genda --seeds 123 --aug_path data/aug/genda.jsonl",
    "examples": 4270,
    "outputs": [
-    "outputs/para_dup/seed_123"
+    "outputs/para_genda/seed_123"
    ],
-   "done": "outputs/para_dup/seed_123/test_predictions.jsonl",
-   "est_min": 73.4
+   "done": "outputs/para_genda/seed_123/test_predictions.jsonl",
+   "est_min": 73.8
   },
-  "para_dup:s2024": {
-   "id": "para_dup:s2024",
-   "run": "para_dup",
+  "para_genda:s2024": {
+   "id": "para_genda:s2024",
+   "run": "para_genda",
    "seed": 2024,
-   "aug": "data/aug/dup.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_dup --seeds 2024 --aug_path data/aug/dup.jsonl",
+   "aug": "data/aug/genda.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_genda --seeds 2024 --aug_path data/aug/genda.jsonl",
    "examples": 4270,
    "outputs": [
-    "outputs/para_dup/seed_2024"
+    "outputs/para_genda/seed_2024"
    ],
-   "done": "outputs/para_dup/seed_2024/test_predictions.jsonl",
-   "est_min": 73.4
+   "done": "outputs/para_genda/seed_2024/test_predictions.jsonl",
+   "est_min": 73.8
   },
-  "para_dup:s7": {
-   "id": "para_dup:s7",
-   "run": "para_dup",
+  "para_genda:s7": {
+   "id": "para_genda:s7",
+   "run": "para_genda",
    "seed": 7,
-   "aug": "data/aug/dup.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_dup --seeds 7 --aug_path data/aug/dup.jsonl",
+   "aug": "data/aug/genda.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_genda --seeds 7 --aug_path data/aug/genda.jsonl",
    "examples": 4270,
    "outputs": [
-    "outputs/para_dup/seed_7"
+    "outputs/para_genda/seed_7"
    ],
-   "done": "outputs/para_dup/seed_7/test_predictions.jsonl",
-   "est_min": 73.4
+   "done": "outputs/para_genda/seed_7/test_predictions.jsonl",
+   "est_min": 73.8
   },
-  "para_dup:s99": {
-   "id": "para_dup:s99",
-   "run": "para_dup",
+  "para_genda:s99": {
+   "id": "para_genda:s99",
+   "run": "para_genda",
    "seed": 99,
-   "aug": "data/aug/dup.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_dup --seeds 99 --aug_path data/aug/dup.jsonl",
+   "aug": "data/aug/genda.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_genda --seeds 99 --aug_path data/aug/genda.jsonl",
    "examples": 4270,
    "outputs": [
-    "outputs/para_dup/seed_99"
+    "outputs/para_genda/seed_99"
    ],
-   "done": "outputs/para_dup/seed_99/test_predictions.jsonl",
-   "est_min": 73.4
-  },
-  "para_eda:s42": {
-   "id": "para_eda:s42",
-   "run": "para_eda",
-   "seed": 42,
-   "aug": "data/aug/eda.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_eda --seeds 42 --aug_path data/aug/eda.jsonl",
-   "examples": 4270,
-   "outputs": [
-    "outputs/para_eda/seed_42"
-   ],
-   "done": "outputs/para_eda/seed_42/test_predictions.jsonl",
-   "est_min": 73.4
-  },
-  "para_eda:s123": {
-   "id": "para_eda:s123",
-   "run": "para_eda",
-   "seed": 123,
-   "aug": "data/aug/eda.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_eda --seeds 123 --aug_path data/aug/eda.jsonl",
-   "examples": 4270,
-   "outputs": [
-    "outputs/para_eda/seed_123"
-   ],
-   "done": "outputs/para_eda/seed_123/test_predictions.jsonl",
-   "est_min": 73.4
-  },
-  "para_eda:s2024": {
-   "id": "para_eda:s2024",
-   "run": "para_eda",
-   "seed": 2024,
-   "aug": "data/aug/eda.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_eda --seeds 2024 --aug_path data/aug/eda.jsonl",
-   "examples": 4270,
-   "outputs": [
-    "outputs/para_eda/seed_2024"
-   ],
-   "done": "outputs/para_eda/seed_2024/test_predictions.jsonl",
-   "est_min": 73.4
-  },
-  "para_eda:s7": {
-   "id": "para_eda:s7",
-   "run": "para_eda",
-   "seed": 7,
-   "aug": "data/aug/eda.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_eda --seeds 7 --aug_path data/aug/eda.jsonl",
-   "examples": 4270,
-   "outputs": [
-    "outputs/para_eda/seed_7"
-   ],
-   "done": "outputs/para_eda/seed_7/test_predictions.jsonl",
-   "est_min": 73.4
-  },
-  "para_eda:s99": {
-   "id": "para_eda:s99",
-   "run": "para_eda",
-   "seed": 99,
-   "aug": "data/aug/eda.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_eda --seeds 99 --aug_path data/aug/eda.jsonl",
-   "examples": 4270,
-   "outputs": [
-    "outputs/para_eda/seed_99"
-   ],
-   "done": "outputs/para_eda/seed_99/test_predictions.jsonl",
-   "est_min": 73.4
-  },
-  "para_spansub:s42": {
-   "id": "para_spansub:s42",
-   "run": "para_spansub",
-   "seed": 42,
-   "aug": "data/aug/spansub.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_spansub --seeds 42 --aug_path data/aug/spansub.jsonl",
-   "examples": 4270,
-   "outputs": [
-    "outputs/para_spansub/seed_42"
-   ],
-   "done": "outputs/para_spansub/seed_42/test_predictions.jsonl",
-   "est_min": 73.4
-  },
-  "para_spansub:s123": {
-   "id": "para_spansub:s123",
-   "run": "para_spansub",
-   "seed": 123,
-   "aug": "data/aug/spansub.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_spansub --seeds 123 --aug_path data/aug/spansub.jsonl",
-   "examples": 4270,
-   "outputs": [
-    "outputs/para_spansub/seed_123"
-   ],
-   "done": "outputs/para_spansub/seed_123/test_predictions.jsonl",
-   "est_min": 73.4
-  },
-  "para_spansub:s2024": {
-   "id": "para_spansub:s2024",
-   "run": "para_spansub",
-   "seed": 2024,
-   "aug": "data/aug/spansub.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_spansub --seeds 2024 --aug_path data/aug/spansub.jsonl",
-   "examples": 4270,
-   "outputs": [
-    "outputs/para_spansub/seed_2024"
-   ],
-   "done": "outputs/para_spansub/seed_2024/test_predictions.jsonl",
-   "est_min": 73.4
-  },
-  "para_spansub:s7": {
-   "id": "para_spansub:s7",
-   "run": "para_spansub",
-   "seed": 7,
-   "aug": "data/aug/spansub.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_spansub --seeds 7 --aug_path data/aug/spansub.jsonl",
-   "examples": 4270,
-   "outputs": [
-    "outputs/para_spansub/seed_7"
-   ],
-   "done": "outputs/para_spansub/seed_7/test_predictions.jsonl",
-   "est_min": 73.4
-  },
-  "para_spansub:s99": {
-   "id": "para_spansub:s99",
-   "run": "para_spansub",
-   "seed": 99,
-   "aug": "data/aug/spansub.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_spansub --seeds 99 --aug_path data/aug/spansub.jsonl",
-   "examples": 4270,
-   "outputs": [
-    "outputs/para_spansub/seed_99"
-   ],
-   "done": "outputs/para_spansub/seed_99/test_predictions.jsonl",
-   "est_min": 73.4
-  },
-  "para_llm_para:s42": {
-   "id": "para_llm_para:s42",
-   "run": "para_llm_para",
-   "seed": 42,
-   "aug": "data/aug/llm_para.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_llm_para --seeds 42 --aug_path data/aug/llm_para.jsonl",
-   "examples": 4270,
-   "outputs": [
-    "outputs/para_llm_para/seed_42"
-   ],
-   "done": "outputs/para_llm_para/seed_42/test_predictions.jsonl",
-   "est_min": 73.4
-  },
-  "para_llm_para:s123": {
-   "id": "para_llm_para:s123",
-   "run": "para_llm_para",
-   "seed": 123,
-   "aug": "data/aug/llm_para.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_llm_para --seeds 123 --aug_path data/aug/llm_para.jsonl",
-   "examples": 4270,
-   "outputs": [
-    "outputs/para_llm_para/seed_123"
-   ],
-   "done": "outputs/para_llm_para/seed_123/test_predictions.jsonl",
-   "est_min": 73.4
-  },
-  "para_llm_para:s2024": {
-   "id": "para_llm_para:s2024",
-   "run": "para_llm_para",
-   "seed": 2024,
-   "aug": "data/aug/llm_para.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_llm_para --seeds 2024 --aug_path data/aug/llm_para.jsonl",
-   "examples": 4270,
-   "outputs": [
-    "outputs/para_llm_para/seed_2024"
-   ],
-   "done": "outputs/para_llm_para/seed_2024/test_predictions.jsonl",
-   "est_min": 73.4
-  },
-  "para_llm_para:s7": {
-   "id": "para_llm_para:s7",
-   "run": "para_llm_para",
-   "seed": 7,
-   "aug": "data/aug/llm_para.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_llm_para --seeds 7 --aug_path data/aug/llm_para.jsonl",
-   "examples": 4270,
-   "outputs": [
-    "outputs/para_llm_para/seed_7"
-   ],
-   "done": "outputs/para_llm_para/seed_7/test_predictions.jsonl",
-   "est_min": 73.4
-  },
-  "para_llm_para:s99": {
-   "id": "para_llm_para:s99",
-   "run": "para_llm_para",
-   "seed": 99,
-   "aug": "data/aug/llm_para.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_llm_para --seeds 99 --aug_path data/aug/llm_para.jsonl",
-   "examples": 4270,
-   "outputs": [
-    "outputs/para_llm_para/seed_99"
-   ],
-   "done": "outputs/para_llm_para/seed_99/test_predictions.jsonl",
-   "est_min": 73.4
-  },
-  "para_llm_q2t:s42": {
-   "id": "para_llm_q2t:s42",
-   "run": "para_llm_q2t",
-   "seed": 42,
-   "aug": "data/aug/llm_q2t.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_llm_q2t --seeds 42 --aug_path data/aug/llm_q2t.jsonl",
-   "examples": 4270,
-   "outputs": [
-    "outputs/para_llm_q2t/seed_42"
-   ],
-   "done": "outputs/para_llm_q2t/seed_42/test_predictions.jsonl",
-   "est_min": 73.4
-  },
-  "para_llm_q2t:s123": {
-   "id": "para_llm_q2t:s123",
-   "run": "para_llm_q2t",
-   "seed": 123,
-   "aug": "data/aug/llm_q2t.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_llm_q2t --seeds 123 --aug_path data/aug/llm_q2t.jsonl",
-   "examples": 4270,
-   "outputs": [
-    "outputs/para_llm_q2t/seed_123"
-   ],
-   "done": "outputs/para_llm_q2t/seed_123/test_predictions.jsonl",
-   "est_min": 73.4
-  },
-  "para_llm_q2t:s2024": {
-   "id": "para_llm_q2t:s2024",
-   "run": "para_llm_q2t",
-   "seed": 2024,
-   "aug": "data/aug/llm_q2t.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_llm_q2t --seeds 2024 --aug_path data/aug/llm_q2t.jsonl",
-   "examples": 4270,
-   "outputs": [
-    "outputs/para_llm_q2t/seed_2024"
-   ],
-   "done": "outputs/para_llm_q2t/seed_2024/test_predictions.jsonl",
-   "est_min": 73.4
-  },
-  "para_llm_q2t:s7": {
-   "id": "para_llm_q2t:s7",
-   "run": "para_llm_q2t",
-   "seed": 7,
-   "aug": "data/aug/llm_q2t.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_llm_q2t --seeds 7 --aug_path data/aug/llm_q2t.jsonl",
-   "examples": 4270,
-   "outputs": [
-    "outputs/para_llm_q2t/seed_7"
-   ],
-   "done": "outputs/para_llm_q2t/seed_7/test_predictions.jsonl",
-   "est_min": 73.4
-  },
-  "para_llm_q2t:s99": {
-   "id": "para_llm_q2t:s99",
-   "run": "para_llm_q2t",
-   "seed": 99,
-   "aug": "data/aug/llm_q2t.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_llm_q2t --seeds 99 --aug_path data/aug/llm_q2t.jsonl",
-   "examples": 4270,
-   "outputs": [
-    "outputs/para_llm_q2t/seed_99"
-   ],
-   "done": "outputs/para_llm_q2t/seed_99/test_predictions.jsonl",
-   "est_min": 73.4
+   "done": "outputs/para_genda/seed_99/test_predictions.jsonl",
+   "est_min": 73.8
   }
  }
 }

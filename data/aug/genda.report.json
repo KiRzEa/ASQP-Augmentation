@@ -1,0 +1,89 @@
+{
+ "n": 2135,
+ "quad_sets_tried": 4496,
+ "yield": 0.4748665480427046,
+ "quads": 5387,
+ "args": {
+  "out": "data/aug/genda.jsonl",
+  "n": 0,
+  "model_name": "VietAI/vit5-base",
+  "epochs": 10,
+  "batch_size": 16,
+  "lr": 0.0003,
+  "seed": 42,
+  "set_seed": 13,
+  "top_p": 0.9,
+  "num_return": 4,
+  "gen_batch": 32,
+  "max_len": 128,
+  "limit": 0,
+  "cpu": false,
+  "train_path": "/kaggle/working/ASQP-Augmentation/data/restaurant_v1/train.jsonl",
+  "dev_path": "/kaggle/working/ASQP-Augmentation/data/restaurant_v1/dev.jsonl"
+ },
+ "best_epoch": 2,
+ "best_dev_loss": 2.6953329699380055,
+ "history": [
+  {
+   "epoch": 1,
+   "train_loss": 3.190515745931597,
+   "dev_loss": 2.726447820663452
+  },
+  {
+   "epoch": 2,
+   "train_loss": 2.4531835477743575,
+   "dev_loss": 2.6953329699380055
+  },
+  {
+   "epoch": 3,
+   "train_loss": 1.9401343304719498,
+   "dev_loss": 2.730053492954799
+  },
+  {
+   "epoch": 4,
+   "train_loss": 1.4752284857764173,
+   "dev_loss": 2.983431100845337
+  },
+  {
+   "epoch": 5,
+   "train_loss": 1.0677904793575628,
+   "dev_loss": 3.264054570879255
+  },
+  {
+   "epoch": 6,
+   "train_loss": 0.765440570774363,
+   "dev_loss": 3.635854721069336
+  },
+  {
+   "epoch": 7,
+   "train_loss": 0.5410598042740751,
+   "dev_loss": 4.045903308050973
+  },
+  {
+   "epoch": 8,
+   "train_loss": 0.3738897647430648,
+   "dev_loss": 4.514261518205915
+  },
+  {
+   "epoch": 9,
+   "train_loss": 0.2614022824746459,
+   "dev_loss": 4.728793144226074
+  },
+  {
+   "epoch": 10,
+   "train_loss": 0.1950370610983514,
+   "dev_loss": 4.867459569658552
+  }
+ ],
+ "data_sha256": {
+  "/kaggle/working/ASQP-Augmentation/data/restaurant_v1/train.jsonl": "70817da60c9cbacfdac338c3e226c8cbd9fa36e5cf6090ea939bcfd957aa2893",
+  "/kaggle/working/ASQP-Augmentation/data/restaurant_v1/dev.jsonl": "92271d03c514a322133274b11ac55ec797c2b3baba85e117c7d41cdc0022ab60"
+ },
+ "gpu": "Tesla T4",
+ "versions": {
+  "python": "3.13.15",
+  "torch": "2.11.0+cu128",
+  "transformers": "4.57.6"
+ },
+ "minutes": 24.544313108921052
+}
