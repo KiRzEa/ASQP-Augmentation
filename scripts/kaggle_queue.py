@@ -57,7 +57,8 @@ def expand(round_id, rounds):
                              "outputs": t.get("outputs", []), "done": t.get("done", ""), "examples": None}
             continue
         aug = t.get("aug")
-        examples = n_train + n_lines(aug)
+        views = re.search(r"--views (\d+)", t.get("args", ""))
+        examples = (n_train + n_lines(aug)) * (int(views.group(1)) if views else 1)  # each view is one more example
         for s in t.get("seeds", seeds):
             jid = f"{t['run']}:s{s}"
             out = f"outputs/{t['run']}"

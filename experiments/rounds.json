@@ -39,7 +39,7 @@
     "r5": {
       "goal": "DA baselines on the same backbone: ADA (pattern, category, joint), random concatenation and duplication controls, span-safe EDA, span substitution, GPT paraphrase, GPT quad-to-text; plus the ViT5 quad-to-text generator job (data for r6).",
       "openai_key": "no on Kaggle (GPT sets llm_para / llm_q2t were generated locally and committed)",
-      "status": "s1-s3 done 2026-10-29; s4 (spansub, llm_para, llm_q2t) running. ADA x3 and concat ran out of GPU memory (concatenated reviews, batch 16) after 1-4 min -> moved to r6 with batch 8 x grad_accum 2",
+      "status": "done 2026-11-01 (s1-s4). ADA x3 and concat ran out of GPU memory (concatenated reviews, batch 16) after 1-4 min -> rerun in r6 with batch 8 x grad_accum 2",
       "targets": [
         {"id": "genda_gen", "command": "python -u src/aug/genda.py --out data/aug/genda.jsonl", "est_min": 75,
          "outputs": ["data/aug/genda.jsonl", "data/aug/genda.report.json"], "done": "data/aug/genda.jsonl"},
@@ -53,13 +53,26 @@
     "r6": {
       "goal": "ADA (pattern, category, joint) and random concatenation rerun with batch 8 x grad_accum 2 (same effective batch 16 and steps; r5 attempt ran out of T4 memory), and the ViT5 quad-to-text (GenDA-style) baseline on data/aug/genda.jsonl from r5.",
       "openai_key": "no",
-      "status": "planned",
+      "status": "s1 done 2026-11-01 (ADA pattern x4, category x2, no OOM); s2, s3 running",
       "targets": [
         {"run": "para_ada_pattern", "aug": "data/aug/ada_pattern.jsonl", "args": "--batch_size 8 --grad_accum 2"},
         {"run": "para_ada_category", "aug": "data/aug/ada_category.jsonl", "args": "--batch_size 8 --grad_accum 2"},
         {"run": "para_ada_joint", "aug": "data/aug/ada_joint.jsonl", "args": "--batch_size 8 --grad_accum 2"},
         {"run": "para_concat", "aug": "data/aug/concat.jsonl", "args": "--batch_size 8 --grad_accum 2"},
         {"run": "para_genda", "aug": "data/aug/genda.jsonl"}
+      ]
+    },
+    "r7": {
+      "goal": "Pilot (2 seeds, go if dev F1 >= +2 over para_none on the same seeds): (a) multi-view targets, every review trained in k element orders and decoded with a majority vote over the k views (--views 3, --views 5); (b) consensus relabelling: 3 Paraphrase teachers trained on train only label the GPT paraphrases (llm_para, which lost 3.7 F1 with copied labels) and the GPT quad-to-text set, a student is trained on train + relabelled llm_para.",
+      "openai_key": "no",
+      "status": "planned",
+      "targets": [
+        {"run": "para_views3", "args": "--views 3", "seeds": [42, 123]},
+        {"run": "para_views5", "args": "--views 5", "seeds": [42, 123]},
+        {"id": "cons_llm_para", "est_min": 320,
+         "command": "python -u src/train_paraphrase.py --output_dir outputs/teacher_none --seeds 42,123,2024 --keep_ckpt && python -u src/aug/relabel.py --ckpts outputs/teacher_none/seed_42/checkpoint,outputs/teacher_none/seed_123/checkpoint,outputs/teacher_none/seed_2024/checkpoint --in data/aug/llm_para.jsonl,data/aug/llm_q2t.jsonl --out data/aug/llm_para_cons.jsonl,data/aug/llm_q2t_cons.jsonl && python -u src/train_paraphrase.py --output_dir outputs/para_llm_para_cons --seeds 42,123 --aug_path data/aug/llm_para_cons.jsonl",
+         "outputs": ["outputs/teacher_none", "outputs/para_llm_para_cons", "data/aug/llm_para_cons.jsonl", "data/aug/llm_para_cons.report.json", "data/aug/llm_q2t_cons.jsonl", "data/aug/llm_q2t_cons.report.json"],
+         "done": "outputs/para_llm_para_cons/seed_123/test_predictions.jsonl"}
       ]
     }
   }

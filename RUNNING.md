@@ -76,6 +76,16 @@ python3 src/aug/llm_aug.py {paraphrase|quad2text} --out data/aug/llm_{para|q2t}.
 python -u src/aug/genda.py --out data/aug/genda.jsonl                                       # Kaggle (job genda_gen, r5)
 ```
 
+## Multi-view targets and consensus relabelling (r7 pilot)
+```bash
+# Kaggle: every review trained in k element orders (asqp_common.VIEWS), decoded per view, majority vote
+python -u src/train_paraphrase.py --output_dir outputs/para_views3 --views 3
+#   -> test_predictions.jsonl = voted; test_view0_predictions.jsonl = view 0 alone (summarize_runs.py --split test_view0)
+# Kaggle (GPU inference): teachers trained on train only label augmented reviews, majority of teachers kept
+python -u src/aug/relabel.py --ckpts <ckpt1>,<ckpt2>,<ckpt3> --in data/aug/llm_para.jsonl --out data/aug/llm_para_cons.jsonl
+```
+--views 1 (default) is the single AOCS target, byte-identical to earlier runs.
+
 ## QUADRA (our method)
 1. Kaggle `prep` (in s1): 5-fold out-of-fold F1 per cell → `data/aug/difficulty.json`; verifier = Paraphrase
    seed 42 on the full train set with checkpoint → `outputs/verifier/seed_42/checkpoint`.

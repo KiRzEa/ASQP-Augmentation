@@ -30,6 +30,19 @@ VI_CATEGORY = {v: k for k, v in CATEGORY_VI.items()}
 VI_POLARITY = {v: k for k, v in POLARITY_VI.items()}
 SEP = " [SSEP] "
 QUAD_RE = re.compile(r"\[A\](.*?)\[O\](.*?)\[C\](.*?)\[S\](.*)$")
+ORDER = "AOCS"  # element order of the default target; other orders are the views of --views (multi-view)
+# Views in a fixed order chosen before any run: view 0 = the default target, then orders that move each element
+# to the front at least once and differ in the position of the aspect-opinion pair.
+VIEWS = ["AOCS", "OASC", "CSAO", "SCOA", "ACSO", "OCAS"]
+
+
+def view_prefix(order):
+    """Input prefix that tells the model which element order to generate, e.g. "[O] [A] [S] [C]"."""
+    return " ".join(f"[{e}]" for e in order)
+
+
+def _quad_re(order):
+    return re.compile("".join(rf"\[{e}\](.*?)" for e in order[:-1]) + rf"\[{order[-1]}\](.*)$")
 
 
 def clean_span(s):
@@ -47,25 +60,30 @@ def quad_tuple(q):
 
 # ---------- Paraphrase target (marked template, cf. "PARAPHRASE + Marked Template" in GenDA) ----------
 
-def quads_to_target(quads):
-    """[A] aspect [O] opinion [C] category words [S] polarity word, quads joined by [SSEP] (gold order)."""
-    parts = [f"[A] {q['aspect']} [O] {q['opinion']} [C] {CATEGORY_VI[q['category']]} [S] {POLARITY_VI[q['polarity']]}"
-             for q in quads]
+def quads_to_target(quads, order=ORDER):
+    """[A] aspect [O] opinion [C] category words [S] polarity word, quads joined by [SSEP] (gold order).
+    order permutes the four marked elements (default AOCS = the template above)."""
+    parts = []
+    for q in quads:
+        v = {"A": q["aspect"], "O": q["opinion"], "C": CATEGORY_VI[q["category"]], "S": POLARITY_VI[q["polarity"]]}
+        parts.append(" ".join(f"[{e}] {v[e]}" for e in order))
     return SEP.join(parts)
 
 
-def target_to_quads(text):
+def target_to_quads(text, order=ORDER):
     """Parse a generated target. Returns (set of quad tuples, number of unparsable segments)."""
     quads, invalid = set(), 0
+    rx = QUAD_RE if order == ORDER else _quad_re(order)
     for seg in text.split("[SSEP]"):
         seg = seg.strip()
         if not seg:
             continue
-        m = QUAD_RE.match(seg)
+        m = rx.match(seg)
         if not m:
             invalid += 1
             continue
-        a, o, c, s = (clean_span(x) for x in m.groups())
+        g = dict(zip(order, (clean_span(x) for x in m.groups())))
+        a, o, c, s = g["A"], g["O"], g["C"], g["S"]
         if c not in VI_CATEGORY or s not in VI_POLARITY or not a or not o:
             invalid += 1
             continue
