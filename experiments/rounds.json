@@ -53,7 +53,7 @@
     "r6": {
       "goal": "ADA (pattern, category, joint) and random concatenation rerun with batch 8 x grad_accum 2 (same effective batch 16 and steps; r5 attempt ran out of T4 memory), and the ViT5 quad-to-text (GenDA-style) baseline on data/aug/genda.jsonl from r5.",
       "openai_key": "no",
-      "status": "s1-s3 done 2026-11-01 (no OOM); 3 jobs deferred by the s2 budget: para_ada_joint s99, para_genda s42, s123",
+      "status": "done 2026-11-01 (s1-s3; the 3 jobs deferred by the s2 budget, para_ada_joint s99 and para_genda s42, s123, ran in r6+r8_s1)",
       "targets": [
         {"run": "para_ada_pattern", "aug": "data/aug/ada_pattern.jsonl", "args": "--batch_size 8 --grad_accum 2"},
         {"run": "para_ada_category", "aug": "data/aug/ada_category.jsonl", "args": "--batch_size 8 --grad_accum 2"},
@@ -78,7 +78,7 @@
     "r8": {
       "goal": "Consensus-labelled synthetic augmentation, pilot (2 seeds; go if dev F1 >= +2 over para_none on the same seeds). 20k reviews made locally by GPT infilling training reviews (opinion units hidden, ~40% of the words, filled with new content; data/aug/syn_infill.jsonl). 5 Paraphrase teachers trained on train only (seeds 11-55) label them; consensus quads (>= 3 or >= 4 of 5 votes) with spans found in the text, reviews kept only with >= 2 quads and >= 2 polarities (as in train). Student: --aug_stage pretrain (2 epochs on the synthetic set) then the gold train set. Teachers also label dev as a label-quality diagnostic (outputs/diag, never trained on).",
       "openai_key": "no (synthetic texts generated locally and committed)",
-      "status": "planned",
+      "status": "done 2026-11-01 (r6+r8_s1, all jobs). No go: dev s42/s123 mean 64.35 (cons3), 63.99 (cons4) vs 65.56 required. Test not computed (protocol B)",
       "targets": [
         {"run": "teacher5", "args": "--keep_ckpt", "seeds": [11, 22, 33, 44, 55], "est_min": 50},
         {"id": "syn_label_0", "est_min": 80, "after": ["teacher5:s11", "teacher5:s22", "teacher5:s33", "teacher5:s44", "teacher5:s55"], "command": "python -u src/aug/relabel.py --ckpts outputs/teacher5/seed_11/checkpoint,outputs/teacher5/seed_22/checkpoint,outputs/teacher5/seed_33/checkpoint,outputs/teacher5/seed_44/checkpoint,outputs/teacher5/seed_55/checkpoint --in data/aug/syn_infill.jsonl --out data/aug/syn_infill_s0.jsonl --shard 0/2", "outputs": ["data/aug/syn_infill_s0.jsonl", "data/aug/syn_infill_s0.votes.jsonl", "data/aug/syn_infill_s0.report.json"], "done": "data/aug/syn_infill_s0.votes.jsonl"},
@@ -92,7 +92,7 @@
     "p1": {
       "goal": "Protocol B pilot of label-aware infilling (src/aug/infill_labelled.py), all data from inner_train only, scored on inner_dev (--test_path; the official test is not decoded; official dev = checkpoint selection only). dv_none = no augmentation; dv_infill_u = untargeted (same category/polarity/implicit structure, new content); dv_infill_t = targeted (new aspect / opinion terms and pairs, opinion before aspect). Go rule written before results: dv_infill_t mean inner_dev F1 over 5 seeds >= dv_none + 2.0.",
       "openai_key": "no (GPT data generated locally and committed)",
-      "status": "planned",
+      "status": "done 2026-11-01 (p1_s1, 15 jobs). No go: inner_dev dv_infill_t 60.72, dv_infill_u 60.31 vs dv_none 61.35 (required >= 63.35)",
       "targets": [
         {"run": "dv_none", "args": "--train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl"},
         {"run": "dv_infill_u", "aug": "data/aug/dv_infill_u.jsonl", "args": "--train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl"},

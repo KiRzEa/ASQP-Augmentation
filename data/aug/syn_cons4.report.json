@@ -1,0 +1,28 @@
+{
+ "in": "data/aug/syn_infill_s0.votes.jsonl,data/aug/syn_infill_s1.votes.jsonl",
+ "out": "data/aug/syn_cons4.jsonl",
+ "n_in": 20000,
+ "n_out": 9495,
+ "n_teachers": 5,
+ "vote_min": 4,
+ "max_ambiguous": -1,
+ "min_quads": 2,
+ "min_polarities": 2,
+ "quads_in": 0,
+ "quads_out": 24179,
+ "quads_per_review_out": 2.5464981569246974,
+ "vote_histogram": {
+  "1": 46731,
+  "2": 13361,
+  "3": 9064,
+  "4": 10082,
+  "5": 30463
+ },
+ "stats": {
+  "quads_ungrounded": 36,
+  "dropped_no_consensus": 847,
+  "dropped_structure": 9658
+ },
+ "identical_share": null,
+ "orig_vs_consensus": null
+}
