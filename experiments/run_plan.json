@@ -1,90 +1,286 @@
 {
- "round": "r7",
+ "round": "r6+r8",
+ "rounds": [
+  "r6",
+  "r8"
+ ],
  "budget_hours": 10.5,
  "gpus": 2,
- "min_per_example": 0.017132551848512173,
- "n_calibrated": 81,
- "created": "2026-11-01 01:07",
+ "min_per_example": 0.017236533957845433,
+ "n_calibrated": 101,
+ "created": "2026-11-01 12:56",
  "sessions": [
   {
    "session": 1,
    "jobs": [
-    "cons_llm_para",
-    "para_views5:s42",
-    "para_views5:s123",
-    "para_views3:s42",
-    "para_views3:s123"
+    "para_syn3_pre:s42",
+    "para_syn3_pre:s123",
+    "para_syn4_pre:s42",
+    "para_syn4_pre:s123",
+    "syn_label_0",
+    "syn_label_1",
+    "teacher5:s11",
+    "teacher5:s22",
+    "teacher5:s33",
+    "teacher5:s44",
+    "teacher5:s55",
+    "syn_label_dev",
+    "syn_build",
+    "para_ada_joint:s99",
+    "para_genda:s42",
+    "para_genda:s123"
    ],
-   "est_hours": 7.92
+   "est_hours": 9.35
   }
  ],
  "jobs": {
-  "para_views3:s42": {
-   "id": "para_views3:s42",
-   "run": "para_views3",
+  "para_ada_joint:s99": {
+   "id": "para_ada_joint:s99",
+   "run": "para_ada_joint",
+   "seed": 99,
+   "aug": "data/aug/ada_joint.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_ada_joint --seeds 99 --aug_path data/aug/ada_joint.jsonl --batch_size 8 --grad_accum 2",
+   "examples": 5767,
+   "est_min": 99.4,
+   "after": [],
+   "outputs": [
+    "outputs/para_ada_joint/seed_99"
+   ],
+   "done": "outputs/para_ada_joint/seed_99/test_predictions.jsonl"
+  },
+  "para_genda:s42": {
+   "id": "para_genda:s42",
+   "run": "para_genda",
    "seed": 42,
-   "aug": null,
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_views3 --seeds 42 --views 3",
-   "examples": 6405,
+   "aug": "data/aug/genda.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_genda --seeds 42 --aug_path data/aug/genda.jsonl",
+   "examples": 4270,
+   "est_min": 73.6,
+   "after": [],
    "outputs": [
-    "outputs/para_views3/seed_42"
+    "outputs/para_genda/seed_42"
    ],
-   "done": "outputs/para_views3/seed_42/test_predictions.jsonl",
-   "est_min": 109.7
+   "done": "outputs/para_genda/seed_42/test_predictions.jsonl"
   },
-  "para_views3:s123": {
-   "id": "para_views3:s123",
-   "run": "para_views3",
+  "para_genda:s123": {
+   "id": "para_genda:s123",
+   "run": "para_genda",
    "seed": 123,
-   "aug": null,
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_views3 --seeds 123 --views 3",
-   "examples": 6405,
+   "aug": "data/aug/genda.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_genda --seeds 123 --aug_path data/aug/genda.jsonl",
+   "examples": 4270,
+   "est_min": 73.6,
+   "after": [],
    "outputs": [
-    "outputs/para_views3/seed_123"
+    "outputs/para_genda/seed_123"
    ],
-   "done": "outputs/para_views3/seed_123/test_predictions.jsonl",
-   "est_min": 109.7
+   "done": "outputs/para_genda/seed_123/test_predictions.jsonl"
   },
-  "para_views5:s42": {
-   "id": "para_views5:s42",
-   "run": "para_views5",
+  "teacher5:s11": {
+   "id": "teacher5:s11",
+   "run": "teacher5",
+   "seed": 11,
+   "aug": null,
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/teacher5 --seeds 11 --keep_ckpt",
+   "examples": null,
+   "est_min": 50,
+   "after": [],
+   "outputs": [
+    "outputs/teacher5/seed_11"
+   ],
+   "done": "outputs/teacher5/seed_11/test_predictions.jsonl"
+  },
+  "teacher5:s22": {
+   "id": "teacher5:s22",
+   "run": "teacher5",
+   "seed": 22,
+   "aug": null,
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/teacher5 --seeds 22 --keep_ckpt",
+   "examples": null,
+   "est_min": 50,
+   "after": [],
+   "outputs": [
+    "outputs/teacher5/seed_22"
+   ],
+   "done": "outputs/teacher5/seed_22/test_predictions.jsonl"
+  },
+  "teacher5:s33": {
+   "id": "teacher5:s33",
+   "run": "teacher5",
+   "seed": 33,
+   "aug": null,
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/teacher5 --seeds 33 --keep_ckpt",
+   "examples": null,
+   "est_min": 50,
+   "after": [],
+   "outputs": [
+    "outputs/teacher5/seed_33"
+   ],
+   "done": "outputs/teacher5/seed_33/test_predictions.jsonl"
+  },
+  "teacher5:s44": {
+   "id": "teacher5:s44",
+   "run": "teacher5",
+   "seed": 44,
+   "aug": null,
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/teacher5 --seeds 44 --keep_ckpt",
+   "examples": null,
+   "est_min": 50,
+   "after": [],
+   "outputs": [
+    "outputs/teacher5/seed_44"
+   ],
+   "done": "outputs/teacher5/seed_44/test_predictions.jsonl"
+  },
+  "teacher5:s55": {
+   "id": "teacher5:s55",
+   "run": "teacher5",
+   "seed": 55,
+   "aug": null,
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/teacher5 --seeds 55 --keep_ckpt",
+   "examples": null,
+   "est_min": 50,
+   "after": [],
+   "outputs": [
+    "outputs/teacher5/seed_55"
+   ],
+   "done": "outputs/teacher5/seed_55/test_predictions.jsonl"
+  },
+  "syn_label_0": {
+   "id": "syn_label_0",
+   "command": "python -u src/aug/relabel.py --ckpts outputs/teacher5/seed_11/checkpoint,outputs/teacher5/seed_22/checkpoint,outputs/teacher5/seed_33/checkpoint,outputs/teacher5/seed_44/checkpoint,outputs/teacher5/seed_55/checkpoint --in data/aug/syn_infill.jsonl --out data/aug/syn_infill_s0.jsonl --shard 0/2",
+   "est_min": 80,
+   "outputs": [
+    "data/aug/syn_infill_s0.jsonl",
+    "data/aug/syn_infill_s0.votes.jsonl",
+    "data/aug/syn_infill_s0.report.json"
+   ],
+   "done": "data/aug/syn_infill_s0.votes.jsonl",
+   "examples": null,
+   "after": [
+    "teacher5:s11",
+    "teacher5:s22",
+    "teacher5:s33",
+    "teacher5:s44",
+    "teacher5:s55"
+   ]
+  },
+  "syn_label_1": {
+   "id": "syn_label_1",
+   "command": "python -u src/aug/relabel.py --ckpts outputs/teacher5/seed_11/checkpoint,outputs/teacher5/seed_22/checkpoint,outputs/teacher5/seed_33/checkpoint,outputs/teacher5/seed_44/checkpoint,outputs/teacher5/seed_55/checkpoint --in data/aug/syn_infill.jsonl --out data/aug/syn_infill_s1.jsonl --shard 1/2",
+   "est_min": 80,
+   "outputs": [
+    "data/aug/syn_infill_s1.jsonl",
+    "data/aug/syn_infill_s1.votes.jsonl",
+    "data/aug/syn_infill_s1.report.json"
+   ],
+   "done": "data/aug/syn_infill_s1.votes.jsonl",
+   "examples": null,
+   "after": [
+    "teacher5:s11",
+    "teacher5:s22",
+    "teacher5:s33",
+    "teacher5:s44",
+    "teacher5:s55"
+   ]
+  },
+  "syn_label_dev": {
+   "id": "syn_label_dev",
+   "command": "python -u src/aug/relabel.py --ckpts outputs/teacher5/seed_11/checkpoint,outputs/teacher5/seed_22/checkpoint,outputs/teacher5/seed_33/checkpoint,outputs/teacher5/seed_44/checkpoint,outputs/teacher5/seed_55/checkpoint --in data/restaurant_v1/dev.jsonl --out outputs/diag/teacher5_dev_cons.jsonl",
+   "est_min": 5,
+   "outputs": [
+    "outputs/diag"
+   ],
+   "done": "outputs/diag/teacher5_dev_cons.votes.jsonl",
+   "examples": null,
+   "after": [
+    "teacher5:s11",
+    "teacher5:s22",
+    "teacher5:s33",
+    "teacher5:s44",
+    "teacher5:s55"
+   ]
+  },
+  "syn_build": {
+   "id": "syn_build",
+   "command": "python src/aug/relabel.py --from_votes data/aug/syn_infill_s0.votes.jsonl,data/aug/syn_infill_s1.votes.jsonl --vote_min 3 --min_quads 2 --min_polarities 2 --out data/aug/syn_cons3.jsonl && python src/aug/relabel.py --from_votes data/aug/syn_infill_s0.votes.jsonl,data/aug/syn_infill_s1.votes.jsonl --vote_min 4 --min_quads 2 --min_polarities 2 --out data/aug/syn_cons4.jsonl",
+   "est_min": 3,
+   "outputs": [
+    "data/aug/syn_cons3.jsonl",
+    "data/aug/syn_cons3.report.json",
+    "data/aug/syn_cons4.jsonl",
+    "data/aug/syn_cons4.report.json"
+   ],
+   "done": "data/aug/syn_cons4.jsonl",
+   "examples": null,
+   "after": [
+    "syn_label_0",
+    "syn_label_1"
+   ]
+  },
+  "para_syn3_pre:s42": {
+   "id": "para_syn3_pre:s42",
+   "run": "para_syn3_pre",
    "seed": 42,
-   "aug": null,
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_views5 --seeds 42 --views 5",
-   "examples": 10675,
-   "outputs": [
-    "outputs/para_views5/seed_42"
+   "aug": "data/aug/syn_cons3.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_syn3_pre --seeds 42 --aug_path data/aug/syn_cons3.jsonl --aug_stage pretrain --pretrain_epochs 2",
+   "examples": null,
+   "est_min": 100,
+   "after": [
+    "syn_build"
    ],
-   "done": "outputs/para_views5/seed_42/test_predictions.jsonl",
-   "est_min": 182.9
+   "outputs": [
+    "outputs/para_syn3_pre/seed_42"
+   ],
+   "done": "outputs/para_syn3_pre/seed_42/test_predictions.jsonl"
   },
-  "para_views5:s123": {
-   "id": "para_views5:s123",
-   "run": "para_views5",
+  "para_syn3_pre:s123": {
+   "id": "para_syn3_pre:s123",
+   "run": "para_syn3_pre",
    "seed": 123,
-   "aug": null,
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_views5 --seeds 123 --views 5",
-   "examples": 10675,
-   "outputs": [
-    "outputs/para_views5/seed_123"
+   "aug": "data/aug/syn_cons3.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_syn3_pre --seeds 123 --aug_path data/aug/syn_cons3.jsonl --aug_stage pretrain --pretrain_epochs 2",
+   "examples": null,
+   "est_min": 100,
+   "after": [
+    "syn_build"
    ],
-   "done": "outputs/para_views5/seed_123/test_predictions.jsonl",
-   "est_min": 182.9
+   "outputs": [
+    "outputs/para_syn3_pre/seed_123"
+   ],
+   "done": "outputs/para_syn3_pre/seed_123/test_predictions.jsonl"
   },
-  "cons_llm_para": {
-   "id": "cons_llm_para",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/teacher_none --seeds 42,123,2024 --keep_ckpt && python -u src/aug/relabel.py --ckpts outputs/teacher_none/seed_42/checkpoint,outputs/teacher_none/seed_123/checkpoint,outputs/teacher_none/seed_2024/checkpoint --in data/aug/llm_para.jsonl,data/aug/llm_q2t.jsonl --out data/aug/llm_para_cons.jsonl,data/aug/llm_q2t_cons.jsonl && python -u src/train_paraphrase.py --output_dir outputs/para_llm_para_cons --seeds 42,123 --aug_path data/aug/llm_para_cons.jsonl",
-   "est_min": 320,
-   "outputs": [
-    "outputs/teacher_none",
-    "outputs/para_llm_para_cons",
-    "data/aug/llm_para_cons.jsonl",
-    "data/aug/llm_para_cons.report.json",
-    "data/aug/llm_q2t_cons.jsonl",
-    "data/aug/llm_q2t_cons.report.json"
+  "para_syn4_pre:s42": {
+   "id": "para_syn4_pre:s42",
+   "run": "para_syn4_pre",
+   "seed": 42,
+   "aug": "data/aug/syn_cons4.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_syn4_pre --seeds 42 --aug_path data/aug/syn_cons4.jsonl --aug_stage pretrain --pretrain_epochs 2",
+   "examples": null,
+   "est_min": 100,
+   "after": [
+    "syn_build"
    ],
-   "done": "outputs/para_llm_para_cons/seed_123/test_predictions.jsonl",
-   "examples": null
+   "outputs": [
+    "outputs/para_syn4_pre/seed_42"
+   ],
+   "done": "outputs/para_syn4_pre/seed_42/test_predictions.jsonl"
+  },
+  "para_syn4_pre:s123": {
+   "id": "para_syn4_pre:s123",
+   "run": "para_syn4_pre",
+   "seed": 123,
+   "aug": "data/aug/syn_cons4.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_syn4_pre --seeds 123 --aug_path data/aug/syn_cons4.jsonl --aug_stage pretrain --pretrain_epochs 2",
+   "examples": null,
+   "est_min": 100,
+   "after": [
+    "syn_build"
+   ],
+   "outputs": [
+    "outputs/para_syn4_pre/seed_123"
+   ],
+   "done": "outputs/para_syn4_pre/seed_123/test_predictions.jsonl"
   }
  }
 }

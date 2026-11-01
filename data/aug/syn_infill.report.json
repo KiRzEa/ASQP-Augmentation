@@ -1,0 +1,58 @@
+{
+ "n": 20000,
+ "args": {
+  "out": "data/aug/syn_infill.jsonl",
+  "n": 20000,
+  "mode": "infill",
+  "mask_ratio": 0.4,
+  "max_jaccard_train": 0.0,
+  "shots": 6,
+  "per_call": 10,
+  "llm_model": "gpt-4.1-mini-2025-04-14",
+  "llm_temperature": 1.0,
+  "llm_workers": 8,
+  "min_words": 4,
+  "max_words": 80,
+  "max_jaccard": 0.5,
+  "seed": 13,
+  "max_calls": 0,
+  "train_path": "/Users/kietnt/Desktop/Workspace/DataAugmentation/data/restaurant_v1/train.jsonl",
+  "dev_path": "/Users/kietnt/Desktop/Workspace/DataAugmentation/data/restaurant_v1/dev.jsonl",
+  "test_path": "/Users/kietnt/Desktop/Workspace/DataAugmentation/data/restaurant_v1/test.jsonl"
+ },
+ "stats": {
+  "api_calls": 2187,
+  "calls": 2187,
+  "prompt_tokens": 905213,
+  "completion_tokens": 586995,
+  "lines": 21430,
+  "drop_call_line_mismatch": 44,
+  "drop_infill_changed_visible": 1175,
+  "drop_exact_duplicate": 170,
+  "drop_near_dev_test": 1,
+  "drop_near_train": 40,
+  "drop_length": 1
+ },
+ "texts": {
+  "n": 20000,
+  "words_mean": 20.9099,
+  "words_median": 19.0,
+  "words_p10": 12,
+  "words_p90": 33,
+  "emoji_share": 0.0325,
+  "comma_share": 0.25245,
+  "commas_per_review": 0.37175,
+  "slang_share": 0.09105
+ },
+ "train_texts": {
+  "n": 2135,
+  "words_mean": 22.843091334894613,
+  "words_median": 20,
+  "words_p10": 12,
+  "words_p90": 39,
+  "emoji_share": 0.05526932084309134,
+  "comma_share": 0.24824355971896955,
+  "commas_per_review": 0.5339578454332553,
+  "slang_share": 0.16065573770491803
+ }
+}

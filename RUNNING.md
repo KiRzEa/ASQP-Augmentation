@@ -86,6 +86,19 @@ python -u src/aug/relabel.py --ckpts <ckpt1>,<ckpt2>,<ckpt3> --in data/aug/llm_p
 ```
 --views 1 (default) is the single AOCS target, byte-identical to earlier runs.
 
+## Consensus-labelled synthetic augmentation (r8)
+Only the training set and synthetic text are used (no external data).
+```bash
+# local, GPT (key in .env): 20k reviews = training reviews with opinion units hidden and re-filled with new content
+python3 src/aug/synth_reviews.py --mode infill --mask_ratio 0.4 --n 20000 --out data/aug/syn_infill.jsonl
+# local, CPU: distribution drift vs train (dev row = natural gap between two real samples; never used to select)
+python3 src/aug/data_quality.py data/aug/syn_infill.jsonl data/aug/llm_para.jsonl ...
+# Kaggle (round r8, jobs depend on each other via "after"): 5 teachers -> consensus labels on 2 GPUs -> students
+python3 scripts/kaggle_queue.py plan --round r6,r8     # several rounds in one plan
+```
+Rebuilding the consensus with another threshold needs no GPU:
+`python3 src/aug/relabel.py --from_votes data/aug/syn_infill_s0.votes.jsonl,data/aug/syn_infill_s1.votes.jsonl --vote_min 5 --min_quads 2 --min_polarities 2 --out data/aug/syn_cons5.jsonl`
+
 ## QUADRA (our method)
 1. Kaggle `prep` (in s1): 5-fold out-of-fold F1 per cell → `data/aug/difficulty.json`; verifier = Paraphrase
    seed 42 on the full train set with checkpoint → `outputs/verifier/seed_42/checkpoint`.

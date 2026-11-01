@@ -1,0 +1,29 @@
+{
+ "in": "data/aug/llm_para.jsonl",
+ "out": "data/aug/llm_para_cons.jsonl",
+ "n_in": 2135,
+ "n_out": 2134,
+ "teachers": [
+  "outputs/teacher_none/seed_42/checkpoint",
+  "outputs/teacher_none/seed_123/checkpoint",
+  "outputs/teacher_none/seed_2024/checkpoint"
+ ],
+ "vote_min": 2,
+ "quads_in": 6895,
+ "quads_out": 6653,
+ "identical_share": 0.6281030444964871,
+ "stats": {
+  "quads_ungrounded": 4,
+  "identical": 1341,
+  "dropped_no_consensus": 1
+ },
+ "orig_vs_consensus": {
+  "precision": 85.55474981870921,
+  "recall": 88.66676687208778,
+  "f1": 87.08296427516977,
+  "tp": 5899,
+  "fp": 996,
+  "fn": 754
+ },
+ "minutes": 18.719643799463906
+}

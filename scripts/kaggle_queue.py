@@ -10,7 +10,10 @@ from measured times, and packs them into sessions of two GPU lanes each.
   python3 scripts/kaggle_queue.py run    --session 1 [--budget-hours 10.5]  on Kaggle (2 x T4), from the repo root
   python3 scripts/kaggle_queue.py ingest                                     unzip runs_inbox/*.zip into the repo
 
-`run` binds one worker to each GPU, starts the longest jobs first, never starts a job whose estimate no longer fits
+A target may name jobs it must wait for ("after": [job ids]); `plan` keeps such a group in one session and `run`
+starts a job only after all its predecessors in the session finished with rc 0 (a failed or deferred predecessor
+skips it). `plan --round r6,r8` packs several rounds into one plan (session tag r6+r8_s<N>).
+`run` binds one worker to each GPU, starts the longest ready jobs first, never starts a job whose estimate no longer fits
 the budget (it stays for the next session), streams every job's output with a prefix, writes it to
 outputs/_logs/<job>.log, appends `job  minutes  rc  session` to outputs/_job_times/<round>_s<N>.tsv and re-packs
 results_<round>_s<N>.zip after every finished job, so a cut session loses at most the jobs in flight.
@@ -19,9 +22,9 @@ outputs/_ingested.txt; re-ingesting a zip does nothing. Estimates use minutes pe
 from all outputs/_job_times/*.tsv.
 """
 import argparse
+import collections
 import json
 import os
-import queue
 import re
 import shutil
 import statistics
@@ -54,11 +57,14 @@ def expand(round_id, rounds):
     for t in rounds["rounds"][round_id]["targets"]:
         if "command" in t:  # generic one-off job (e.g. k-fold, verifier)
             jobs[t["id"]] = {"id": t["id"], "command": t["command"], "est_min": t.get("est_min", 60),
-                             "outputs": t.get("outputs", []), "done": t.get("done", ""), "examples": None}
+                             "outputs": t.get("outputs", []), "done": t.get("done", ""), "examples": None,
+                             "after": t.get("after", [])}
             continue
         aug = t.get("aug")
         views = re.search(r"--views (\d+)", t.get("args", ""))
         examples = (n_train + n_lines(aug)) * (int(views.group(1)) if views else 1)  # each view is one more example
+        if "est_min" in t:  # data made inside the session, or a two-stage run: the per-example estimate does not apply
+            examples = None
         for s in t.get("seeds", seeds):
             jid = f"{t['run']}:s{s}"
             out = f"outputs/{t['run']}"
@@ -68,7 +74,9 @@ def expand(round_id, rounds):
             if t.get("args"):
                 cmd += " " + t["args"]
             jobs[jid] = {"id": jid, "run": t["run"], "seed": s, "aug": aug, "command": cmd, "examples": examples,
-                         "outputs": [f"{out}/seed_{s}"], "done": f"{out}/seed_{s}/test_predictions.jsonl"}
+                         "est_min": t.get("est_min", 60), "after": t.get("after", []),
+                         "outputs": [f"{out}/seed_{s}"] + t.get("outputs", []),
+                         "done": f"{out}/seed_{s}/test_predictions.jsonl"}
     return jobs
 
 
@@ -109,26 +117,51 @@ def cmd_list(a):
             print(f"    {j['id']:40s} ~{estimate(j, mpe):5.0f} min")
 
 
+def groups(jobs):
+    """Pending jobs joined by "after" links (union-find): each group must run in one session."""
+    parent = {j: j for j in jobs}
+
+    def find(x):
+        while parent[x] != x:
+            parent[x] = parent[parent[x]]
+            x = parent[x]
+        return x
+    for j in jobs.values():
+        for d in j.get("after", []):
+            if d in jobs:
+                parent[find(j["id"])] = find(d)
+    out = collections.defaultdict(list)
+    for j in jobs.values():
+        out[find(j["id"])].append(j)
+    return list(out.values())
+
+
 def cmd_plan(a):
     rounds = json.load(open(ROUNDS))
     mpe, n = calibrate()
-    jobs = {k: v for k, v in expand(a.round, rounds).items() if not (v["done"] and (ROOT / v["done"]).exists())}
+    rids = a.round.split(",")
+    jobs = {k: v for r in rids for k, v in expand(r, rounds).items() if not (v["done"] and (ROOT / v["done"]).exists())}
     for j in jobs.values():
         j["est_min"] = estimate(j, mpe)
     cap = a.budget_hours * 60
     sessions = []  # each: {"lanes": [minutes per GPU], "jobs": [...]}
-    for j in sorted(jobs.values(), key=lambda j: -j["est_min"]):  # longest first, first fit
-        for s in sessions:
-            lane = min(range(a.gpus), key=lambda i: s["lanes"][i])
-            if s["lanes"][lane] + j["est_min"] <= cap:
-                s["lanes"][lane] += j["est_min"]
-                s["jobs"].append(j["id"])
+    for g in sorted(groups(jobs), key=lambda g: -sum(j["est_min"] for j in g)):  # largest group first, first fit
+        g = sorted(g, key=lambda j: -j["est_min"])
+        for s in sessions + [None]:
+            lanes = list(s["lanes"]) if s else [0.0] * a.gpus
+            fits = True
+            for j in g:
+                lane = min(range(a.gpus), key=lambda i: lanes[i])
+                lanes[lane] += j["est_min"]
+                fits &= lanes[lane] <= cap
+            if fits or s is None:
+                if s is None:
+                    s = {"lanes": lanes, "jobs": []}
+                    sessions.append(s)
+                s["lanes"] = lanes
+                s["jobs"] += [j["id"] for j in g]
                 break
-        else:
-            lanes = [0.0] * a.gpus
-            lanes[0] = j["est_min"]
-            sessions.append({"lanes": lanes, "jobs": [j["id"]]})
-    plan = {"round": a.round, "budget_hours": a.budget_hours, "gpus": a.gpus, "min_per_example": mpe,
+    plan = {"round": "+".join(rids), "rounds": rids, "budget_hours": a.budget_hours, "gpus": a.gpus, "min_per_example": mpe,
             "n_calibrated": n, "created": time.strftime("%Y-%m-%d %H:%M"),
             "sessions": [{"session": i + 1, "jobs": s["jobs"], "est_hours": round(max(s["lanes"]) / 60, 2)}
                          for i, s in enumerate(sessions)],
@@ -171,10 +204,12 @@ def cmd_run(a):
     print(f"[gpu] {ngpu} CUDA device(s): {names}", flush=True)
     if ngpu == 0 and not os.environ.get("ALLOW_CPU"):
         sys.exit("ERROR: no GPU. Kaggle: Settings -> Accelerator -> GPU T4 x2 (also for Save & Run All).")
-    key_rule = json.load(open(ROUNDS))["rounds"][plan["round"]].get("openai_key", "no")
+    rr = json.load(open(ROUNDS))["rounds"]
+    key_rule = " / ".join(rr[r].get("openai_key", "no") for r in plan.get("rounds", [plan["round"]]))
     print(f"[openai] round {plan['round']} needs OPENAI_API_KEY: {key_rule}; "
           f"set in this session: {'yes' if os.environ.get('OPENAI_API_KEY') else 'no'}", flush=True)
-    if key_rule.startswith("yes") and not os.environ.get("OPENAI_API_KEY"):
+    if any(rr[r].get("openai_key", "no").startswith("yes") for r in plan.get("rounds", [plan["round"]])) \
+            and not os.environ.get("OPENAI_API_KEY"):
         sys.exit("ERROR: this round needs OPENAI_API_KEY. Kaggle: Add-ons -> Secrets -> OPENAI_API_KEY, "
                  "then export it before run_kaggle.sh (see RUNNING.md).")
     budget = (a.budget_hours or plan["budget_hours"]) * 60
@@ -188,21 +223,56 @@ def cmd_run(a):
     times_file = TIMES / f"{tag}.tsv"
     files = [f"outputs/_sessions/{tag}", f"outputs/_job_times/{tag}.tsv"]
     lock, t0 = threading.Lock(), time.time()
-    q = queue.Queue()
-    for jid in sorted(sess["jobs"], key=lambda j: -plan["jobs"][j]["est_min"]):
-        q.put(plan["jobs"][jid])
+    succ = collections.defaultdict(list)
+    for jid in sess["jobs"]:
+        for d in plan["jobs"][jid].get("after", []):
+            succ[d].append(jid)
+
+    def chain(jid, memo={}):
+        """Minutes from the start of jid to the end of its longest chain of successors (critical path)."""
+        if jid not in memo:
+            memo[jid] = plan["jobs"][jid]["est_min"] + max((chain(s) for s in succ[jid]), default=0)
+        return memo[jid]
+    pending = sorted((plan["jobs"][j] for j in sess["jobs"]), key=lambda j: -chain(j["id"]))  # critical path first
+    state = {}  # job id -> running / ok / failed / skipped; predecessors outside the session count as done
     lanes = max(1, ngpu) if ngpu else 1
+
+    def take(gpu):
+        """Next ready job (all predecessors ok), or None if none is ready yet; "stop" when nothing is left."""
+        with lock:
+            for j in list(pending):
+                deps = [state.get(d, "ok") for d in j.get("after", []) if d in plan["jobs"] and d in sess["jobs"]]
+                if any(d in ("failed", "skipped") for d in deps):
+                    pending.remove(j); state[j["id"]] = "skipped"
+                    print(f"[gpu{gpu}] skip {j['id']}: a predecessor failed or was deferred", flush=True)
+            for j in pending:
+                deps = [state.get(d) for d in j.get("after", []) if d in sess["jobs"]]
+                if all(d == "ok" for d in deps):
+                    pending.remove(j); state[j["id"]] = "running"
+                    return j
+            if not pending:
+                return "stop"
+            if "running" not in state.values():  # only blocked jobs left and nothing that could unblock them
+                for j in pending:
+                    state[j["id"]] = "skipped"
+                pending.clear()
+                return "stop"
+            return None
 
     def worker(gpu):
         while True:
-            try:
-                job = q.get_nowait()
-            except queue.Empty:
+            job = take(gpu)
+            if job == "stop":
                 return
+            if job is None:
+                time.sleep(20)
+                continue
             elapsed = (time.time() - t0) / 60
             if elapsed + job["est_min"] > budget:
                 print(f"[gpu{gpu}] defer {job['id']}: ~{job['est_min']:.0f} min does not fit "
                       f"({elapsed:.0f}/{budget:.0f} min used)", flush=True)
+                with lock:
+                    state[job["id"]] = "skipped"
                 continue
             log = ROOT / f"outputs/_logs/{re.sub(r'[^A-Za-z0-9_.-]', '_', job['id'])}.log"
             env = {**os.environ, "CUDA_VISIBLE_DEVICES": str(gpu)} if ngpu else dict(os.environ)
@@ -217,6 +287,7 @@ def cmd_run(a):
                 rc = p.wait()
             mins = (time.time() - js) / 60
             with lock:
+                state[job["id"]] = "ok" if rc == 0 else "failed"
                 with open(times_file, "a") as tf:
                     tf.write(f"{job['id']}\t{mins:.1f}\t{rc}\t{tag}\n")
                 files.extend(job["outputs"] + [str(log.relative_to(ROOT))])

@@ -53,7 +53,7 @@
     "r6": {
       "goal": "ADA (pattern, category, joint) and random concatenation rerun with batch 8 x grad_accum 2 (same effective batch 16 and steps; r5 attempt ran out of T4 memory), and the ViT5 quad-to-text (GenDA-style) baseline on data/aug/genda.jsonl from r5.",
       "openai_key": "no",
-      "status": "s1 done 2026-11-01 (ADA pattern x4, category x2, no OOM); s2, s3 running",
+      "status": "s1-s3 done 2026-11-01 (no OOM); 3 jobs deferred by the s2 budget: para_ada_joint s99, para_genda s42, s123",
       "targets": [
         {"run": "para_ada_pattern", "aug": "data/aug/ada_pattern.jsonl", "args": "--batch_size 8 --grad_accum 2"},
         {"run": "para_ada_category", "aug": "data/aug/ada_category.jsonl", "args": "--batch_size 8 --grad_accum 2"},
@@ -65,7 +65,7 @@
     "r7": {
       "goal": "Pilot (2 seeds, go if dev F1 >= +2 over para_none on the same seeds): (a) multi-view targets, every review trained in k element orders and decoded with a majority vote over the k views (--views 3, --views 5); (b) consensus relabelling: 3 Paraphrase teachers trained on train only label the GPT paraphrases (llm_para, which lost 3.7 F1 with copied labels) and the GPT quad-to-text set, a student is trained on train + relabelled llm_para.",
       "openai_key": "no",
-      "status": "planned",
+      "status": "done 2026-11-01 (r7_s1, 5 jobs). Both directions below the pre-stated go rule (dev +0.72 views3, +0.40 views5, +0.61 consensus)",
       "targets": [
         {"run": "para_views3", "args": "--views 3", "seeds": [42, 123]},
         {"run": "para_views5", "args": "--views 5", "seeds": [42, 123]},
@@ -73,6 +73,20 @@
          "command": "python -u src/train_paraphrase.py --output_dir outputs/teacher_none --seeds 42,123,2024 --keep_ckpt && python -u src/aug/relabel.py --ckpts outputs/teacher_none/seed_42/checkpoint,outputs/teacher_none/seed_123/checkpoint,outputs/teacher_none/seed_2024/checkpoint --in data/aug/llm_para.jsonl,data/aug/llm_q2t.jsonl --out data/aug/llm_para_cons.jsonl,data/aug/llm_q2t_cons.jsonl && python -u src/train_paraphrase.py --output_dir outputs/para_llm_para_cons --seeds 42,123 --aug_path data/aug/llm_para_cons.jsonl",
          "outputs": ["outputs/teacher_none", "outputs/para_llm_para_cons", "data/aug/llm_para_cons.jsonl", "data/aug/llm_para_cons.report.json", "data/aug/llm_q2t_cons.jsonl", "data/aug/llm_q2t_cons.report.json"],
          "done": "outputs/para_llm_para_cons/seed_123/test_predictions.jsonl"}
+      ]
+    },
+    "r8": {
+      "goal": "Consensus-labelled synthetic augmentation, pilot (2 seeds; go if dev F1 >= +2 over para_none on the same seeds). 20k reviews made locally by GPT infilling training reviews (opinion units hidden, ~40% of the words, filled with new content; data/aug/syn_infill.jsonl). 5 Paraphrase teachers trained on train only (seeds 11-55) label them; consensus quads (>= 3 or >= 4 of 5 votes) with spans found in the text, reviews kept only with >= 2 quads and >= 2 polarities (as in train). Student: --aug_stage pretrain (2 epochs on the synthetic set) then the gold train set. Teachers also label dev as a label-quality diagnostic (outputs/diag, never trained on).",
+      "openai_key": "no (synthetic texts generated locally and committed)",
+      "status": "planned",
+      "targets": [
+        {"run": "teacher5", "args": "--keep_ckpt", "seeds": [11, 22, 33, 44, 55], "est_min": 50},
+        {"id": "syn_label_0", "est_min": 80, "after": ["teacher5:s11", "teacher5:s22", "teacher5:s33", "teacher5:s44", "teacher5:s55"], "command": "python -u src/aug/relabel.py --ckpts outputs/teacher5/seed_11/checkpoint,outputs/teacher5/seed_22/checkpoint,outputs/teacher5/seed_33/checkpoint,outputs/teacher5/seed_44/checkpoint,outputs/teacher5/seed_55/checkpoint --in data/aug/syn_infill.jsonl --out data/aug/syn_infill_s0.jsonl --shard 0/2", "outputs": ["data/aug/syn_infill_s0.jsonl", "data/aug/syn_infill_s0.votes.jsonl", "data/aug/syn_infill_s0.report.json"], "done": "data/aug/syn_infill_s0.votes.jsonl"},
+        {"id": "syn_label_1", "est_min": 80, "after": ["teacher5:s11", "teacher5:s22", "teacher5:s33", "teacher5:s44", "teacher5:s55"], "command": "python -u src/aug/relabel.py --ckpts outputs/teacher5/seed_11/checkpoint,outputs/teacher5/seed_22/checkpoint,outputs/teacher5/seed_33/checkpoint,outputs/teacher5/seed_44/checkpoint,outputs/teacher5/seed_55/checkpoint --in data/aug/syn_infill.jsonl --out data/aug/syn_infill_s1.jsonl --shard 1/2", "outputs": ["data/aug/syn_infill_s1.jsonl", "data/aug/syn_infill_s1.votes.jsonl", "data/aug/syn_infill_s1.report.json"], "done": "data/aug/syn_infill_s1.votes.jsonl"},
+        {"id": "syn_label_dev", "est_min": 5, "after": ["teacher5:s11", "teacher5:s22", "teacher5:s33", "teacher5:s44", "teacher5:s55"], "command": "python -u src/aug/relabel.py --ckpts outputs/teacher5/seed_11/checkpoint,outputs/teacher5/seed_22/checkpoint,outputs/teacher5/seed_33/checkpoint,outputs/teacher5/seed_44/checkpoint,outputs/teacher5/seed_55/checkpoint --in data/restaurant_v1/dev.jsonl --out outputs/diag/teacher5_dev_cons.jsonl", "outputs": ["outputs/diag"], "done": "outputs/diag/teacher5_dev_cons.votes.jsonl"},
+        {"id": "syn_build", "est_min": 3, "after": ["syn_label_0", "syn_label_1"], "command": "python src/aug/relabel.py --from_votes data/aug/syn_infill_s0.votes.jsonl,data/aug/syn_infill_s1.votes.jsonl --vote_min 3 --min_quads 2 --min_polarities 2 --out data/aug/syn_cons3.jsonl && python src/aug/relabel.py --from_votes data/aug/syn_infill_s0.votes.jsonl,data/aug/syn_infill_s1.votes.jsonl --vote_min 4 --min_quads 2 --min_polarities 2 --out data/aug/syn_cons4.jsonl", "outputs": ["data/aug/syn_cons3.jsonl", "data/aug/syn_cons3.report.json", "data/aug/syn_cons4.jsonl", "data/aug/syn_cons4.report.json"], "done": "data/aug/syn_cons4.jsonl"},
+        {"run": "para_syn3_pre", "aug": "data/aug/syn_cons3.jsonl", "args": "--aug_stage pretrain --pretrain_epochs 2", "seeds": [42, 123], "after": ["syn_build"], "est_min": 100},
+        {"run": "para_syn4_pre", "aug": "data/aug/syn_cons4.jsonl", "args": "--aug_stage pretrain --pretrain_epochs 2", "seeds": [42, 123], "after": ["syn_build"], "est_min": 100}
       ]
     }
   }
