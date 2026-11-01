@@ -75,6 +75,12 @@ os.environ["OPENAI_API_KEY"] = UserSecretsClient().get_secret("OPENAI_API_KEY")
 ```
 Never type the key into a notebook cell.
 
+Spend cap (local, every GPT script): each call is logged in `outputs/_openai_ledger.tsv` (month, key fingerprint,
+model, tokens, USD) and a script stops before a call once this month's spend of the current key reaches
+`OPENAI_MAX_USD` (default 10, set it in `.env`). A refusal for missing credit or a dashboard spend limit stops at once
+instead of retrying. Dashboard controls (Organization or Project settings → Limits → Spend): spend alerts only send
+email; "Enforce a hard limit" makes requests fail with 429 once the monthly limit is reached.
+
 ## Augmentation baselines (data committed in data/aug/, each with .report.json)
 Where each step runs: rule/CPU and GPT steps locally (OpenAI key in `.env`); model steps on Kaggle.
 ```bash

@@ -206,7 +206,37 @@ def load_env(path):
                 os.environ[m.group(1)] = m.group(2).strip().strip('"').strip("'")
 
 
+# Local spend cap. Every call is written to LEDGER (month, key fingerprint, model, tokens, USD); before a call, the
+# month's spend of the current key is summed and the process stops once it reaches OPENAI_MAX_USD (default 10).
+# Calls already in flight in other threads/processes can add a few cents above the cap. Prices: USD per 1M tokens
+# (input, cached input, output) from the OpenAI pricing page; a model missing here is refused.
+PRICES = {"gpt-4.1-mini": (0.40, 0.10, 1.60), "gpt-4.1-mini-2025-04-14": (0.40, 0.10, 1.60)}
+LEDGER = ROOT / "outputs/_openai_ledger.tsv"
+STOP_CODES = ("insufficient_quota", "credit_balance_exhausted", "organization_spend_limit_exceeded",
+              "project_spend_limit_exceeded")
+
+
+def key_fingerprint():
+    return hashlib.sha256(os.environ["OPENAI_API_KEY"].encode()).hexdigest()[:8]
+
+
+def month_spend(fp=None):
+    fp, month, total = fp or key_fingerprint(), time.strftime("%Y-%m"), 0.0
+    if LEDGER.exists():
+        for line in open(LEDGER, encoding="utf-8"):
+            p = line.rstrip("\n").split("\t")
+            if len(p) >= 7 and p[1] == month and p[2] == fp:
+                total += float(p[6])
+    return total
+
+
 def openai_chat(model, prompt, temperature):
+    if model not in PRICES:
+        raise SystemExit(f"no price for {model} in quadra.PRICES: add it before spending")
+    cap, spent = float(os.environ.get("OPENAI_MAX_USD", "10")), month_spend()
+    if spent >= cap:
+        raise SystemExit(f"OpenAI spend this month for this key ${spent:.2f} >= cap OPENAI_MAX_USD=${cap:.2f}: stopped "
+                         f"(cached calls are kept; raise the cap in .env to continue)")
     # store=False: the completion is not kept for OpenAI's distillation/evals products (the default, stated explicitly)
     body = json.dumps({"model": model, "temperature": temperature, "store": False,
                        "messages": [{"role": "user", "content": prompt}]}).encode()
@@ -216,12 +246,25 @@ def openai_chat(model, prompt, temperature):
     for attempt in range(5):
         try:
             with urllib.request.urlopen(req, timeout=120) as r:
-                return json.load(r)
+                resp = json.load(r)
+            break
         except urllib.error.HTTPError as e:
+            msg = e.read().decode(errors="replace")
+            if any(c in msg for c in STOP_CODES):  # no credit / spend limit: retrying cannot help
+                raise SystemExit(f"OpenAI refused the request ({[c for c in STOP_CODES if c in msg][0]}): stopped")
             if e.code in (429, 500, 502, 503) and attempt < 4:
                 time.sleep(2 ** attempt * 3)
                 continue
             raise
+    u = resp.get("usage", {})
+    cached = (u.get("prompt_tokens_details") or {}).get("cached_tokens", 0)
+    pin, pc, pout = PRICES[model]
+    usd = ((u.get("prompt_tokens", 0) - cached) * pin + cached * pc + u.get("completion_tokens", 0) * pout) / 1e6
+    LEDGER.parent.mkdir(parents=True, exist_ok=True)
+    with open(LEDGER, "a", encoding="utf-8") as f:
+        f.write(f"{time.strftime('%Y-%m-%d %H:%M:%S')}\t{time.strftime('%Y-%m')}\t{key_fingerprint()}\t{model}\t"
+                f"{u.get('prompt_tokens', 0)}\t{u.get('completion_tokens', 0)}\t{usd:.6f}\n")
+    return resp
 
 
 def fuse(items, args, cache_path):
