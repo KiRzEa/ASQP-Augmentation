@@ -18,7 +18,7 @@
   "max_calls": 0,
   "overgen": 1.3,
   "train_path": "data/restaurant_v1/inner_train.jsonl",
-  "heldout": "/Users/kietnt/Desktop/Workspace/DataAugmentation/data/restaurant_v1/dev.jsonl,/Users/kietnt/Desktop/Workspace/DataAugmentation/data/restaurant_v1/test.jsonl,/Users/kietnt/Desktop/Workspace/DataAugmentation/data/restaurant_v1/inner_dev.jsonl"
+  "heldout": "data/restaurant_v1/dev.jsonl,data/restaurant_v1/test.jsonl,data/restaurant_v1/inner_dev.jsonl"
  },
  "stats": {
   "calls": 848,

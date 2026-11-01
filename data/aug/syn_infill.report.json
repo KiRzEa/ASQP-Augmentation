@@ -16,9 +16,9 @@
   "max_jaccard": 0.5,
   "seed": 13,
   "max_calls": 0,
-  "train_path": "/Users/kietnt/Desktop/Workspace/DataAugmentation/data/restaurant_v1/train.jsonl",
-  "dev_path": "/Users/kietnt/Desktop/Workspace/DataAugmentation/data/restaurant_v1/dev.jsonl",
-  "test_path": "/Users/kietnt/Desktop/Workspace/DataAugmentation/data/restaurant_v1/test.jsonl"
+  "train_path": "data/restaurant_v1/train.jsonl",
+  "dev_path": "data/restaurant_v1/dev.jsonl",
+  "test_path": "data/restaurant_v1/test.jsonl"
  },
  "stats": {
   "api_calls": 2187,

@@ -70,19 +70,34 @@ def quads_to_target(quads, order=ORDER):
     return SEP.join(parts)
 
 
+def _any_order(seg):
+    """Elements of a segment whose four markers may come in any order (DLO / ILO targets); None if malformed."""
+    parts = re.findall(r"\[([AOCS])\]([^\[]*)", seg)
+    if sorted(e for e, _ in parts) != list("ACOS") or not seg.startswith("["):
+        return None
+    return {e: clean_span(v) for e, v in parts}
+
+
 def target_to_quads(text, order=ORDER):
-    """Parse a generated target. Returns (set of quad tuples, number of unparsable segments)."""
+    """Parse a generated target. Returns (set of quad tuples, number of unparsable segments).
+    order=None accepts the four markers in any order within each quad."""
     quads, invalid = set(), 0
-    rx = QUAD_RE if order == ORDER else _quad_re(order)
+    rx = None if order is None else QUAD_RE if order == ORDER else _quad_re(order)
     for seg in text.split("[SSEP]"):
         seg = seg.strip()
         if not seg:
             continue
-        m = rx.match(seg)
-        if not m:
-            invalid += 1
-            continue
-        g = dict(zip(order, (clean_span(x) for x in m.groups())))
+        if rx is None:
+            g = _any_order(seg)
+            if g is None:
+                invalid += 1
+                continue
+        else:
+            m = rx.match(seg)
+            if not m:
+                invalid += 1
+                continue
+            g = dict(zip(order, (clean_span(x) for x in m.groups())))
         a, o, c, s = g["A"], g["O"], g["C"], g["S"]
         if c not in VI_CATEGORY or s not in VI_POLARITY or not a or not o:
             invalid += 1

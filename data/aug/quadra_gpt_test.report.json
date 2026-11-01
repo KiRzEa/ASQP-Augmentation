@@ -1,6 +1,6 @@
 {
  "args": {
-  "train_path": "/Users/kietnt/Desktop/Workspace/DataAugmentation/data/restaurant_v1/train.jsonl",
+  "train_path": "data/restaurant_v1/train.jsonl",
   "out": "data/aug/quadra_gpt_test.jsonl",
   "ratio": 1.0,
   "gamma": 0.05,

@@ -1,0 +1,19 @@
+{
+ "train_path": "data/restaurant_v1/train.jsonl",
+ "seed": 13,
+ "sets": {
+  "I": 2,
+  "E": 1440,
+  "M": 693
+ },
+ "pairs_I_E": 2,
+ "pairs_with_M": 693,
+ "alone": {
+  "I": 0,
+  "E": 745,
+  "M": 0
+ },
+ "n_out": 1440,
+ "quads_in": 6907,
+ "quads_out": 6907
+}

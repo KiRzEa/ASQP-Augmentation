@@ -1,0 +1,9 @@
+{
+ "syn": "data/aug/syn_infill.jsonl",
+ "train_path": "data/restaurant_v1/inner_train.jsonl",
+ "stats": {
+  "kept": 12217,
+  "overlaps a review outside train": 2981,
+  "source outside train": 4802
+ }
+}

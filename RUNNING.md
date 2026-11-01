@@ -127,3 +127,17 @@ Rebuilding the consensus with another threshold needs no GPU:
        --in data/aug/quadra_$v.jsonl --out data/aug/quadra_${v}_v.jsonl --target_n 2135; done
    ```
 3. Kaggle s2: train both verified sets with the baseline protocol (5 seeds).
+
+## Literature baselines added in p2 and self-training with a pseudo-label scorer
+```bash
+# Kaggle (GPU): order scores of the pre-trained model -> DLO / ILO / MvP
+python -u src/aug/order_scores.py --train_path data/restaurant_v1/train.jsonl --out data/aug/order_scores_train.json
+python -u src/train_paraphrase.py --output_dir outputs/para_dlo --order_mode dlo --order_scores data/aug/order_scores_train.json --top_k 3 --lr 1e-4
+python -u src/train_paraphrase.py --output_dir outputs/para_mvp --order_mode mvp --order_scores data/aug/order_scores_train.json --top_k 5 --lr 1e-4
+# local, CPU: Review Combination (the combined set replaces train)
+python3 src/aug/review_combination.py --out data/aug/rc_train.jsonl
+# ST + scorer: pool (CPU) -> CV candidates, scorer, pseudo-labels, filters (GPU, round p2 shows the chain)
+python3 src/aug/st_scorer.py pool --train_path data/restaurant_v1/train.jsonl --out data/aug/st_pool_train.jsonl
+```
+Reranking with the scorer at inference: `--rerank_scorer <scorer checkpoint>` (metrics `test_rerank`).
+Deviations from each paper: notes (local).

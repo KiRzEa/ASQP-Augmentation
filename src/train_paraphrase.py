@@ -16,6 +16,18 @@ view and keeps a quad predicted by >= --vote_min views (default majority); dev s
 *_predictions.jsonl hold the voted predictions plus the per-view ones; *_view0_predictions.jsonl hold view 0 alone
 (the same model decoded as a single-view model).
 
+Order-based baselines (orders ranked by src/aug/order_scores.py with the pre-trained model, --order_scores FILE):
+  --order_mode dlo  DLO (Hu et al., 2022): every review once per each of the --top_k dataset-level orders with the
+                    lowest mean entropy, input unchanged; one greedy generation parsed in whatever order it comes.
+  --order_mode ilo  ILO: the same with the --top_k lowest-entropy orders of each review (aug reviews without a
+                    score use the dataset-level orders).
+  --order_mode mvp  MvP (Gou et al., 2023): the --top_k orders with the highest mean log-probability become views
+                    (order prompt in the input, majority vote at inference), as --views but with ranked orders.
+
+--rerank_scorer S: after training, also decode --rerank_beams beam candidates and keep the one with the highest
+score of the pseudo-label scorer S (src/aug/st_scorer.py; Zhang et al., 2024, Sec. 4.3):
+*_rerank_predictions.jsonl and metrics "dev_rerank" / "test_rerank" (checkpoint selection unchanged).
+
 Per seed, <output_dir>/seed_<s>/ gets:
   test_predictions.jsonl, dev_predictions.jsonl  id, text, gold, pred, raw generation, invalid segments
   metrics.json      dev/test metrics of the selected checkpoint (exact + relaxed F1, breakdowns, raw counts)
@@ -47,7 +59,7 @@ from torch.utils.data import DataLoader
 from transformers import AutoModelForSeq2SeqLM, AutoTokenizer, get_linear_schedule_with_warmup
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from asqp_common import VIEWS, load_jsonl, quad_tuple, quads_to_target, score, target_to_quads, view_prefix  # noqa: E402
+from asqp_common import ORDER, VIEWS, load_jsonl, quad_tuple, quads_to_target, score, target_to_quads, view_prefix  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -62,6 +74,11 @@ def parse_args():
     ap.add_argument("--views", type=int, default=1,
                     help=f"element-order views per review (1..{len(VIEWS)}); 1 = the single default target")
     ap.add_argument("--vote_min", type=int, default=0, help="with --views k: views that must agree on a quad; 0 = majority")
+    ap.add_argument("--order_mode", choices=["dlo", "ilo", "mvp"], help="order-based baseline (see docstring)")
+    ap.add_argument("--order_scores", help="JSON from src/aug/order_scores.py for the training file")
+    ap.add_argument("--top_k", type=int, default=3, help="orders per review with --order_mode")
+    ap.add_argument("--rerank_scorer", help="checkpoint of a pseudo-label scorer: also report reranked predictions")
+    ap.add_argument("--rerank_beams", type=int, default=4)
     ap.add_argument("--dev_path", default=str(ROOT / "data/restaurant_v1/dev.jsonl"))
     ap.add_argument("--test_path", default=str(ROOT / "data/restaurant_v1/test.jsonl"))
     ap.add_argument("--output_dir", required=True)
@@ -109,12 +126,35 @@ def set_seed(seed):
     torch.cuda.manual_seed_all(seed)
 
 
+def set_orders(args):
+    """args.view_orders: orders decoded at inference (several = views with prompts and a vote);
+    args.target_orders: id -> training orders for DLO / ILO (None otherwise)."""
+    args.view_orders, args.target_orders = VIEWS[:args.views], None
+    if not args.order_mode:
+        return
+    sc = json.load(open(args.order_scores))
+    ds = sc["dataset"]
+    if args.order_mode == "mvp":
+        args.view_orders = sorted(sc["orders"], key=lambda o: -ds["logprob"][o])[:args.top_k]
+        return
+    args.view_orders = [ORDER]
+    dlo = sorted(sc["orders"], key=lambda o: ds["entropy"][o])[:args.top_k]
+    args.target_orders = collections.defaultdict(lambda: dlo)
+    if args.order_mode == "ilo":
+        for i, v in sc["instance"].items():
+            args.target_orders[i] = [o for _, o in sorted(zip(v["entropy"], sc["orders"]))][:args.top_k]
+
+
 def encode(items, args):
-    """Training pairs; with --views k every review appears once per view (input prefixed with the view's order)."""
-    if args.views == 1:
+    """Training pairs; with views every review appears once per view (input prefixed with the view's order);
+    with DLO / ILO once per training order of the review (input unchanged)."""
+    if args.target_orders is not None:
+        return [{"text": x["text"], "target": quads_to_target(x["quads"], o)}
+                for x in items for o in args.target_orders[x["id"]]]
+    if len(args.view_orders) == 1:
         return [{"text": x["text"], "target": quads_to_target(x["quads"])} for x in items]
     return [{"text": f"{view_prefix(o)} {x['text']}", "target": quads_to_target(x["quads"], o)}
-            for x in items for o in VIEWS[:args.views]]
+            for x in items for o in args.view_orders]
 
 
 def make_collate(tok, args):
@@ -130,12 +170,12 @@ def make_collate(tok, args):
 
 @torch.no_grad()
 def predict(model, tok, items, args, device):
-    """Greedy decoding; with --views k one generation per view and a vote over the views."""
+    """Greedy decoding; with several views one generation per view and a vote over the views."""
     model.eval()
-    views = VIEWS[:args.views]
+    views, multi = args.view_orders, len(args.view_orders) > 1
     gens = []
     for order in views:
-        src = [x["text"] if args.views == 1 else f"{view_prefix(order)} {x['text']}" for x in items]
+        src = [f"{view_prefix(order)} {x['text']}" if multi else x["text"] for x in items]
         g = []
         for i in range(0, len(src), args.eval_batch_size):
             enc = tok(src[i:i + args.eval_batch_size], max_length=args.max_source_len, truncation=True, padding=True,
@@ -143,21 +183,43 @@ def predict(model, tok, items, args, device):
             g += tok.batch_decode(model.generate(**enc, max_new_tokens=args.gen_max_len, num_beams=args.num_beams),
                                   skip_special_tokens=True)
         gens.append(g)
-    vote_min = args.vote_min or args.views // 2 + 1
+    vote_min = args.vote_min or len(views) // 2 + 1
     out = []
     for j, x in enumerate(items):
-        parsed = [target_to_quads(gens[v][j], order) for v, order in enumerate(views)]
-        if args.views == 1:
+        parsed = [target_to_quads(gens[v][j], None if args.target_orders is not None else order)
+                  for v, order in enumerate(views)]
+        if not multi:
             pred, n_invalid = parsed[0]
         else:
             votes = collections.Counter(q for p, _ in parsed for q in p)
             pred, n_invalid = {q for q, c in votes.items() if c >= vote_min}, sum(n for _, n in parsed)
         rec = {"id": x["id"], "text": x["text"], "gold": [list(quad_tuple(q)) for q in x["quads"]],
                "pred": [list(q) for q in sorted(pred)], "generation": gens[0][j], "n_invalid": n_invalid}
-        if args.views > 1:
+        if multi:
             rec.update(generations=[g[j] for g in gens], views=[[list(q) for q in sorted(p)] for p, _ in parsed],
                        views_invalid=[n for _, n in parsed])
         out.append(rec)
+    return out
+
+
+@torch.no_grad()
+def rerank(model, tok, items, args, device):
+    """Beam candidates of the trained model, the scorer picks one (candidates without a parsed quad are skipped)."""
+    from aug.st_scorer import as_quads, generate_candidates, load, seq_logprob
+    cands, _ = generate_candidates(model, tok, [x["text"] for x in items], args.rerank_beams, device)
+    s_tok, scorer = load(args.rerank_scorer, device)
+    scorer.eval()
+    out = []
+    for x, cs in zip(items, cands):
+        parsed = [target_to_quads(g) for g, _ in cs]
+        ok = [k for k, (q, _) in enumerate(parsed) if q] or [0]
+        sc, _ = seq_logprob(scorer, s_tok, [x["text"]] * len(ok),
+                            [quads_to_target(as_quads(parsed[k][0])) for k in ok], device)
+        k = ok[int(sc.argmax())]
+        out.append({"id": x["id"], "text": x["text"], "gold": [list(quad_tuple(q)) for q in x["quads"]],
+                    "pred": [list(q) for q in sorted(parsed[k][0])], "generation": cs[k][0], "n_invalid": parsed[k][1],
+                    "chosen_beam": k, "candidates": [g for g, _ in cs]})
+    del scorer
     return out
 
 
@@ -289,15 +351,23 @@ def run_seed(seed, args, data, device, out_dir):
     metrics = {"seed": seed, "best_epoch": best_epoch, "dev": score(dev_pred), "test": score(test_pred)}
     write_jsonl(out_dir / "dev_predictions.jsonl", dev_pred)
     write_jsonl(out_dir / "test_predictions.jsonl", test_pred)
-    if args.views > 1:
+    if len(args.view_orders) > 1:
         for split, rows in (("dev", dev_pred), ("test", test_pred)):
             write_jsonl(out_dir / f"{split}_view0_predictions.jsonl", single_view(rows))
             metrics[f"{split}_view0"] = score(single_view(rows))
+    if args.rerank_scorer:
+        for split in ("dev", "test"):
+            rows = rerank(model, tok, data[split], args, device)
+            write_jsonl(out_dir / f"{split}_rerank_predictions.jsonl", rows)
+            metrics[f"{split}_rerank"] = score(rows)
     json.dump(pre_history + history, open(out_dir / "history.json", "w"), indent=1)
     json.dump(metrics, open(out_dir / "metrics.json", "w"), indent=1)
     cfg = {
-        "args": vars(args), "seed": seed, "best_epoch": best_epoch, "optimizer_steps": step, "pretrain_steps": pre_steps,
+        "args": {k: v for k, v in vars(args).items() if k != "target_orders"}, "seed": seed, "best_epoch": best_epoch, "optimizer_steps": step, "pretrain_steps": pre_steps,
         "epochs_run": len(history), "steps_per_epoch": steps_per_epoch,
+        "view_orders": args.view_orders,
+        "target_orders": None if args.target_orders is None else (
+            collections.Counter(o for x in data["train"] for o in args.target_orders[x["id"]])),
         "n_train": len(data["train"]), "n_aug": len(data["train_all"]) - len(data["train"]), "n_train_total": len(train),
         "truncated_source": src_trunc, "truncated_target": tgt_trunc,
         "data_sha256": data["hashes"], "seconds_total": time.time() - t0, "seconds_final_predict": time.time() - tp,
@@ -313,7 +383,7 @@ def run_seed(seed, args, data, device, out_dir):
         model.save_pretrained(out_dir / "checkpoint"); tok.save_pretrained(out_dir / "checkpoint")
     log.info(f"done: best epoch {best_epoch}, dev F1 {metrics['dev']['quad']['f1']:.2f}, "
              f"test F1 {metrics['test']['quad']['f1']:.2f}"
-             + (f" (view 0 alone: {metrics['test_view0']['quad']['f1']:.2f})" if args.views > 1 else "")
+             + (f" (view 0 alone: {metrics['test_view0']['quad']['f1']:.2f})" if len(args.view_orders) > 1 else "")
              + f", {cfg['seconds_total'] / 60:.1f} min")
     del model, best
     if device.type == "cuda":
@@ -324,6 +394,11 @@ def main():
     args = parse_args()
     if not 1 <= args.views <= len(VIEWS):
         raise SystemExit(f"--views must be 1..{len(VIEWS)}")
+    if args.rerank_scorer and (args.views > 1 or args.order_mode):
+        raise SystemExit("--rerank_scorer works with the single default target only")
+    if args.order_mode and (args.views > 1 or not args.order_scores):
+        raise SystemExit("--order_mode needs --order_scores and excludes --views")
+    set_orders(args)
     device = torch.device("cpu" if args.cpu or not torch.cuda.is_available() else "cuda")
     data = {k: load_jsonl(getattr(args, f"{k}_path")) for k in ("train", "dev", "test")}
     aug = [x for p in args.aug_path for x in load_jsonl(p)]
