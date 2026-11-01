@@ -62,7 +62,9 @@ def expand(round_id, rounds):
             continue
         aug = t.get("aug")
         views = re.search(r"--views (\d+)", t.get("args", ""))
-        examples = (n_train + n_lines(aug)) * (int(views.group(1)) if views else 1)  # each view is one more example
+        tp = re.search(r"--train_path (\S+)", t.get("args", ""))
+        base = n_lines(tp.group(1)) if tp else n_train
+        examples = (base + n_lines(aug)) * (int(views.group(1)) if views else 1)  # each view is one more example
         if "est_min" in t:  # data made inside the session, or a two-stage run: the per-example estimate does not apply
             examples = None
         for s in t.get("seeds", seeds):

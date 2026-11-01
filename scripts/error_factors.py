@@ -120,12 +120,15 @@ def main():
     ap.add_argument("--oof", default=str(ROOT / "outputs/kfold"))
     ap.add_argument("--json")
     ap.add_argument("--by_length", action="store_true", help="style factors within review-length buckets")
+    ap.add_argument("--exclude_fold", default="", help="e.g. fold0: leave the inner dev fold out of the analysis")
     a = ap.parse_args()
     train = load_jsonl(ROOT / "data/restaurant_v1/train.jsonl")
     dia = Diacritics(train)
     by_id = {x["id"]: x for x in train}
     dev = load_jsonl(ROOT / "data/restaurant_v1/dev.jsonl"); test = load_jsonl(ROOT / "data/restaurant_v1/test.jsonl")
     folds = sorted(Path(a.oof).glob("fold*/seed_*/test_predictions.jsonl"))
+    if a.exclude_fold:
+        folds = [f for f in folds if f.parts[-3] not in a.exclude_fold.split(",")]
     qf, rf = collections.defaultdict(lambda: [0, 0, 0]), collections.defaultdict(lambda: [0, 0, 0])
     gold_n, rev_n = collections.Counter(), collections.Counter()
     for fp_ in folds:

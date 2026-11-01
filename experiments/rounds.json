@@ -88,6 +88,16 @@
         {"run": "para_syn3_pre", "aug": "data/aug/syn_cons3.jsonl", "args": "--aug_stage pretrain --pretrain_epochs 2", "seeds": [42, 123], "after": ["syn_build"], "est_min": 100},
         {"run": "para_syn4_pre", "aug": "data/aug/syn_cons4.jsonl", "args": "--aug_stage pretrain --pretrain_epochs 2", "seeds": [42, 123], "after": ["syn_build"], "est_min": 100}
       ]
+    },
+    "p1": {
+      "goal": "Protocol B pilot of label-aware infilling (src/aug/infill_labelled.py), all data from inner_train only, scored on inner_dev (--test_path; the official test is not decoded; official dev = checkpoint selection only). dv_none = no augmentation; dv_infill_u = untargeted (same category/polarity/implicit structure, new content); dv_infill_t = targeted (new aspect / opinion terms and pairs, opinion before aspect). Go rule written before results: dv_infill_t mean inner_dev F1 over 5 seeds >= dv_none + 2.0.",
+      "openai_key": "no (GPT data generated locally and committed)",
+      "status": "planned",
+      "targets": [
+        {"run": "dv_none", "args": "--train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl"},
+        {"run": "dv_infill_u", "aug": "data/aug/dv_infill_u.jsonl", "args": "--train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl"},
+        {"run": "dv_infill_t", "aug": "data/aug/dv_infill_t.jsonl", "args": "--train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl"}
+      ]
     }
   }
 }
