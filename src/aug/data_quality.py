@@ -2,9 +2,10 @@
 
     python src/aug/data_quality.py data/aug/llm_para.jsonl data/aug/syn20k_cons.jsonl ... [--json out.json]
 
-Every candidate set is compared with train on the same measures, and dev (real held-out reviews) is compared with
-train the same way: dev-vs-train is the natural gap between two real samples, so a candidate is "drifted" when it is
-much further from train than dev is. Dev is only measured here, never used to build or select data.
+Every candidate set is compared with train on the same measures. The reference row is one random half of train
+against the other half: the natural gap between two real samples of the training distribution, so a candidate is
+"drifted" when it is much further from train than that. Design decisions use train only; --dev adds dev as a
+descriptive row for the paper (never used to build or select data).
 Text: word-length distribution (KS statistic), unigram Jensen-Shannon divergence, share of tokens unseen in train,
 distinct-2 and mean max word-trigram Jaccard to other reviews of the same set (diversity), comma / emoji / slang
 shares, novelty (1 - mean max word-trigram Jaccard of a review with any training review other than an identical
@@ -14,7 +15,7 @@ Labels (if the set has quads): quads per review, JSD of the category, polarity a
 share of reviews with mixed polarity, mean opinion length, and the share of opinion spans among the 50 most frequent
 training opinions ("stereotyped" labels: high = easier, more ideal data than the real reviews).
 Size-dependent measures (unigram JSD, distinct-2, self overlap, C2ST) are averaged over --draws random subsets of
-the dev size (221) of each set, against train subsets of the same size that exclude texts identical to the set's
+--m reviews (default 221) of each set, against train subsets of the same size that exclude texts identical to the set's
 texts (a copy of train would otherwise sit in both classes of the C2ST); rates use the whole set.
 """
 import argparse
@@ -150,6 +151,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("sets", nargs="+", help="JSONL files (augmented / synthetic data)")
     ap.add_argument("--draws", type=int, default=5, help="random subsets for the size-dependent measures")
+    ap.add_argument("--m", type=int, default=221, help="subset size for the size-dependent measures")
+    ap.add_argument("--dev", action="store_true", help="add dev as a descriptive row (not for design decisions)")
     ap.add_argument("--seed", type=int, default=13)
     ap.add_argument("--json", help="write all measures here")
     ap.add_argument("--train_path", default=str(ROOT / "data/restaurant_v1/train.jsonl"))
@@ -160,14 +163,14 @@ def main():
     train_vocab = {w for x in train for w in x["text"].split()}
     top_ops = {o for o, _ in collections.Counter(q["opinion"] for x in train for q in x["quads"]
                                                   if q["opinion"] != NULL).most_common(50)}
-    dev = load_jsonl(a.dev_path)
-    m = len(dev)
+    m = a.m
     rows = {}
-    # reference rows: dev vs train = the natural gap between two real samples; a train half vs the other half = floor
+    # reference row: one half of train vs the other half = the natural gap between two real samples
     half_ids = set(rng.sample(range(len(train)), len(train) // 2))
     half, rest = [x for i, x in enumerate(train) if i in half_ids], [x for i, x in enumerate(train) if i not in half_ids]
-    rows["(dev, real)"] = measure(dev, train, train_vocab, top_ops, a, m, rng)
     rows["(train half)"] = measure(half, rest, {w for x in rest for w in x["text"].split()}, top_ops, a, m, rng)
+    if a.dev:
+        rows["(dev, descriptive)"] = measure(load_jsonl(a.dev_path), train, train_vocab, top_ops, a, m, rng)
     for p in a.sets:
         rows[Path(p).stem] = measure(load_jsonl(p), train, train_vocab, top_ops, a, m, rng)
     cols = list(dict.fromkeys(k for r in rows.values() for k in r))

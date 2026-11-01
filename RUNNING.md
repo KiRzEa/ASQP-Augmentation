@@ -16,6 +16,15 @@
 - Augmented data: a JSONL in the same format as `train.jsonl`, passed with `--aug_path`; nothing else changes.
 - Step-matched control: `--max_steps N` with N = the steps used by the augmented run.
 
+## What each split may be used for
+- **train**: everything that designs a method: error analysis (5-fold out-of-fold predictions, `outputs/kfold`),
+  statistics of labels and texts, drift measures (`data_quality.py`, reference = train half vs train half),
+  generation, filtering, teacher training.
+- **dev**: inside a run only, the same way for every method: checkpoint selection and early stopping. Choices
+  between variants use a rule written down before the results (see notes) and are never the reason a method is
+  designed the way it is; dev errors and dev composition are not inspected to design augmentation.
+- **test**: decoded once per run with the dev-selected checkpoint, for reporting only.
+
 ## Kaggle (2×T4, internet on)
 1. Upload this folder (at least `src/`, `scripts/`, `data/`) as a Kaggle dataset, e.g. `asqp-da`.
 2. In the notebook:
