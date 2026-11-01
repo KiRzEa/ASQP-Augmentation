@@ -207,7 +207,8 @@ def load_env(path):
 
 
 def openai_chat(model, prompt, temperature):
-    body = json.dumps({"model": model, "temperature": temperature,
+    # store=False: the completion is not kept for OpenAI's distillation/evals products (the default, stated explicitly)
+    body = json.dumps({"model": model, "temperature": temperature, "store": False,
                        "messages": [{"role": "user", "content": prompt}]}).encode()
     req = urllib.request.Request("https://api.openai.com/v1/chat/completions", data=body,
                                  headers={"Authorization": f"Bearer {os.environ['OPENAI_API_KEY']}",
