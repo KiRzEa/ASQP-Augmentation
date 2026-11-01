@@ -1,0 +1,151 @@
+{
+ "n": 1708,
+ "mode": "targeted",
+ "args": {
+  "out": "data/aug/dv_infill_t.jsonl",
+  "mode": "targeted",
+  "n": 0,
+  "mask_ratio": 0.4,
+  "p_new_aspect": 0.5,
+  "p_new_opinion": 0.5,
+  "p_opinion_first": 0.07,
+  "per_call": 6,
+  "shots": 4,
+  "llm_model": "gpt-4.1-mini-2025-04-14",
+  "llm_temperature": 0.9,
+  "llm_workers": 8,
+  "seed": 13,
+  "max_calls": 0,
+  "overgen": 1.3,
+  "train_path": "data/restaurant_v1/inner_train.jsonl",
+  "heldout": "/Users/kietnt/Desktop/Workspace/DataAugmentation/data/restaurant_v1/dev.jsonl,/Users/kietnt/Desktop/Workspace/DataAugmentation/data/restaurant_v1/test.jsonl,/Users/kietnt/Desktop/Workspace/DataAugmentation/data/restaurant_v1/inner_dev.jsonl"
+ },
+ "stats": {
+  "calls": 1436,
+  "prompt_tokens": 2512294,
+  "completion_tokens": 905215,
+  "items": 8532,
+  "drop_empty_fill": 768,
+  "drop_label_not_as_asked": 353,
+  "drop_convention_long_opinion": 1103,
+  "drop_order_not_as_asked": 274,
+  "drop_span_not_in_fill": 1144,
+  "drop_visible_changed": 563,
+  "drop_type_not_as_asked": 329,
+  "drop_exact_duplicate": 15,
+  "drop_convention_overlap": 90,
+  "drop_fills_shape": 66,
+  "drop_convention_long_aspect": 96,
+  "drop_call_not_json": 4,
+  "drop_call_length": 10,
+  "drop_verify_polarity_implicit": 205,
+  "category_from_verifier": 1357,
+  "drop_verify_polarity": 682,
+  "drop_verify_spans_implicit": 379,
+  "drop_verify_no_matching_target": 116,
+  "drop_verify_no_matching_target_implicit": 47,
+  "drop_verify_spans": 64,
+  "drop_verify_format": 16,
+  "api_calls": 937,
+  "verify_api_calls": 375,
+  "verify_prompt_tokens": 387531,
+  "verify_completion_tokens": 372669
+ },
+ "selection": {
+  "pool": 2220,
+  "kept": 1708,
+  "target_filled_shares": {
+   "negative|EA-EO": 0.2857,
+   "negative|EA-IO": 0.0181,
+   "negative|IA-EO": 0.0165,
+   "neutral|EA-EO": 0.1472,
+   "neutral|EA-IO": 0.0286,
+   "neutral|IA-EO": 0.0123,
+   "positive|EA-EO": 0.4489,
+   "positive|EA-IO": 0.0181,
+   "positive|IA-EO": 0.0246
+  },
+  "pool_filled_shares": {
+   "negative|EA-EO": 0.5053,
+   "negative|EA-IO": 0.0016,
+   "negative|IA-EO": 0.0029,
+   "neutral|EA-EO": 0.0599,
+   "neutral|EA-IO": 0.0086,
+   "positive|EA-EO": 0.4195,
+   "positive|EA-IO": 0.0012,
+   "positive|IA-EO": 0.0008
+  },
+  "kept_filled_shares": {
+   "negative|EA-EO": 0.4412,
+   "negative|EA-IO": 0.0021,
+   "negative|IA-EO": 0.0037,
+   "neutral|EA-EO": 0.0766,
+   "neutral|EA-IO": 0.0112,
+   "positive|EA-EO": 0.4625,
+   "positive|EA-IO": 0.0016,
+   "positive|IA-EO": 0.0011
+  }
+ },
+ "quads_per_review": {
+  "train": 3.234192037470726,
+  "out": 3.0046838407494145
+ },
+ "polarity": {
+  "train": {
+   "negative": 0.3195,
+   "neutral": 0.1904,
+   "positive": 0.49
+  },
+  "out": {
+   "negative": 0.3465,
+   "neutral": 0.1424,
+   "positive": 0.5111
+  }
+ },
+ "implicit_type": {
+  "train": {
+   "EA-EO": 0.8709,
+   "EA-IO": 0.0641,
+   "IA-EO": 0.0527,
+   "IA-IO": 0.0123
+  },
+  "out": {
+   "EA-EO": 0.9365,
+   "EA-IO": 0.0374,
+   "IA-EO": 0.0261
+  }
+ },
+ "category": {
+  "train": {
+   "AMBIENCE#GENERAL": 0.1211,
+   "DRINKS#PRICES": 0.0152,
+   "DRINKS#QUALITY": 0.0391,
+   "DRINKS#STYLE&OPTIONS": 0.0154,
+   "FOOD#PRICES": 0.0525,
+   "FOOD#QUALITY": 0.2209,
+   "FOOD#STYLE&OPTIONS": 0.0976,
+   "LOCATION#GENERAL": 0.0429,
+   "RESTAURANT#GENERAL": 0.0748,
+   "RESTAURANT#MISCELLANEOUS": 0.0469,
+   "RESTAURANT#PRICES": 0.0883,
+   "SERVICE#GENERAL": 0.1854
+  },
+  "out": {
+   "AMBIENCE#GENERAL": 0.1401,
+   "DRINKS#PRICES": 0.0156,
+   "DRINKS#QUALITY": 0.112,
+   "DRINKS#STYLE&OPTIONS": 0.0144,
+   "FOOD#PRICES": 0.0452,
+   "FOOD#QUALITY": 0.2547,
+   "FOOD#STYLE&OPTIONS": 0.0801,
+   "LOCATION#GENERAL": 0.0312,
+   "RESTAURANT#GENERAL": 0.0546,
+   "RESTAURANT#MISCELLANEOUS": 0.0372,
+   "RESTAURANT#PRICES": 0.0528,
+   "SERVICE#GENERAL": 0.1621
+  }
+ },
+ "filled_quads": 1879,
+ "filled_aspect_unseen_in_train": 0.5678552421500799,
+ "filled_opinion_unseen_in_train": 0.542309739222991
+}

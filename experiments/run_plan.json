@@ -1,286 +1,246 @@
 {
- "round": "r6+r8",
+ "round": "p1",
  "rounds": [
-  "r6",
-  "r8"
+  "p1"
  ],
  "budget_hours": 10.5,
  "gpus": 2,
  "min_per_example": 0.017236533957845433,
  "n_calibrated": 101,
- "created": "2026-11-01 12:56",
+ "created": "2026-11-01 15:05",
  "sessions": [
   {
    "session": 1,
    "jobs": [
-    "para_syn3_pre:s42",
-    "para_syn3_pre:s123",
-    "para_syn4_pre:s42",
-    "para_syn4_pre:s123",
-    "syn_label_0",
-    "syn_label_1",
-    "teacher5:s11",
-    "teacher5:s22",
-    "teacher5:s33",
-    "teacher5:s44",
-    "teacher5:s55",
-    "syn_label_dev",
-    "syn_build",
-    "para_ada_joint:s99",
-    "para_genda:s42",
-    "para_genda:s123"
+    "dv_infill_u:s42",
+    "dv_infill_u:s123",
+    "dv_infill_u:s2024",
+    "dv_infill_u:s7",
+    "dv_infill_u:s99",
+    "dv_infill_t:s42",
+    "dv_infill_t:s123",
+    "dv_infill_t:s2024",
+    "dv_infill_t:s7",
+    "dv_infill_t:s99",
+    "dv_none:s42",
+    "dv_none:s123",
+    "dv_none:s2024",
+    "dv_none:s7",
+    "dv_none:s99"
    ],
-   "est_hours": 9.35
+   "est_hours": 6.38
   }
  ],
  "jobs": {
-  "para_ada_joint:s99": {
-   "id": "para_ada_joint:s99",
-   "run": "para_ada_joint",
+  "dv_none:s42": {
+   "id": "dv_none:s42",
+   "run": "dv_none",
+   "seed": 42,
+   "aug": null,
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_none --seeds 42 --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl",
+   "examples": 1708,
+   "est_min": 29.4,
+   "after": [],
+   "outputs": [
+    "outputs/dv_none/seed_42"
+   ],
+   "done": "outputs/dv_none/seed_42/test_predictions.jsonl"
+  },
+  "dv_none:s123": {
+   "id": "dv_none:s123",
+   "run": "dv_none",
+   "seed": 123,
+   "aug": null,
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_none --seeds 123 --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl",
+   "examples": 1708,
+   "est_min": 29.4,
+   "after": [],
+   "outputs": [
+    "outputs/dv_none/seed_123"
+   ],
+   "done": "outputs/dv_none/seed_123/test_predictions.jsonl"
+  },
+  "dv_none:s2024": {
+   "id": "dv_none:s2024",
+   "run": "dv_none",
+   "seed": 2024,
+   "aug": null,
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_none --seeds 2024 --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl",
+   "examples": 1708,
+   "est_min": 29.4,
+   "after": [],
+   "outputs": [
+    "outputs/dv_none/seed_2024"
+   ],
+   "done": "outputs/dv_none/seed_2024/test_predictions.jsonl"
+  },
+  "dv_none:s7": {
+   "id": "dv_none:s7",
+   "run": "dv_none",
+   "seed": 7,
+   "aug": null,
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_none --seeds 7 --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl",
+   "examples": 1708,
+   "est_min": 29.4,
+   "after": [],
+   "outputs": [
+    "outputs/dv_none/seed_7"
+   ],
+   "done": "outputs/dv_none/seed_7/test_predictions.jsonl"
+  },
+  "dv_none:s99": {
+   "id": "dv_none:s99",
+   "run": "dv_none",
    "seed": 99,
-   "aug": "data/aug/ada_joint.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_ada_joint --seeds 99 --aug_path data/aug/ada_joint.jsonl --batch_size 8 --grad_accum 2",
-   "examples": 5767,
-   "est_min": 99.4,
+   "aug": null,
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_none --seeds 99 --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl",
+   "examples": 1708,
+   "est_min": 29.4,
    "after": [],
    "outputs": [
-    "outputs/para_ada_joint/seed_99"
+    "outputs/dv_none/seed_99"
    ],
-   "done": "outputs/para_ada_joint/seed_99/test_predictions.jsonl"
+   "done": "outputs/dv_none/seed_99/test_predictions.jsonl"
   },
-  "para_genda:s42": {
-   "id": "para_genda:s42",
-   "run": "para_genda",
+  "dv_infill_u:s42": {
+   "id": "dv_infill_u:s42",
+   "run": "dv_infill_u",
    "seed": 42,
-   "aug": "data/aug/genda.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_genda --seeds 42 --aug_path data/aug/genda.jsonl",
-   "examples": 4270,
-   "est_min": 73.6,
+   "aug": "data/aug/dv_infill_u.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_infill_u --seeds 42 --aug_path data/aug/dv_infill_u.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl",
+   "examples": 3416,
+   "est_min": 58.9,
    "after": [],
    "outputs": [
-    "outputs/para_genda/seed_42"
+    "outputs/dv_infill_u/seed_42"
    ],
-   "done": "outputs/para_genda/seed_42/test_predictions.jsonl"
+   "done": "outputs/dv_infill_u/seed_42/test_predictions.jsonl"
   },
-  "para_genda:s123": {
-   "id": "para_genda:s123",
-   "run": "para_genda",
+  "dv_infill_u:s123": {
+   "id": "dv_infill_u:s123",
+   "run": "dv_infill_u",
    "seed": 123,
-   "aug": "data/aug/genda.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_genda --seeds 123 --aug_path data/aug/genda.jsonl",
-   "examples": 4270,
-   "est_min": 73.6,
+   "aug": "data/aug/dv_infill_u.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_infill_u --seeds 123 --aug_path data/aug/dv_infill_u.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl",
+   "examples": 3416,
+   "est_min": 58.9,
    "after": [],
    "outputs": [
-    "outputs/para_genda/seed_123"
+    "outputs/dv_infill_u/seed_123"
    ],
-   "done": "outputs/para_genda/seed_123/test_predictions.jsonl"
+   "done": "outputs/dv_infill_u/seed_123/test_predictions.jsonl"
   },
-  "teacher5:s11": {
-   "id": "teacher5:s11",
-   "run": "teacher5",
-   "seed": 11,
-   "aug": null,
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/teacher5 --seeds 11 --keep_ckpt",
-   "examples": null,
-   "est_min": 50,
+  "dv_infill_u:s2024": {
+   "id": "dv_infill_u:s2024",
+   "run": "dv_infill_u",
+   "seed": 2024,
+   "aug": "data/aug/dv_infill_u.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_infill_u --seeds 2024 --aug_path data/aug/dv_infill_u.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl",
+   "examples": 3416,
+   "est_min": 58.9,
    "after": [],
    "outputs": [
-    "outputs/teacher5/seed_11"
+    "outputs/dv_infill_u/seed_2024"
    ],
-   "done": "outputs/teacher5/seed_11/test_predictions.jsonl"
+   "done": "outputs/dv_infill_u/seed_2024/test_predictions.jsonl"
   },
-  "teacher5:s22": {
-   "id": "teacher5:s22",
-   "run": "teacher5",
-   "seed": 22,
-   "aug": null,
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/teacher5 --seeds 22 --keep_ckpt",
-   "examples": null,
-   "est_min": 50,
+  "dv_infill_u:s7": {
+   "id": "dv_infill_u:s7",
+   "run": "dv_infill_u",
+   "seed": 7,
+   "aug": "data/aug/dv_infill_u.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_infill_u --seeds 7 --aug_path data/aug/dv_infill_u.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl",
+   "examples": 3416,
+   "est_min": 58.9,
    "after": [],
    "outputs": [
-    "outputs/teacher5/seed_22"
+    "outputs/dv_infill_u/seed_7"
    ],
-   "done": "outputs/teacher5/seed_22/test_predictions.jsonl"
+   "done": "outputs/dv_infill_u/seed_7/test_predictions.jsonl"
   },
-  "teacher5:s33": {
-   "id": "teacher5:s33",
-   "run": "teacher5",
-   "seed": 33,
-   "aug": null,
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/teacher5 --seeds 33 --keep_ckpt",
-   "examples": null,
-   "est_min": 50,
+  "dv_infill_u:s99": {
+   "id": "dv_infill_u:s99",
+   "run": "dv_infill_u",
+   "seed": 99,
+   "aug": "data/aug/dv_infill_u.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_infill_u --seeds 99 --aug_path data/aug/dv_infill_u.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl",
+   "examples": 3416,
+   "est_min": 58.9,
    "after": [],
    "outputs": [
-    "outputs/teacher5/seed_33"
+    "outputs/dv_infill_u/seed_99"
    ],
-   "done": "outputs/teacher5/seed_33/test_predictions.jsonl"
+   "done": "outputs/dv_infill_u/seed_99/test_predictions.jsonl"
   },
-  "teacher5:s44": {
-   "id": "teacher5:s44",
-   "run": "teacher5",
-   "seed": 44,
-   "aug": null,
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/teacher5 --seeds 44 --keep_ckpt",
-   "examples": null,
-   "est_min": 50,
-   "after": [],
-   "outputs": [
-    "outputs/teacher5/seed_44"
-   ],
-   "done": "outputs/teacher5/seed_44/test_predictions.jsonl"
-  },
-  "teacher5:s55": {
-   "id": "teacher5:s55",
-   "run": "teacher5",
-   "seed": 55,
-   "aug": null,
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/teacher5 --seeds 55 --keep_ckpt",
-   "examples": null,
-   "est_min": 50,
-   "after": [],
-   "outputs": [
-    "outputs/teacher5/seed_55"
-   ],
-   "done": "outputs/teacher5/seed_55/test_predictions.jsonl"
-  },
-  "syn_label_0": {
-   "id": "syn_label_0",
-   "command": "python -u src/aug/relabel.py --ckpts outputs/teacher5/seed_11/checkpoint,outputs/teacher5/seed_22/checkpoint,outputs/teacher5/seed_33/checkpoint,outputs/teacher5/seed_44/checkpoint,outputs/teacher5/seed_55/checkpoint --in data/aug/syn_infill.jsonl --out data/aug/syn_infill_s0.jsonl --shard 0/2",
-   "est_min": 80,
-   "outputs": [
-    "data/aug/syn_infill_s0.jsonl",
-    "data/aug/syn_infill_s0.votes.jsonl",
-    "data/aug/syn_infill_s0.report.json"
-   ],
-   "done": "data/aug/syn_infill_s0.votes.jsonl",
-   "examples": null,
-   "after": [
-    "teacher5:s11",
-    "teacher5:s22",
-    "teacher5:s33",
-    "teacher5:s44",
-    "teacher5:s55"
-   ]
-  },
-  "syn_label_1": {
-   "id": "syn_label_1",
-   "command": "python -u src/aug/relabel.py --ckpts outputs/teacher5/seed_11/checkpoint,outputs/teacher5/seed_22/checkpoint,outputs/teacher5/seed_33/checkpoint,outputs/teacher5/seed_44/checkpoint,outputs/teacher5/seed_55/checkpoint --in data/aug/syn_infill.jsonl --out data/aug/syn_infill_s1.jsonl --shard 1/2",
-   "est_min": 80,
-   "outputs": [
-    "data/aug/syn_infill_s1.jsonl",
-    "data/aug/syn_infill_s1.votes.jsonl",
-    "data/aug/syn_infill_s1.report.json"
-   ],
-   "done": "data/aug/syn_infill_s1.votes.jsonl",
-   "examples": null,
-   "after": [
-    "teacher5:s11",
-    "teacher5:s22",
-    "teacher5:s33",
-    "teacher5:s44",
-    "teacher5:s55"
-   ]
-  },
-  "syn_label_dev": {
-   "id": "syn_label_dev",
-   "command": "python -u src/aug/relabel.py --ckpts outputs/teacher5/seed_11/checkpoint,outputs/teacher5/seed_22/checkpoint,outputs/teacher5/seed_33/checkpoint,outputs/teacher5/seed_44/checkpoint,outputs/teacher5/seed_55/checkpoint --in data/restaurant_v1/dev.jsonl --out outputs/diag/teacher5_dev_cons.jsonl",
-   "est_min": 5,
-   "outputs": [
-    "outputs/diag"
-   ],
-   "done": "outputs/diag/teacher5_dev_cons.votes.jsonl",
-   "examples": null,
-   "after": [
-    "teacher5:s11",
-    "teacher5:s22",
-    "teacher5:s33",
-    "teacher5:s44",
-    "teacher5:s55"
-   ]
-  },
-  "syn_build": {
-   "id": "syn_build",
-   "command": "python src/aug/relabel.py --from_votes data/aug/syn_infill_s0.votes.jsonl,data/aug/syn_infill_s1.votes.jsonl --vote_min 3 --min_quads 2 --min_polarities 2 --out data/aug/syn_cons3.jsonl && python src/aug/relabel.py --from_votes data/aug/syn_infill_s0.votes.jsonl,data/aug/syn_infill_s1.votes.jsonl --vote_min 4 --min_quads 2 --min_polarities 2 --out data/aug/syn_cons4.jsonl",
-   "est_min": 3,
-   "outputs": [
-    "data/aug/syn_cons3.jsonl",
-    "data/aug/syn_cons3.report.json",
-    "data/aug/syn_cons4.jsonl",
-    "data/aug/syn_cons4.report.json"
-   ],
-   "done": "data/aug/syn_cons4.jsonl",
-   "examples": null,
-   "after": [
-    "syn_label_0",
-    "syn_label_1"
-   ]
-  },
-  "para_syn3_pre:s42": {
-   "id": "para_syn3_pre:s42",
-   "run": "para_syn3_pre",
+  "dv_infill_t:s42": {
+   "id": "dv_infill_t:s42",
+   "run": "dv_infill_t",
    "seed": 42,
-   "aug": "data/aug/syn_cons3.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_syn3_pre --seeds 42 --aug_path data/aug/syn_cons3.jsonl --aug_stage pretrain --pretrain_epochs 2",
-   "examples": null,
-   "est_min": 100,
-   "after": [
-    "syn_build"
-   ],
+   "aug": "data/aug/dv_infill_t.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_infill_t --seeds 42 --aug_path data/aug/dv_infill_t.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl",
+   "examples": 3416,
+   "est_min": 58.9,
+   "after": [],
    "outputs": [
-    "outputs/para_syn3_pre/seed_42"
+    "outputs/dv_infill_t/seed_42"
    ],
-   "done": "outputs/para_syn3_pre/seed_42/test_predictions.jsonl"
+   "done": "outputs/dv_infill_t/seed_42/test_predictions.jsonl"
   },
-  "para_syn3_pre:s123": {
-   "id": "para_syn3_pre:s123",
-   "run": "para_syn3_pre",
+  "dv_infill_t:s123": {
+   "id": "dv_infill_t:s123",
+   "run": "dv_infill_t",
    "seed": 123,
-   "aug": "data/aug/syn_cons3.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_syn3_pre --seeds 123 --aug_path data/aug/syn_cons3.jsonl --aug_stage pretrain --pretrain_epochs 2",
-   "examples": null,
-   "est_min": 100,
-   "after": [
-    "syn_build"
-   ],
+   "aug": "data/aug/dv_infill_t.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_infill_t --seeds 123 --aug_path data/aug/dv_infill_t.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl",
+   "examples": 3416,
+   "est_min": 58.9,
+   "after": [],
    "outputs": [
-    "outputs/para_syn3_pre/seed_123"
+    "outputs/dv_infill_t/seed_123"
    ],
-   "done": "outputs/para_syn3_pre/seed_123/test_predictions.jsonl"
+   "done": "outputs/dv_infill_t/seed_123/test_predictions.jsonl"
   },
-  "para_syn4_pre:s42": {
-   "id": "para_syn4_pre:s42",
-   "run": "para_syn4_pre",
-   "seed": 42,
-   "aug": "data/aug/syn_cons4.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_syn4_pre --seeds 42 --aug_path data/aug/syn_cons4.jsonl --aug_stage pretrain --pretrain_epochs 2",
-   "examples": null,
-   "est_min": 100,
-   "after": [
-    "syn_build"
-   ],
+  "dv_infill_t:s2024": {
+   "id": "dv_infill_t:s2024",
+   "run": "dv_infill_t",
+   "seed": 2024,
+   "aug": "data/aug/dv_infill_t.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_infill_t --seeds 2024 --aug_path data/aug/dv_infill_t.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl",
+   "examples": 3416,
+   "est_min": 58.9,
+   "after": [],
    "outputs": [
-    "outputs/para_syn4_pre/seed_42"
+    "outputs/dv_infill_t/seed_2024"
    ],
-   "done": "outputs/para_syn4_pre/seed_42/test_predictions.jsonl"
+   "done": "outputs/dv_infill_t/seed_2024/test_predictions.jsonl"
   },
-  "para_syn4_pre:s123": {
-   "id": "para_syn4_pre:s123",
-   "run": "para_syn4_pre",
-   "seed": 123,
-   "aug": "data/aug/syn_cons4.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/para_syn4_pre --seeds 123 --aug_path data/aug/syn_cons4.jsonl --aug_stage pretrain --pretrain_epochs 2",
-   "examples": null,
-   "est_min": 100,
-   "after": [
-    "syn_build"
-   ],
+  "dv_infill_t:s7": {
+   "id": "dv_infill_t:s7",
+   "run": "dv_infill_t",
+   "seed": 7,
+   "aug": "data/aug/dv_infill_t.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_infill_t --seeds 7 --aug_path data/aug/dv_infill_t.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl",
+   "examples": 3416,
+   "est_min": 58.9,
+   "after": [],
    "outputs": [
-    "outputs/para_syn4_pre/seed_123"
+    "outputs/dv_infill_t/seed_7"
    ],
-   "done": "outputs/para_syn4_pre/seed_123/test_predictions.jsonl"
+   "done": "outputs/dv_infill_t/seed_7/test_predictions.jsonl"
+  },
+  "dv_infill_t:s99": {
+   "id": "dv_infill_t:s99",
+   "run": "dv_infill_t",
+   "seed": 99,
+   "aug": "data/aug/dv_infill_t.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_infill_t --seeds 99 --aug_path data/aug/dv_infill_t.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl",
+   "examples": 3416,
+   "est_min": 58.9,
+   "after": [],
+   "outputs": [
+    "outputs/dv_infill_t/seed_99"
+   ],
+   "done": "outputs/dv_infill_t/seed_99/test_predictions.jsonl"
   }
  }
 }

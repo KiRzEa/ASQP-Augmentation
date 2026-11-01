@@ -256,6 +256,11 @@ def openai_chat(model, prompt, temperature):
                 time.sleep(2 ** attempt * 3)
                 continue
             raise
+        except (TimeoutError, OSError) as e:  # read timeout, reset connection (socket.timeout is an OSError)
+            if attempt < 4:
+                time.sleep(2 ** attempt * 3)
+                continue
+            raise SystemExit(f"OpenAI request failed 5 times ({type(e).__name__}: {e}): stopped")
     u = resp.get("usage", {})
     cached = (u.get("prompt_tokens_details") or {}).get("cached_tokens", 0)
     pin, pc, pout = PRICES[model]

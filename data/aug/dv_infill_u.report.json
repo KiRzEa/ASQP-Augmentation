@@ -1,0 +1,149 @@
+{
+ "n": 1708,
+ "mode": "untargeted",
+ "args": {
+  "out": "data/aug/dv_infill_u.jsonl",
+  "mode": "untargeted",
+  "n": 0,
+  "mask_ratio": 0.4,
+  "p_new_aspect": 0.5,
+  "p_new_opinion": 0.5,
+  "p_opinion_first": 0.07,
+  "per_call": 6,
+  "shots": 4,
+  "llm_model": "gpt-4.1-mini-2025-04-14",
+  "llm_temperature": 0.9,
+  "llm_workers": 8,
+  "seed": 13,
+  "max_calls": 0,
+  "overgen": 1.3,
+  "train_path": "data/restaurant_v1/inner_train.jsonl",
+  "heldout": "/Users/kietnt/Desktop/Workspace/DataAugmentation/data/restaurant_v1/dev.jsonl,/Users/kietnt/Desktop/Workspace/DataAugmentation/data/restaurant_v1/test.jsonl,/Users/kietnt/Desktop/Workspace/DataAugmentation/data/restaurant_v1/inner_dev.jsonl"
+ },
+ "stats": {
+  "calls": 848,
+  "prompt_tokens": 1191754,
+  "completion_tokens": 504079,
+  "items": 5028,
+  "drop_empty_fill": 453,
+  "drop_span_not_in_fill": 628,
+  "drop_visible_changed": 258,
+  "drop_label_not_as_asked": 225,
+  "drop_type_not_as_asked": 57,
+  "drop_convention_long_opinion": 76,
+  "drop_convention_long_aspect": 7,
+  "drop_fills_shape": 27,
+  "drop_exact_duplicate": 109,
+  "drop_convention_overlap": 18,
+  "drop_duplicate_quad": 1,
+  "drop_call_length": 5,
+  "drop_near_heldout": 3,
+  "drop_call_not_json": 5,
+  "drop_verify_polarity_implicit": 128,
+  "drop_verify_spans_implicit": 319,
+  "drop_verify_polarity": 351,
+  "category_from_verifier": 526,
+  "drop_verify_no_matching_target_implicit": 42,
+  "drop_verify_no_matching_target": 77,
+  "drop_verify_spans": 27,
+  "api_calls": 418,
+  "verify_api_calls": 255,
+  "verify_prompt_tokens": 258786,
+  "verify_completion_tokens": 243148
+ },
+ "selection": {
+  "pool": 2220,
+  "kept": 1708,
+  "target_filled_shares": {
+   "negative|EA-EO": 0.2857,
+   "negative|EA-IO": 0.0181,
+   "negative|IA-EO": 0.0165,
+   "neutral|EA-EO": 0.1472,
+   "neutral|EA-IO": 0.0286,
+   "neutral|IA-EO": 0.0123,
+   "positive|EA-EO": 0.4489,
+   "positive|EA-IO": 0.0181,
+   "positive|IA-EO": 0.0246
+  },
+  "pool_filled_shares": {
+   "negative|EA-EO": 0.4567,
+   "negative|EA-IO": 0.0004,
+   "negative|IA-EO": 0.0016,
+   "neutral|EA-EO": 0.1131,
+   "neutral|EA-IO": 0.0028,
+   "neutral|IA-EO": 0.0004,
+   "positive|EA-EO": 0.4251
+  },
+  "kept_filled_shares": {
+   "negative|EA-EO": 0.4026,
+   "negative|EA-IO": 0.0005,
+   "negative|IA-EO": 0.002,
+   "neutral|EA-EO": 0.1345,
+   "neutral|EA-IO": 0.0036,
+   "neutral|IA-EO": 0.0005,
+   "positive|EA-EO": 0.4563
+  }
+ },
+ "quads_per_review": {
+  "train": 3.234192037470726,
+  "out": 2.988290398126464
+ },
+ "polarity": {
+  "train": {
+   "negative": 0.3195,
+   "neutral": 0.1904,
+   "positive": 0.49
+  },
+  "out": {
+   "negative": 0.3462,
+   "neutral": 0.1556,
+   "positive": 0.4982
+  }
+ },
+ "implicit_type": {
+  "train": {
+   "EA-EO": 0.8709,
+   "EA-IO": 0.0641,
+   "IA-EO": 0.0527,
+   "IA-IO": 0.0123
+  },
+  "out": {
+   "EA-EO": 0.9496,
+   "EA-IO": 0.0294,
+   "IA-EO": 0.021
+  }
+ },
+ "category": {
+  "train": {
+   "AMBIENCE#GENERAL": 0.1211,
+   "DRINKS#PRICES": 0.0152,
+   "DRINKS#QUALITY": 0.0391,
+   "DRINKS#STYLE&OPTIONS": 0.0154,
+   "FOOD#PRICES": 0.0525,
+   "FOOD#QUALITY": 0.2209,
+   "FOOD#STYLE&OPTIONS": 0.0976,
+   "LOCATION#GENERAL": 0.0429,
+   "RESTAURANT#GENERAL": 0.0748,
+   "RESTAURANT#MISCELLANEOUS": 0.0469,
+   "RESTAURANT#PRICES": 0.0883,
+   "SERVICE#GENERAL": 0.1854
+  },
+  "out": {
+   "AMBIENCE#GENERAL": 0.1415,
+   "DRINKS#PRICES": 0.0141,
+   "DRINKS#QUALITY": 0.0435,
+   "DRINKS#STYLE&OPTIONS": 0.0098,
+   "FOOD#PRICES": 0.0684,
+   "FOOD#QUALITY": 0.233,
+   "FOOD#STYLE&OPTIONS": 0.0795,
+   "LOCATION#GENERAL": 0.03,
+   "RESTAURANT#GENERAL": 0.0562,
+   "RESTAURANT#MISCELLANEOUS": 0.0221,
+   "RESTAURANT#PRICES": 0.0731,
+   "SERVICE#GENERAL": 0.2288
+  }
+ },
+ "filled_quads": 1955,
+ "filled_aspect_unseen_in_train": 0.13964194373401534,
+ "filled_opinion_unseen_in_train": 0.1815856777493606
+}
