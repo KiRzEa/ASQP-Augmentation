@@ -189,9 +189,15 @@ def cmd_plan(a):
                 s["lanes"] = lanes
                 s["jobs"] += [j["id"] for j in g]
                 break
-    plan = {"round": "+".join(rids), "rounds": rids, "budget_hours": a.budget_hours, "gpus": a.gpus, "min_per_example": mpe,
+    # number after the sessions this round already used (zips ingested, job times), so a tag is never reused
+    tag = "+".join(rids)
+    ledger = ROOT / "outputs/_ingested.txt"
+    used = re.findall(rf"(?:^|\s)results_{re.escape(tag)}_s(\d+)\.zip", ledger.read_text() if ledger.exists() else "")
+    used += [p.stem.rsplit("_s", 1)[1] for p in TIMES.glob(f"{tag}_s*.tsv") if p.stem.rsplit("_s", 1)[0] == tag]
+    first = max(map(int, used), default=0) + 1
+    plan = {"round": tag, "rounds": rids, "budget_hours": a.budget_hours, "gpus": a.gpus, "min_per_example": mpe,
             "n_calibrated": n, "created": time.strftime("%Y-%m-%d %H:%M"),
-            "sessions": [{"session": i + 1, "jobs": s["jobs"], "est_hours": round(max(s["lanes"]) / 60, 2)}
+            "sessions": [{"session": first + i, "jobs": s["jobs"], "est_hours": round(max(s["lanes"]) / 60, 2)}
                          for i, s in enumerate(sessions)],
             "jobs": jobs}
     PLAN.write_text(json.dumps(plan, indent=1, ensure_ascii=False))

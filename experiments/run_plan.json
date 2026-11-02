@@ -7,10 +7,10 @@
  "gpus": 2,
  "min_per_example": 0.018173302107728335,
  "n_calibrated": 127,
- "created": "2026-11-02 10:13",
+ "created": "2026-11-02 10:18",
  "sessions": [
   {
-   "session": 1,
+   "session": 3,
    "jobs": [
     "dv_none_lr1e4:s42",
     "dv_none_lr1e4:s123",
