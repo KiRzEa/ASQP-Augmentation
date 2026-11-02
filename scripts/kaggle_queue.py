@@ -10,6 +10,8 @@ from measured times, and packs them into sessions of two GPU lanes each.
   python3 scripts/kaggle_queue.py run    --session 1 [--budget-hours 10.5]  on Kaggle (2 x T4), from the repo root
   python3 scripts/kaggle_queue.py ingest                                     unzip runs_inbox/*.zip into the repo
 
+A round may define "vars" ({"lr": null}); a target whose args use {name} of a var that is still null is held (not
+planned, shown by `list`) until the value is filled in, e.g. an lr chosen from an earlier session of the round.
 A target may name jobs it must wait for ("after": [job ids]); `plan` keeps such a group in one session and `run`
 starts a job only after all its predecessors in the session finished with rc 0 (a failed or deferred predecessor
 skips it). `plan --round r6,r8` packs several rounds into one plan (session tag r6+r8_s<N>).
@@ -49,17 +51,38 @@ def n_lines(path):
     return sum(1 for _ in open(ROOT / path, encoding="utf-8")) if path and (ROOT / path).exists() else 0
 
 
-def expand(round_id, rounds):
+def expand(round_id, rounds, held=None):
     """Jobs of one round: {id: job}. Targets: {"run", "aug"?, "args"?, "seeds"?} or {"id", "command", "est_min", "outputs"}."""
     seeds = rounds["seeds"]
+    var = rounds["rounds"][round_id].get("vars", {})
     jobs = {}
     n_train = n_lines("data/restaurant_v1/train.jsonl")
+    waiting = set()  # held runs / one-off job ids: a job that waits for one of them is held too
+
+    def hold(t, key, label):
+        names = [k for k in re.findall(r"\{(\w+)\}", t.get(key, "")) if var.get(k) is None]
+        deps = [d for d in t.get("after", []) if d.split(":")[0] in waiting]
+        if not names and not deps:
+            return False
+        waiting.add(label)
+        if held is not None:
+            held.append(f"{label} (waits for {', '.join(names + deps)})")
+        return True
+
+    def fill(text):
+        return re.sub(r"\{(\w+)\}", lambda m: str(var[m.group(1)]), text)
+
     for t in rounds["rounds"][round_id]["targets"]:
+        if "command" in t and hold(t, "command", t["id"]):
+            continue
         if "command" in t:  # generic one-off job (e.g. k-fold, verifier)
-            jobs[t["id"]] = {"id": t["id"], "command": t["command"], "est_min": t.get("est_min", 60),
+            jobs[t["id"]] = {"id": t["id"], "command": fill(t["command"]), "est_min": t.get("est_min", 60),
                              "outputs": t.get("outputs", []), "done": t.get("done", ""), "examples": None,
                              "after": t.get("after", [])}
             continue
+        if hold(t, "args", t["run"]):
+            continue
+        t = {**t, "args": fill(t.get("args", ""))}
         aug = t.get("aug")
         views = re.search(r"--views (\d+)", t.get("args", ""))
         tp = re.search(r"--train_path (\S+)", t.get("args", ""))
@@ -109,7 +132,8 @@ def cmd_list(a):
     mpe, n = calibrate()
     print(f"estimate: {mpe:.4f} min per training example ({'from ' + str(n) + ' measured jobs' if n else 'default'})")
     for r in ([a.round] if a.round else rounds["rounds"]):
-        jobs = expand(r, rounds)
+        held = []
+        jobs = expand(r, rounds, held)
         done = [j for j in jobs.values() if j["done"] and (ROOT / j["done"]).exists()]
         todo = [j for j in jobs.values() if j not in done]
         print(f"\n{r}: {rounds['rounds'][r]['goal']}\n  OpenAI key: {rounds['rounds'][r].get('openai_key', '?')}"
@@ -117,6 +141,8 @@ def cmd_list(a):
               f"~{sum(estimate(j, mpe) for j in todo) / 60:.1f} GPU-h")
         for j in todo:
             print(f"    {j['id']:40s} ~{estimate(j, mpe):5.0f} min")
+        for h in held:
+            print(f"    held: {h}")
 
 
 def groups(jobs):
