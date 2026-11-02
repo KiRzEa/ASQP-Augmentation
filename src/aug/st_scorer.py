@@ -194,7 +194,10 @@ def generate_candidates(model, tok, texts, beams, device, batch_size=16):
         dec = tok.batch_decode(g.sequences, skip_special_tokens=True)
         sc = g.sequences_scores.tolist()
         top = g.sequences[::beams][:, 1:]  # drop the decoder start token
-        mask = (top != tok.pad_token_id)
+        # tokens up to and including the first EOS: beam search fills finished hypotheses with EOS, not pad, and an
+        # EOS after EOS has probability ~0 (in p2_s4 this set the confidence of almost every pseudo-label to ~0)
+        eos = (top == tok.eos_token_id).int()
+        mask = (top != tok.pad_token_id) & ((eos.cumsum(1) - eos) == 0)
         # decoder inputs instead of labels: same logits without the loss tensors
         logits = model(**enc, decoder_input_ids=model._shift_right(top)).logits
         p = torch.softmax(logits.float(), -1).gather(-1, top.unsqueeze(-1)).squeeze(-1)
