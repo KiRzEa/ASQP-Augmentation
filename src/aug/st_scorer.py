@@ -106,7 +106,9 @@ def cmd_comparison(a):
                 seen.add(k)
                 negs.append(quads_to_target(as_quads(k)))
         n_neg[len(negs)] += 1
-        out.append({"id": r["id"], "text": r["text"], "pos": quads_to_target(r["quads"]), "negs": negs})
+        # the positive in the same (sorted) quad order as the negatives and as every candidate at inference: in gold
+        # order, quad order alone told the positive apart (85 % of samples in p2), a cue absent when reranking
+        out.append({"id": r["id"], "text": r["text"], "pos": quads_to_target(as_quads(gold)), "negs": negs})
     write_jsonl(a.out, out)
     print(f"{len(out)} comparison samples; negatives per sample {dict(sorted(n_neg.items()))}")
 
@@ -162,6 +164,20 @@ def seq_logprob(model, tok, texts, targets, device, grad=False):
     return lp.sum(1), mask.sum(1)
 
 
+def halving_on_oom(fn, idx):
+    """fn(idx); if the GPU runs out of memory, free the cache and run fn on the two halves of idx instead."""
+    import torch
+    try:
+        fn(idx)
+        return
+    except torch.OutOfMemoryError:
+        if len(idx) == 1:
+            raise
+    torch.cuda.empty_cache()  # outside the except block, so the failed batch's tensors are released
+    halving_on_oom(fn, idx[:len(idx) // 2])
+    halving_on_oom(fn, idx[len(idx) // 2:])
+
+
 def generate_candidates(model, tok, texts, beams, device, batch_size=16):
     """Beam candidates per text: [[(generation, length-normalised beam score)], ...] and the min token prob of the
     top candidate."""
@@ -169,23 +185,27 @@ def generate_candidates(model, tok, texts, beams, device, batch_size=16):
     order = sorted(range(len(texts)), key=lambda i: len(texts[i]))
     cands, conf = [None] * len(texts), [None] * len(texts)
     model.eval()
+
+    def run(idx):
+        enc = tok([texts[i] for i in idx], max_length=256, truncation=True, padding=True,
+                  return_tensors="pt").to(device)
+        g = model.generate(**enc, max_new_tokens=384, num_beams=beams, num_return_sequences=beams,
+                           output_scores=True, return_dict_in_generate=True)
+        dec = tok.batch_decode(g.sequences, skip_special_tokens=True)
+        sc = g.sequences_scores.tolist()
+        top = g.sequences[::beams][:, 1:]  # drop the decoder start token
+        mask = (top != tok.pad_token_id)
+        # decoder inputs instead of labels: same logits without the loss tensors
+        logits = model(**enc, decoder_input_ids=model._shift_right(top)).logits
+        p = torch.softmax(logits.float(), -1).gather(-1, top.unsqueeze(-1)).squeeze(-1)
+        mins = p.masked_fill(~mask, 1.0).min(1).values.tolist()
+        for j, i in enumerate(idx):
+            cands[i] = [(dec[j * beams + k], sc[j * beams + k]) for k in range(beams)]
+            conf[i] = mins[j]
+
     with torch.no_grad():
         for b in range(0, len(order), batch_size):
-            idx = order[b:b + batch_size]
-            enc = tok([texts[i] for i in idx], max_length=256, truncation=True, padding=True,
-                      return_tensors="pt").to(device)
-            g = model.generate(**enc, max_new_tokens=384, num_beams=beams, num_return_sequences=beams,
-                               output_scores=True, return_dict_in_generate=True)
-            dec = tok.batch_decode(g.sequences, skip_special_tokens=True)
-            sc = g.sequences_scores.tolist()
-            top = g.sequences[::beams][:, 1:]  # drop the decoder start token
-            mask = (top != tok.pad_token_id)
-            logits = model(**enc, labels=top.masked_fill(~mask, -100)).logits
-            p = torch.softmax(logits.float(), -1).gather(-1, top.unsqueeze(-1)).squeeze(-1)
-            mins = p.masked_fill(~mask, 1.0).min(1).values.tolist()
-            for j, i in enumerate(idx):
-                cands[i] = [(dec[j * beams + k], sc[j * beams + k]) for k in range(beams)]
-                conf[i] = mins[j]
+            halving_on_oom(run, order[b:b + batch_size])
     return cands, conf
 
 
@@ -274,12 +294,15 @@ def cmd_score(a):
     model.eval()
     rows = [r for p in a.inp.split(",") for r in load_jsonl(p)]
     t0 = time.time()
+
+    def run(idx):
+        s, _ = seq_logprob(model, tok, [rows[i]["text"] for i in idx],
+                           [quads_to_target(as_quads(map(tuple, rows[i]["candidates"][0]["quads"]))) for i in idx], device)
+        for i, v in zip(idx, s.tolist()):
+            rows[i]["score"] = v
+
     for b in range(0, len(rows), a.batch_size):
-        batch = rows[b:b + a.batch_size]
-        s, _ = seq_logprob(model, tok, [r["text"] for r in batch],
-                           [quads_to_target(as_quads(map(tuple, r["candidates"][0]["quads"]))) for r in batch], device)
-        for r, v in zip(batch, s.tolist()):
-            r["score"] = v
+        halving_on_oom(run, list(range(b, min(b + a.batch_size, len(rows)))))
     write_jsonl(a.out, rows)
     print(f"{len(rows)} pseudo-labels scored, {(time.time() - t0) / 60:.1f} min -> {a.out}")
 
