@@ -5,180 +5,563 @@
  ],
  "budget_hours": 10.5,
  "gpus": 2,
- "min_per_example": 0.018173302107728335,
- "n_calibrated": 127,
- "created": "2026-11-02 10:18",
+ "min_per_example": 0.018220140515222482,
+ "n_calibrated": 128,
+ "created": "2026-11-02 15:06",
  "sessions": [
   {
-   "session": 3,
+   "session": 4,
    "jobs": [
-    "dv_none_lr1e4:s42",
-    "dv_none_lr1e4:s123",
-    "dv_none_lr1e4:s2024",
-    "dv_none_lr1e4:s7",
-    "dv_none_lr1e4:s99",
-    "dv_none_lr2e4:s42",
-    "dv_none_lr2e4:s123",
-    "dv_none_lr2e4:s2024",
-    "dv_none_lr2e4:s7",
-    "dv_none_lr2e4:s99",
-    "genda_gen_inner"
+    "dv_st:s42",
+    "dv_st:s123",
+    "dv_st:s2024",
+    "dv_st:s7",
+    "dv_st:s99",
+    "dv_st_conf:s42",
+    "dv_st_conf:s123",
+    "dv_st_conf:s2024",
+    "st_scorer_train",
+    "dv_none_rr:s42",
+    "dv_none_rr:s123",
+    "dv_none_rr:s2024",
+    "st_pl_0",
+    "st_pl_1",
+    "dv_st_teacher:s42",
+    "st_select",
+    "dv_ada_joint_lrsel:s42",
+    "dv_ada_joint_lrsel:s123",
+    "dv_ada_joint_lrsel:s2024",
+    "dv_genda_lrsel:s42"
    ],
-   "est_hours": 4.67
+   "est_hours": 10.42
+  },
+  {
+   "session": 5,
+   "jobs": [
+    "dv_concat_lrsel:s42",
+    "dv_concat_lrsel:s123",
+    "dv_concat_lrsel:s2024",
+    "dv_genda_lrsel:s123",
+    "dv_genda_lrsel:s2024",
+    "dv_eda_lrsel:s42",
+    "dv_eda_lrsel:s123",
+    "dv_eda_lrsel:s2024",
+    "dv_infill_t_lrsel:s42",
+    "dv_infill_t_lrsel:s123",
+    "dv_infill_t_lrsel:s2024",
+    "dv_rc_lrsel:s42",
+    "dv_rc_lrsel:s123",
+    "dv_rc_lrsel:s2024"
+   ],
+   "est_hours": 6.94
   }
  ],
  "jobs": {
-  "dv_none_lr1e4:s42": {
-   "id": "dv_none_lr1e4:s42",
-   "run": "dv_none_lr1e4",
+  "dv_st_teacher:s42": {
+   "id": "dv_st_teacher:s42",
+   "run": "dv_st_teacher",
    "seed": 42,
    "aug": null,
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_none_lr1e4 --seeds 42 --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 1e-4",
-   "examples": null,
-   "est_min": 50,
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_st_teacher --seeds 42 --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --keep_ckpt --lr 1e-4",
+   "examples": 1708,
+   "est_min": 31.1,
    "after": [],
    "outputs": [
-    "outputs/dv_none_lr1e4/seed_42"
+    "outputs/dv_st_teacher/seed_42"
    ],
-   "done": "outputs/dv_none_lr1e4/seed_42/test_predictions.jsonl"
+   "done": "outputs/dv_st_teacher/seed_42/test_predictions.jsonl"
   },
-  "dv_none_lr1e4:s123": {
-   "id": "dv_none_lr1e4:s123",
-   "run": "dv_none_lr1e4",
+  "st_pl_0": {
+   "id": "st_pl_0",
+   "command": "python -u src/aug/st_scorer.py candidates --ckpt outputs/dv_st_teacher/seed_42/checkpoint --in data/aug/st_pool_inner.jsonl --shard 0/2 --out data/aug/st_inner/pl_0.jsonl",
+   "est_min": 45,
+   "outputs": [
+    "data/aug/st_inner/pl_0.jsonl"
+   ],
+   "done": "data/aug/st_inner/pl_0.jsonl",
+   "examples": null,
+   "after": [
+    "dv_st_teacher:s42"
+   ]
+  },
+  "st_pl_1": {
+   "id": "st_pl_1",
+   "command": "python -u src/aug/st_scorer.py candidates --ckpt outputs/dv_st_teacher/seed_42/checkpoint --in data/aug/st_pool_inner.jsonl --shard 1/2 --out data/aug/st_inner/pl_1.jsonl",
+   "est_min": 45,
+   "outputs": [
+    "data/aug/st_inner/pl_1.jsonl"
+   ],
+   "done": "data/aug/st_inner/pl_1.jsonl",
+   "examples": null,
+   "after": [
+    "dv_st_teacher:s42"
+   ]
+  },
+  "st_scorer_train": {
+   "id": "st_scorer_train",
+   "command": "python src/aug/st_scorer.py comparison --cands data/aug/st_inner/cands_cv0.jsonl,data/aug/st_inner/cands_cv1.jsonl,data/aug/st_inner/cands_cv2.jsonl,data/aug/st_inner/cands_cv3.jsonl,data/aug/st_inner/cands_cv4.jsonl --out data/aug/st_inner/comp.jsonl && python -u src/aug/st_scorer.py train --comp data/aug/st_inner/comp.jsonl --out_dir outputs/dv_st_scorer",
+   "est_min": 50,
+   "outputs": [
+    "data/aug/st_inner/comp.jsonl",
+    "outputs/dv_st_scorer"
+   ],
+   "done": "outputs/dv_st_scorer/scorer.json",
+   "examples": null,
+   "after": [
+    "dv_st_teacher:s42",
+    "st_cands_cv0",
+    "st_cands_cv1",
+    "st_cands_cv2",
+    "st_cands_cv3",
+    "st_cands_cv4"
+   ]
+  },
+  "st_select": {
+   "id": "st_select",
+   "command": "python -u src/aug/st_scorer.py score --scorer outputs/dv_st_scorer/checkpoint --in data/aug/st_inner/pl_0.jsonl,data/aug/st_inner/pl_1.jsonl --out data/aug/st_inner/scored.jsonl && python src/aug/st_scorer.py select --in data/aug/st_inner/scored.jsonl --out data/aug/dv_st.jsonl && python src/aug/st_scorer.py select --in data/aug/st_inner/scored.jsonl --band 0,1 --n $(grep -c . data/aug/dv_st.jsonl) --out data/aug/dv_st_conf.jsonl",
+   "est_min": 15,
+   "outputs": [
+    "data/aug/st_inner/scored.jsonl",
+    "data/aug/dv_st.jsonl",
+    "data/aug/dv_st.report.json",
+    "data/aug/dv_st_conf.jsonl",
+    "data/aug/dv_st_conf.report.json"
+   ],
+   "done": "data/aug/dv_st_conf.jsonl",
+   "examples": null,
+   "after": [
+    "st_scorer_train",
+    "st_pl_0",
+    "st_pl_1"
+   ]
+  },
+  "dv_st:s42": {
+   "id": "dv_st:s42",
+   "run": "dv_st",
+   "seed": 42,
+   "aug": "data/aug/dv_st.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_st --seeds 42 --aug_path data/aug/dv_st.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --rerank_scorer outputs/dv_st_scorer/checkpoint --lr 1e-4",
+   "examples": null,
+   "est_min": 75,
+   "after": [
+    "st_select"
+   ],
+   "outputs": [
+    "outputs/dv_st/seed_42"
+   ],
+   "done": "outputs/dv_st/seed_42/test_predictions.jsonl"
+  },
+  "dv_st:s123": {
+   "id": "dv_st:s123",
+   "run": "dv_st",
    "seed": 123,
-   "aug": null,
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_none_lr1e4 --seeds 123 --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 1e-4",
+   "aug": "data/aug/dv_st.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_st --seeds 123 --aug_path data/aug/dv_st.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --rerank_scorer outputs/dv_st_scorer/checkpoint --lr 1e-4",
    "examples": null,
-   "est_min": 50,
-   "after": [],
-   "outputs": [
-    "outputs/dv_none_lr1e4/seed_123"
+   "est_min": 75,
+   "after": [
+    "st_select"
    ],
-   "done": "outputs/dv_none_lr1e4/seed_123/test_predictions.jsonl"
+   "outputs": [
+    "outputs/dv_st/seed_123"
+   ],
+   "done": "outputs/dv_st/seed_123/test_predictions.jsonl"
   },
-  "dv_none_lr1e4:s2024": {
-   "id": "dv_none_lr1e4:s2024",
-   "run": "dv_none_lr1e4",
+  "dv_st:s2024": {
+   "id": "dv_st:s2024",
+   "run": "dv_st",
    "seed": 2024,
-   "aug": null,
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_none_lr1e4 --seeds 2024 --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 1e-4",
+   "aug": "data/aug/dv_st.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_st --seeds 2024 --aug_path data/aug/dv_st.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --rerank_scorer outputs/dv_st_scorer/checkpoint --lr 1e-4",
    "examples": null,
-   "est_min": 50,
-   "after": [],
-   "outputs": [
-    "outputs/dv_none_lr1e4/seed_2024"
+   "est_min": 75,
+   "after": [
+    "st_select"
    ],
-   "done": "outputs/dv_none_lr1e4/seed_2024/test_predictions.jsonl"
+   "outputs": [
+    "outputs/dv_st/seed_2024"
+   ],
+   "done": "outputs/dv_st/seed_2024/test_predictions.jsonl"
   },
-  "dv_none_lr1e4:s7": {
-   "id": "dv_none_lr1e4:s7",
-   "run": "dv_none_lr1e4",
+  "dv_st:s7": {
+   "id": "dv_st:s7",
+   "run": "dv_st",
    "seed": 7,
-   "aug": null,
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_none_lr1e4 --seeds 7 --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 1e-4",
+   "aug": "data/aug/dv_st.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_st --seeds 7 --aug_path data/aug/dv_st.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --rerank_scorer outputs/dv_st_scorer/checkpoint --lr 1e-4",
    "examples": null,
-   "est_min": 50,
-   "after": [],
-   "outputs": [
-    "outputs/dv_none_lr1e4/seed_7"
+   "est_min": 75,
+   "after": [
+    "st_select"
    ],
-   "done": "outputs/dv_none_lr1e4/seed_7/test_predictions.jsonl"
+   "outputs": [
+    "outputs/dv_st/seed_7"
+   ],
+   "done": "outputs/dv_st/seed_7/test_predictions.jsonl"
   },
-  "dv_none_lr1e4:s99": {
-   "id": "dv_none_lr1e4:s99",
-   "run": "dv_none_lr1e4",
+  "dv_st:s99": {
+   "id": "dv_st:s99",
+   "run": "dv_st",
    "seed": 99,
-   "aug": null,
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_none_lr1e4 --seeds 99 --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 1e-4",
+   "aug": "data/aug/dv_st.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_st --seeds 99 --aug_path data/aug/dv_st.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --rerank_scorer outputs/dv_st_scorer/checkpoint --lr 1e-4",
    "examples": null,
-   "est_min": 50,
-   "after": [],
-   "outputs": [
-    "outputs/dv_none_lr1e4/seed_99"
+   "est_min": 75,
+   "after": [
+    "st_select"
    ],
-   "done": "outputs/dv_none_lr1e4/seed_99/test_predictions.jsonl"
+   "outputs": [
+    "outputs/dv_st/seed_99"
+   ],
+   "done": "outputs/dv_st/seed_99/test_predictions.jsonl"
   },
-  "dv_none_lr2e4:s42": {
-   "id": "dv_none_lr2e4:s42",
-   "run": "dv_none_lr2e4",
+  "dv_st_conf:s42": {
+   "id": "dv_st_conf:s42",
+   "run": "dv_st_conf",
+   "seed": 42,
+   "aug": "data/aug/dv_st_conf.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_st_conf --seeds 42 --aug_path data/aug/dv_st_conf.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --rerank_scorer outputs/dv_st_scorer/checkpoint --lr 1e-4",
+   "examples": null,
+   "est_min": 75,
+   "after": [
+    "st_select"
+   ],
+   "outputs": [
+    "outputs/dv_st_conf/seed_42"
+   ],
+   "done": "outputs/dv_st_conf/seed_42/test_predictions.jsonl"
+  },
+  "dv_st_conf:s123": {
+   "id": "dv_st_conf:s123",
+   "run": "dv_st_conf",
+   "seed": 123,
+   "aug": "data/aug/dv_st_conf.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_st_conf --seeds 123 --aug_path data/aug/dv_st_conf.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --rerank_scorer outputs/dv_st_scorer/checkpoint --lr 1e-4",
+   "examples": null,
+   "est_min": 75,
+   "after": [
+    "st_select"
+   ],
+   "outputs": [
+    "outputs/dv_st_conf/seed_123"
+   ],
+   "done": "outputs/dv_st_conf/seed_123/test_predictions.jsonl"
+  },
+  "dv_st_conf:s2024": {
+   "id": "dv_st_conf:s2024",
+   "run": "dv_st_conf",
+   "seed": 2024,
+   "aug": "data/aug/dv_st_conf.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_st_conf --seeds 2024 --aug_path data/aug/dv_st_conf.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --rerank_scorer outputs/dv_st_scorer/checkpoint --lr 1e-4",
+   "examples": null,
+   "est_min": 75,
+   "after": [
+    "st_select"
+   ],
+   "outputs": [
+    "outputs/dv_st_conf/seed_2024"
+   ],
+   "done": "outputs/dv_st_conf/seed_2024/test_predictions.jsonl"
+  },
+  "dv_none_rr:s42": {
+   "id": "dv_none_rr:s42",
+   "run": "dv_none_rr",
    "seed": 42,
    "aug": null,
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_none_lr2e4 --seeds 42 --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 2e-4",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_none_rr --seeds 42 --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --rerank_scorer outputs/dv_st_scorer/checkpoint --lr 1e-4",
    "examples": null,
-   "est_min": 50,
-   "after": [],
-   "outputs": [
-    "outputs/dv_none_lr2e4/seed_42"
+   "est_min": 47,
+   "after": [
+    "st_scorer_train"
    ],
-   "done": "outputs/dv_none_lr2e4/seed_42/test_predictions.jsonl"
+   "outputs": [
+    "outputs/dv_none_rr/seed_42"
+   ],
+   "done": "outputs/dv_none_rr/seed_42/test_predictions.jsonl"
   },
-  "dv_none_lr2e4:s123": {
-   "id": "dv_none_lr2e4:s123",
-   "run": "dv_none_lr2e4",
+  "dv_none_rr:s123": {
+   "id": "dv_none_rr:s123",
+   "run": "dv_none_rr",
    "seed": 123,
    "aug": null,
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_none_lr2e4 --seeds 123 --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 2e-4",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_none_rr --seeds 123 --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --rerank_scorer outputs/dv_st_scorer/checkpoint --lr 1e-4",
    "examples": null,
-   "est_min": 50,
-   "after": [],
-   "outputs": [
-    "outputs/dv_none_lr2e4/seed_123"
+   "est_min": 47,
+   "after": [
+    "st_scorer_train"
    ],
-   "done": "outputs/dv_none_lr2e4/seed_123/test_predictions.jsonl"
+   "outputs": [
+    "outputs/dv_none_rr/seed_123"
+   ],
+   "done": "outputs/dv_none_rr/seed_123/test_predictions.jsonl"
   },
-  "dv_none_lr2e4:s2024": {
-   "id": "dv_none_lr2e4:s2024",
-   "run": "dv_none_lr2e4",
+  "dv_none_rr:s2024": {
+   "id": "dv_none_rr:s2024",
+   "run": "dv_none_rr",
    "seed": 2024,
    "aug": null,
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_none_lr2e4 --seeds 2024 --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 2e-4",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_none_rr --seeds 2024 --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --rerank_scorer outputs/dv_st_scorer/checkpoint --lr 1e-4",
    "examples": null,
-   "est_min": 50,
+   "est_min": 47,
+   "after": [
+    "st_scorer_train"
+   ],
+   "outputs": [
+    "outputs/dv_none_rr/seed_2024"
+   ],
+   "done": "outputs/dv_none_rr/seed_2024/test_predictions.jsonl"
+  },
+  "dv_ada_joint_lrsel:s42": {
+   "id": "dv_ada_joint_lrsel:s42",
+   "run": "dv_ada_joint_lrsel",
+   "seed": 42,
+   "aug": "data/aug/dv_ada_joint.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_ada_joint_lrsel --seeds 42 --aug_path data/aug/dv_ada_joint.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --batch_size 8 --grad_accum 2 --lr 1e-4",
+   "examples": 4610,
+   "est_min": 84.0,
    "after": [],
    "outputs": [
-    "outputs/dv_none_lr2e4/seed_2024"
+    "outputs/dv_ada_joint_lrsel/seed_42"
    ],
-   "done": "outputs/dv_none_lr2e4/seed_2024/test_predictions.jsonl"
+   "done": "outputs/dv_ada_joint_lrsel/seed_42/test_predictions.jsonl"
   },
-  "dv_none_lr2e4:s7": {
-   "id": "dv_none_lr2e4:s7",
-   "run": "dv_none_lr2e4",
-   "seed": 7,
+  "dv_ada_joint_lrsel:s123": {
+   "id": "dv_ada_joint_lrsel:s123",
+   "run": "dv_ada_joint_lrsel",
+   "seed": 123,
+   "aug": "data/aug/dv_ada_joint.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_ada_joint_lrsel --seeds 123 --aug_path data/aug/dv_ada_joint.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --batch_size 8 --grad_accum 2 --lr 1e-4",
+   "examples": 4610,
+   "est_min": 84.0,
+   "after": [],
+   "outputs": [
+    "outputs/dv_ada_joint_lrsel/seed_123"
+   ],
+   "done": "outputs/dv_ada_joint_lrsel/seed_123/test_predictions.jsonl"
+  },
+  "dv_ada_joint_lrsel:s2024": {
+   "id": "dv_ada_joint_lrsel:s2024",
+   "run": "dv_ada_joint_lrsel",
+   "seed": 2024,
+   "aug": "data/aug/dv_ada_joint.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_ada_joint_lrsel --seeds 2024 --aug_path data/aug/dv_ada_joint.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --batch_size 8 --grad_accum 2 --lr 1e-4",
+   "examples": 4610,
+   "est_min": 84.0,
+   "after": [],
+   "outputs": [
+    "outputs/dv_ada_joint_lrsel/seed_2024"
+   ],
+   "done": "outputs/dv_ada_joint_lrsel/seed_2024/test_predictions.jsonl"
+  },
+  "dv_concat_lrsel:s42": {
+   "id": "dv_concat_lrsel:s42",
+   "run": "dv_concat_lrsel",
+   "seed": 42,
+   "aug": "data/aug/dv_concat.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_concat_lrsel --seeds 42 --aug_path data/aug/dv_concat.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --batch_size 8 --grad_accum 2 --lr 1e-4",
+   "examples": 4610,
+   "est_min": 84.0,
+   "after": [],
+   "outputs": [
+    "outputs/dv_concat_lrsel/seed_42"
+   ],
+   "done": "outputs/dv_concat_lrsel/seed_42/test_predictions.jsonl"
+  },
+  "dv_concat_lrsel:s123": {
+   "id": "dv_concat_lrsel:s123",
+   "run": "dv_concat_lrsel",
+   "seed": 123,
+   "aug": "data/aug/dv_concat.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_concat_lrsel --seeds 123 --aug_path data/aug/dv_concat.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --batch_size 8 --grad_accum 2 --lr 1e-4",
+   "examples": 4610,
+   "est_min": 84.0,
+   "after": [],
+   "outputs": [
+    "outputs/dv_concat_lrsel/seed_123"
+   ],
+   "done": "outputs/dv_concat_lrsel/seed_123/test_predictions.jsonl"
+  },
+  "dv_concat_lrsel:s2024": {
+   "id": "dv_concat_lrsel:s2024",
+   "run": "dv_concat_lrsel",
+   "seed": 2024,
+   "aug": "data/aug/dv_concat.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_concat_lrsel --seeds 2024 --aug_path data/aug/dv_concat.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --batch_size 8 --grad_accum 2 --lr 1e-4",
+   "examples": 4610,
+   "est_min": 84.0,
+   "after": [],
+   "outputs": [
+    "outputs/dv_concat_lrsel/seed_2024"
+   ],
+   "done": "outputs/dv_concat_lrsel/seed_2024/test_predictions.jsonl"
+  },
+  "dv_eda_lrsel:s42": {
+   "id": "dv_eda_lrsel:s42",
+   "run": "dv_eda_lrsel",
+   "seed": 42,
+   "aug": "data/aug/dv_eda.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_eda_lrsel --seeds 42 --aug_path data/aug/dv_eda.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 1e-4",
+   "examples": 3416,
+   "est_min": 62.2,
+   "after": [],
+   "outputs": [
+    "outputs/dv_eda_lrsel/seed_42"
+   ],
+   "done": "outputs/dv_eda_lrsel/seed_42/test_predictions.jsonl"
+  },
+  "dv_eda_lrsel:s123": {
+   "id": "dv_eda_lrsel:s123",
+   "run": "dv_eda_lrsel",
+   "seed": 123,
+   "aug": "data/aug/dv_eda.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_eda_lrsel --seeds 123 --aug_path data/aug/dv_eda.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 1e-4",
+   "examples": 3416,
+   "est_min": 62.2,
+   "after": [],
+   "outputs": [
+    "outputs/dv_eda_lrsel/seed_123"
+   ],
+   "done": "outputs/dv_eda_lrsel/seed_123/test_predictions.jsonl"
+  },
+  "dv_eda_lrsel:s2024": {
+   "id": "dv_eda_lrsel:s2024",
+   "run": "dv_eda_lrsel",
+   "seed": 2024,
+   "aug": "data/aug/dv_eda.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_eda_lrsel --seeds 2024 --aug_path data/aug/dv_eda.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 1e-4",
+   "examples": 3416,
+   "est_min": 62.2,
+   "after": [],
+   "outputs": [
+    "outputs/dv_eda_lrsel/seed_2024"
+   ],
+   "done": "outputs/dv_eda_lrsel/seed_2024/test_predictions.jsonl"
+  },
+  "dv_genda_lrsel:s42": {
+   "id": "dv_genda_lrsel:s42",
+   "run": "dv_genda_lrsel",
+   "seed": 42,
+   "aug": "data/aug/dv_genda.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_genda_lrsel --seeds 42 --aug_path data/aug/dv_genda.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 1e-4",
+   "examples": null,
+   "est_min": 65,
+   "after": [],
+   "outputs": [
+    "outputs/dv_genda_lrsel/seed_42"
+   ],
+   "done": "outputs/dv_genda_lrsel/seed_42/test_predictions.jsonl"
+  },
+  "dv_genda_lrsel:s123": {
+   "id": "dv_genda_lrsel:s123",
+   "run": "dv_genda_lrsel",
+   "seed": 123,
+   "aug": "data/aug/dv_genda.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_genda_lrsel --seeds 123 --aug_path data/aug/dv_genda.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 1e-4",
+   "examples": null,
+   "est_min": 65,
+   "after": [],
+   "outputs": [
+    "outputs/dv_genda_lrsel/seed_123"
+   ],
+   "done": "outputs/dv_genda_lrsel/seed_123/test_predictions.jsonl"
+  },
+  "dv_genda_lrsel:s2024": {
+   "id": "dv_genda_lrsel:s2024",
+   "run": "dv_genda_lrsel",
+   "seed": 2024,
+   "aug": "data/aug/dv_genda.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_genda_lrsel --seeds 2024 --aug_path data/aug/dv_genda.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 1e-4",
+   "examples": null,
+   "est_min": 65,
+   "after": [],
+   "outputs": [
+    "outputs/dv_genda_lrsel/seed_2024"
+   ],
+   "done": "outputs/dv_genda_lrsel/seed_2024/test_predictions.jsonl"
+  },
+  "dv_infill_t_lrsel:s42": {
+   "id": "dv_infill_t_lrsel:s42",
+   "run": "dv_infill_t_lrsel",
+   "seed": 42,
+   "aug": "data/aug/dv_infill_t.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_infill_t_lrsel --seeds 42 --aug_path data/aug/dv_infill_t.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 1e-4",
+   "examples": 3416,
+   "est_min": 62.2,
+   "after": [],
+   "outputs": [
+    "outputs/dv_infill_t_lrsel/seed_42"
+   ],
+   "done": "outputs/dv_infill_t_lrsel/seed_42/test_predictions.jsonl"
+  },
+  "dv_infill_t_lrsel:s123": {
+   "id": "dv_infill_t_lrsel:s123",
+   "run": "dv_infill_t_lrsel",
+   "seed": 123,
+   "aug": "data/aug/dv_infill_t.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_infill_t_lrsel --seeds 123 --aug_path data/aug/dv_infill_t.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 1e-4",
+   "examples": 3416,
+   "est_min": 62.2,
+   "after": [],
+   "outputs": [
+    "outputs/dv_infill_t_lrsel/seed_123"
+   ],
+   "done": "outputs/dv_infill_t_lrsel/seed_123/test_predictions.jsonl"
+  },
+  "dv_infill_t_lrsel:s2024": {
+   "id": "dv_infill_t_lrsel:s2024",
+   "run": "dv_infill_t_lrsel",
+   "seed": 2024,
+   "aug": "data/aug/dv_infill_t.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_infill_t_lrsel --seeds 2024 --aug_path data/aug/dv_infill_t.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 1e-4",
+   "examples": 3416,
+   "est_min": 62.2,
+   "after": [],
+   "outputs": [
+    "outputs/dv_infill_t_lrsel/seed_2024"
+   ],
+   "done": "outputs/dv_infill_t_lrsel/seed_2024/test_predictions.jsonl"
+  },
+  "dv_rc_lrsel:s42": {
+   "id": "dv_rc_lrsel:s42",
+   "run": "dv_rc_lrsel",
+   "seed": 42,
    "aug": null,
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_none_lr2e4 --seeds 7 --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 2e-4",
-   "examples": null,
-   "est_min": 50,
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_rc_lrsel --seeds 42 --train_path data/aug/dv_rc_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 1e-4",
+   "examples": 1135,
+   "est_min": 20.7,
    "after": [],
    "outputs": [
-    "outputs/dv_none_lr2e4/seed_7"
+    "outputs/dv_rc_lrsel/seed_42"
    ],
-   "done": "outputs/dv_none_lr2e4/seed_7/test_predictions.jsonl"
+   "done": "outputs/dv_rc_lrsel/seed_42/test_predictions.jsonl"
   },
-  "dv_none_lr2e4:s99": {
-   "id": "dv_none_lr2e4:s99",
-   "run": "dv_none_lr2e4",
-   "seed": 99,
+  "dv_rc_lrsel:s123": {
+   "id": "dv_rc_lrsel:s123",
+   "run": "dv_rc_lrsel",
+   "seed": 123,
    "aug": null,
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_none_lr2e4 --seeds 99 --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 2e-4",
-   "examples": null,
-   "est_min": 50,
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_rc_lrsel --seeds 123 --train_path data/aug/dv_rc_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 1e-4",
+   "examples": 1135,
+   "est_min": 20.7,
    "after": [],
    "outputs": [
-    "outputs/dv_none_lr2e4/seed_99"
+    "outputs/dv_rc_lrsel/seed_123"
    ],
-   "done": "outputs/dv_none_lr2e4/seed_99/test_predictions.jsonl"
+   "done": "outputs/dv_rc_lrsel/seed_123/test_predictions.jsonl"
   },
-  "genda_gen_inner": {
-   "id": "genda_gen_inner",
-   "command": "python -u src/aug/genda.py --train_path data/restaurant_v1/inner_train.jsonl --out data/aug/dv_genda.jsonl",
-   "est_min": 30,
+  "dv_rc_lrsel:s2024": {
+   "id": "dv_rc_lrsel:s2024",
+   "run": "dv_rc_lrsel",
+   "seed": 2024,
+   "aug": null,
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_rc_lrsel --seeds 2024 --train_path data/aug/dv_rc_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 1e-4",
+   "examples": 1135,
+   "est_min": 20.7,
+   "after": [],
    "outputs": [
-    "data/aug/dv_genda.jsonl",
-    "data/aug/dv_genda.report.json"
+    "outputs/dv_rc_lrsel/seed_2024"
    ],
-   "done": "data/aug/dv_genda.jsonl",
-   "examples": null,
-   "after": []
+   "done": "outputs/dv_rc_lrsel/seed_2024/test_predictions.jsonl"
   }
  }
 }
