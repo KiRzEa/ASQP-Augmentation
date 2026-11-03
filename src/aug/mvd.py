@@ -1,5 +1,7 @@
 """Multi-view consensus distillation: an MvP teacher (src/train_paraphrase.py --order_mode mvp --keep_ckpt) labels
 unlabelled synthetic texts with every view; the majority vote becomes the pseudo-label of an augmented set.
+Ensemble distillation is the same with several single-view teachers (one label run each): select merges the rows of
+its inputs by id, so every teacher's output becomes one view of the vote.
 
 Self-training with a single-view teacher (src/aug/st_scorer.py, p2) adds nothing because the teacher is no better
 than the student. The MvP vote is better than any of its views (inner_dev), most of all on implicit quads, so its
@@ -10,8 +12,10 @@ labels carry what a single-view student does not get from the gold data alone.
     python src/aug/mvd.py select --in views_0.jsonl,views_1.jsonl --out data/aug/dv_mvd.jsonl --consensus --n 2015  # CPU
 
 label: greedy generation of every view of the teacher (view orders from the run_config.json next to the checkpoint),
-written as the "views" field of src/train_paraphrase.py predictions (so its *_predictions.jsonl can be selected too).
-select: pseudo-label = quads predicted by >= --vote_min views (default majority); quads whose explicit spans are not
+written as the "views" field of src/train_paraphrase.py predictions (so its *_predictions.jsonl can be selected too;
+a single-view prediction counts as one view).
+select: rows with the same id in the inputs (teachers) are merged, their views concatenated (shards of one
+teacher have disjoint ids). Pseudo-label = quads predicted by >= --vote_min views (default majority); quads whose explicit spans are not
 in the text are dropped, then reviews left without quads. --consensus also drops every review where some quad got
 votes but fewer than --vote_min (the views disagree on it). At most --n reviews drawn at random (--seed).
 """
@@ -26,6 +30,10 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from asqp_common import implicit_type, load_jsonl  # noqa: E402
 from aug.st_scorer import as_quads, found, halving_on_oom, load, write_jsonl  # noqa: E402
+
+
+def views(r):
+    return r["views"] if "views" in r else [r["pred"]]
 
 
 def votes(r):
@@ -52,7 +60,9 @@ def cmd_label(a):
     def run(idx):
         args.eval_batch_size = len(idx)
         for i, rec in zip(idx, predict(model, tok, [items[i] for i in idx], args, device)):
-            out[i] = {k: rec[k] for k in ("id", "text", "pred", "generations", "views", "views_invalid")}
+            out[i] = {"id": rec["id"], "text": rec["text"], "pred": rec["pred"],
+                      "generations": rec.get("generations", [rec["generation"]]), "views": views(rec),
+                      "views_invalid": rec.get("views_invalid", [rec["n_invalid"]])}
 
     t0 = time.time()
     for b in range(0, len(order), a.batch_size):
@@ -64,7 +74,15 @@ def cmd_label(a):
 
 def cmd_select(a):
     rng = random.Random(a.seed)
-    rows = [r for p in a.inp.split(",") for r in load_jsonl(p)]
+    merged = {}
+    for p in a.inp.split(","):
+        for r in load_jsonl(p):
+            m = merged.setdefault(r["id"], {"id": r["id"], "text": r["text"], "views": []})
+            m["views"] += views(r)
+    rows = list(merged.values())
+    n_views = collections.Counter(len(r["views"]) for r in rows)
+    if len(n_views) > 1:
+        raise SystemExit(f"reviews have different numbers of views: {dict(n_views)}")
     st = collections.Counter(n=len(rows))
     keep = []
     for r in rows:
@@ -87,7 +105,7 @@ def cmd_select(a):
     write_jsonl(a.out, out)
     types = collections.Counter(implicit_type(tuple(q.values())) for x in out for q in x["quads"])
     rep = {"in": a.inp, "vote_min": a.vote_min or "majority", "consensus": a.consensus, "n_max": a.n,
-           "n_out": len(out), "quads_out": sum(types.values()), "stats": dict(st),
+           "n_views": next(iter(n_views)), "n_out": len(out), "quads_out": sum(types.values()), "stats": dict(st),
            "implicit_types": dict(types), "seed": a.seed}
     json.dump(rep, open(Path(a.out).with_suffix(".report.json"), "w"), indent=1)
     print(json.dumps(rep))
