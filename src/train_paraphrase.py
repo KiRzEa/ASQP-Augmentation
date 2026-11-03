@@ -24,6 +24,9 @@ Order-based baselines (orders ranked by src/aug/order_scores.py with the pre-tra
   --order_mode mvp  MvP (Gou et al., 2023): the --top_k orders with the highest mean log-probability become views
                     (order prompt in the input, majority vote at inference), as --views but with ranked orders.
 
+--tuple_order text writes the quads of every target (gold and augmented) in the order they start in the review
+(asqp_common.text_order); the default "gold" keeps the annotation order.
+
 --rerank_scorer S: after training, also decode --rerank_beams beam candidates and keep the one with the highest
 score of the pseudo-label scorer S (src/aug/st_scorer.py; Zhang et al., 2024, Sec. 4.3):
 *_rerank_predictions.jsonl and metrics "dev_rerank" / "test_rerank" (checkpoint selection unchanged).
@@ -59,7 +62,8 @@ from torch.utils.data import DataLoader
 from transformers import AutoModelForSeq2SeqLM, AutoTokenizer, get_linear_schedule_with_warmup
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from asqp_common import ORDER, VIEWS, load_jsonl, quad_tuple, quads_to_target, score, target_to_quads, view_prefix  # noqa: E402
+from asqp_common import (ORDER, VIEWS, load_jsonl, quad_tuple, quads_to_target, score, target_to_quads, text_order,  # noqa: E402
+                         view_prefix)
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -75,6 +79,8 @@ def parse_args():
                     help=f"element-order views per review (1..{len(VIEWS)}); 1 = the single default target")
     ap.add_argument("--vote_min", type=int, default=0, help="with --views k: views that must agree on a quad; 0 = majority")
     ap.add_argument("--order_mode", choices=["dlo", "ilo", "mvp"], help="order-based baseline (see docstring)")
+    ap.add_argument("--tuple_order", choices=["gold", "text"], default="gold",
+                    help="order of the quads in a target: annotation order or position in the text")
     ap.add_argument("--order_scores", help="JSON from src/aug/order_scores.py for the training file")
     ap.add_argument("--top_k", type=int, default=3, help="orders per review with --order_mode")
     ap.add_argument("--rerank_scorer", help="checkpoint of a pseudo-label scorer: also report reranked predictions")
@@ -148,6 +154,8 @@ def set_orders(args):
 def encode(items, args):
     """Training pairs; with views every review appears once per view (input prefixed with the view's order);
     with DLO / ILO once per training order of the review (input unchanged)."""
+    if args.tuple_order == "text":
+        items = [{**x, "quads": text_order(x["text"], x["quads"])} for x in items]
     if args.target_orders is not None:
         return [{"text": x["text"], "target": quads_to_target(x["quads"], o)}
                 for x in items for o in args.target_orders[x["id"]]]

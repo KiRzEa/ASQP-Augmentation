@@ -58,6 +58,24 @@ def quad_tuple(q):
     return (q["category"], clean_span(q["aspect"]), clean_span(q["opinion"]), q["polarity"])
 
 
+def text_order(text, quads):
+    """Quads sorted by where they start in the text: the first character of the aspect or the opinion span
+    (offsets when given, else the first whole-word occurrence); quads with both spans implicit (or not found) last,
+    by category. Ties keep the input order."""
+    def start(q, e):
+        if q[e] == NULL:
+            return None
+        if q.get(f"{e}_offsets"):
+            return q[f"{e}_offsets"][0]
+        m = re.search(r"(?<!\w)" + re.escape(q[e]) + r"(?!\w)", text)
+        return m.start() if m else None
+
+    def key(q):
+        s = [p for p in (start(q, "aspect"), start(q, "opinion")) if p is not None]
+        return (0, min(s), "") if s else (1, 0, q["category"])
+    return sorted(quads, key=key)
+
+
 # ---------- Paraphrase target (marked template, cf. "PARAPHRASE + Marked Template" in GenDA) ----------
 
 def quads_to_target(quads, order=ORDER):
