@@ -1,240 +1,233 @@
 {
- "round": "p2",
+ "round": "p3",
  "rounds": [
-  "p2"
+  "p3"
  ],
  "budget_hours": 10.5,
  "gpus": 2,
- "min_per_example": 0.018220140515222482,
- "n_calibrated": 144,
- "created": "2026-11-02 23:59",
+ "min_per_example": 0.01826697892271663,
+ "n_calibrated": 145,
+ "created": "2026-11-03 09:58",
  "sessions": [
   {
-   "session": 6,
+   "session": 1,
    "jobs": [
-    "dv_st:s42",
-    "dv_st:s123",
-    "dv_st:s2024",
-    "dv_st:s7",
-    "dv_st:s99",
-    "dv_st_conf:s42",
-    "dv_st_conf:s123",
-    "dv_st_conf:s2024",
-    "st_scorer_train",
-    "st_pl_0",
-    "st_pl_1",
-    "dv_st_teacher:s42",
-    "st_select"
+    "dv_mvp:s7",
+    "dv_mvd:s42",
+    "dv_mvd:s123",
+    "dv_mvd:s2024",
+    "dv_mvd:s7",
+    "dv_mvd:s99",
+    "dv_mvd_all:s42",
+    "dv_mvd_all:s123",
+    "dv_mvd_all:s2024",
+    "mvd_label_0",
+    "mvd_label_1",
+    "mvd_select",
+    "dv_mvp:s99"
    ],
-   "est_hours": 6.6
+   "est_hours": 10.2
   }
  ],
  "jobs": {
-  "dv_st_teacher:s42": {
-   "id": "dv_st_teacher:s42",
-   "run": "dv_st_teacher",
-   "seed": 42,
+  "dv_mvp:s7": {
+   "id": "dv_mvp:s7",
+   "run": "dv_mvp",
+   "seed": 7,
    "aug": null,
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_st_teacher --seeds 42 --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --keep_ckpt --lr 1e-4",
-   "examples": 1708,
-   "est_min": 31.1,
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_mvp --seeds 7 --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 1e-4 --order_mode mvp --order_scores data/aug/order_scores_inner.json --top_k 5 --keep_ckpt",
+   "examples": null,
+   "est_min": 200,
    "after": [],
    "outputs": [
-    "outputs/dv_st_teacher/seed_42"
+    "outputs/dv_mvp/seed_7"
    ],
-   "done": "outputs/dv_st_teacher/seed_42/test_predictions.jsonl"
+   "done": "outputs/dv_mvp/seed_7/test_predictions.jsonl"
   },
-  "st_pl_0": {
-   "id": "st_pl_0",
-   "command": "python -u src/aug/st_scorer.py candidates --ckpt outputs/dv_st_teacher/seed_42/checkpoint --in data/aug/st_pool_inner.jsonl --shard 0/2 --out data/aug/st_inner/pl_0.jsonl",
-   "est_min": 45,
-   "outputs": [
-    "data/aug/st_inner/pl_0.jsonl"
-   ],
-   "done": "data/aug/st_inner/pl_0.jsonl",
+  "dv_mvp:s99": {
+   "id": "dv_mvp:s99",
+   "run": "dv_mvp",
+   "seed": 99,
+   "aug": null,
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_mvp --seeds 99 --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 1e-4 --order_mode mvp --order_scores data/aug/order_scores_inner.json --top_k 5 --keep_ckpt",
    "examples": null,
-   "after": [
-    "dv_st_teacher:s42"
-   ]
-  },
-  "st_pl_1": {
-   "id": "st_pl_1",
-   "command": "python -u src/aug/st_scorer.py candidates --ckpt outputs/dv_st_teacher/seed_42/checkpoint --in data/aug/st_pool_inner.jsonl --shard 1/2 --out data/aug/st_inner/pl_1.jsonl",
-   "est_min": 45,
+   "est_min": 200,
+   "after": [],
    "outputs": [
-    "data/aug/st_inner/pl_1.jsonl"
+    "outputs/dv_mvp/seed_99"
    ],
-   "done": "data/aug/st_inner/pl_1.jsonl",
-   "examples": null,
-   "after": [
-    "dv_st_teacher:s42"
-   ]
+   "done": "outputs/dv_mvp/seed_99/test_predictions.jsonl"
   },
-  "st_scorer_train": {
-   "id": "st_scorer_train",
-   "command": "python src/aug/st_scorer.py comparison --cands data/aug/st_inner/cands_cv0.jsonl,data/aug/st_inner/cands_cv1.jsonl,data/aug/st_inner/cands_cv2.jsonl,data/aug/st_inner/cands_cv3.jsonl,data/aug/st_inner/cands_cv4.jsonl --out data/aug/st_inner/comp.jsonl && python -u src/aug/st_scorer.py train --comp data/aug/st_inner/comp.jsonl --out_dir outputs/dv_st_scorer",
+  "mvd_label_0": {
+   "id": "mvd_label_0",
+   "command": "python -u src/aug/mvd.py label --ckpt outputs/dv_mvp/seed_7/checkpoint --in data/aug/st_pool_inner.jsonl --shard 0/2 --out data/aug/mvd_inner/views_0.jsonl",
    "est_min": 50,
    "outputs": [
-    "data/aug/st_inner/comp.jsonl",
-    "outputs/dv_st_scorer"
+    "data/aug/mvd_inner/views_0.jsonl"
    ],
-   "done": "outputs/dv_st_scorer/scorer.json",
+   "done": "data/aug/mvd_inner/views_0.jsonl",
    "examples": null,
    "after": [
-    "dv_st_teacher:s42",
-    "st_cands_cv0",
-    "st_cands_cv1",
-    "st_cands_cv2",
-    "st_cands_cv3",
-    "st_cands_cv4"
+    "dv_mvp:s7"
    ]
   },
-  "st_select": {
-   "id": "st_select",
-   "command": "python -u src/aug/st_scorer.py score --scorer outputs/dv_st_scorer/checkpoint --in data/aug/st_inner/pl_0.jsonl,data/aug/st_inner/pl_1.jsonl --out data/aug/st_inner/scored.jsonl && python src/aug/st_scorer.py select --in data/aug/st_inner/scored.jsonl --out data/aug/dv_st.jsonl && python src/aug/st_scorer.py select --in data/aug/st_inner/scored.jsonl --band 0,1 --n $(grep -c . data/aug/dv_st.jsonl) --out data/aug/dv_st_conf.jsonl",
-   "est_min": 15,
+  "mvd_label_1": {
+   "id": "mvd_label_1",
+   "command": "python -u src/aug/mvd.py label --ckpt outputs/dv_mvp/seed_7/checkpoint --in data/aug/st_pool_inner.jsonl --shard 1/2 --out data/aug/mvd_inner/views_1.jsonl",
+   "est_min": 50,
    "outputs": [
-    "data/aug/st_inner/scored.jsonl",
-    "data/aug/dv_st.jsonl",
-    "data/aug/dv_st.report.json",
-    "data/aug/dv_st_conf.jsonl",
-    "data/aug/dv_st_conf.report.json"
+    "data/aug/mvd_inner/views_1.jsonl"
    ],
-   "done": "data/aug/dv_st_conf.jsonl",
+   "done": "data/aug/mvd_inner/views_1.jsonl",
    "examples": null,
    "after": [
-    "st_scorer_train",
-    "st_pl_0",
-    "st_pl_1"
+    "dv_mvp:s7"
    ]
   },
-  "dv_st:s42": {
-   "id": "dv_st:s42",
-   "run": "dv_st",
+  "mvd_select": {
+   "id": "mvd_select",
+   "command": "python src/aug/mvd.py select --in data/aug/mvd_inner/views_0.jsonl,data/aug/mvd_inner/views_1.jsonl --consensus --n $(grep -c . data/aug/dv_st_conf.jsonl) --out data/aug/dv_mvd.jsonl && python src/aug/mvd.py select --in data/aug/mvd_inner/views_0.jsonl,data/aug/mvd_inner/views_1.jsonl --n $(grep -c . data/aug/dv_st_conf.jsonl) --out data/aug/dv_mvd_all.jsonl",
+   "est_min": 2,
+   "outputs": [
+    "data/aug/dv_mvd.jsonl",
+    "data/aug/dv_mvd.report.json",
+    "data/aug/dv_mvd_all.jsonl",
+    "data/aug/dv_mvd_all.report.json"
+   ],
+   "done": "data/aug/dv_mvd_all.jsonl",
+   "examples": null,
+   "after": [
+    "mvd_label_0",
+    "mvd_label_1"
+   ]
+  },
+  "dv_mvd:s42": {
+   "id": "dv_mvd:s42",
+   "run": "dv_mvd",
    "seed": 42,
-   "aug": "data/aug/dv_st.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_st --seeds 42 --aug_path data/aug/dv_st.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --rerank_scorer outputs/dv_st_scorer/checkpoint --lr 1e-4",
+   "aug": "data/aug/dv_mvd.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_mvd --seeds 42 --aug_path data/aug/dv_mvd.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 1e-4",
    "examples": null,
-   "est_min": 75,
+   "est_min": 70,
    "after": [
-    "st_select"
+    "mvd_select"
    ],
    "outputs": [
-    "outputs/dv_st/seed_42"
+    "outputs/dv_mvd/seed_42"
    ],
-   "done": "outputs/dv_st/seed_42/test_predictions.jsonl"
+   "done": "outputs/dv_mvd/seed_42/test_predictions.jsonl"
   },
-  "dv_st:s123": {
-   "id": "dv_st:s123",
-   "run": "dv_st",
+  "dv_mvd:s123": {
+   "id": "dv_mvd:s123",
+   "run": "dv_mvd",
    "seed": 123,
-   "aug": "data/aug/dv_st.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_st --seeds 123 --aug_path data/aug/dv_st.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --rerank_scorer outputs/dv_st_scorer/checkpoint --lr 1e-4",
+   "aug": "data/aug/dv_mvd.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_mvd --seeds 123 --aug_path data/aug/dv_mvd.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 1e-4",
    "examples": null,
-   "est_min": 75,
+   "est_min": 70,
    "after": [
-    "st_select"
+    "mvd_select"
    ],
    "outputs": [
-    "outputs/dv_st/seed_123"
+    "outputs/dv_mvd/seed_123"
    ],
-   "done": "outputs/dv_st/seed_123/test_predictions.jsonl"
+   "done": "outputs/dv_mvd/seed_123/test_predictions.jsonl"
   },
-  "dv_st:s2024": {
-   "id": "dv_st:s2024",
-   "run": "dv_st",
+  "dv_mvd:s2024": {
+   "id": "dv_mvd:s2024",
+   "run": "dv_mvd",
    "seed": 2024,
-   "aug": "data/aug/dv_st.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_st --seeds 2024 --aug_path data/aug/dv_st.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --rerank_scorer outputs/dv_st_scorer/checkpoint --lr 1e-4",
+   "aug": "data/aug/dv_mvd.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_mvd --seeds 2024 --aug_path data/aug/dv_mvd.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 1e-4",
    "examples": null,
-   "est_min": 75,
+   "est_min": 70,
    "after": [
-    "st_select"
+    "mvd_select"
    ],
    "outputs": [
-    "outputs/dv_st/seed_2024"
+    "outputs/dv_mvd/seed_2024"
    ],
-   "done": "outputs/dv_st/seed_2024/test_predictions.jsonl"
+   "done": "outputs/dv_mvd/seed_2024/test_predictions.jsonl"
   },
-  "dv_st:s7": {
-   "id": "dv_st:s7",
-   "run": "dv_st",
+  "dv_mvd:s7": {
+   "id": "dv_mvd:s7",
+   "run": "dv_mvd",
    "seed": 7,
-   "aug": "data/aug/dv_st.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_st --seeds 7 --aug_path data/aug/dv_st.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --rerank_scorer outputs/dv_st_scorer/checkpoint --lr 1e-4",
+   "aug": "data/aug/dv_mvd.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_mvd --seeds 7 --aug_path data/aug/dv_mvd.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 1e-4",
    "examples": null,
-   "est_min": 75,
+   "est_min": 70,
    "after": [
-    "st_select"
+    "mvd_select"
    ],
    "outputs": [
-    "outputs/dv_st/seed_7"
+    "outputs/dv_mvd/seed_7"
    ],
-   "done": "outputs/dv_st/seed_7/test_predictions.jsonl"
+   "done": "outputs/dv_mvd/seed_7/test_predictions.jsonl"
   },
-  "dv_st:s99": {
-   "id": "dv_st:s99",
-   "run": "dv_st",
+  "dv_mvd:s99": {
+   "id": "dv_mvd:s99",
+   "run": "dv_mvd",
    "seed": 99,
-   "aug": "data/aug/dv_st.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_st --seeds 99 --aug_path data/aug/dv_st.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --rerank_scorer outputs/dv_st_scorer/checkpoint --lr 1e-4",
+   "aug": "data/aug/dv_mvd.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_mvd --seeds 99 --aug_path data/aug/dv_mvd.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 1e-4",
    "examples": null,
-   "est_min": 75,
+   "est_min": 70,
    "after": [
-    "st_select"
+    "mvd_select"
    ],
    "outputs": [
-    "outputs/dv_st/seed_99"
+    "outputs/dv_mvd/seed_99"
    ],
-   "done": "outputs/dv_st/seed_99/test_predictions.jsonl"
+   "done": "outputs/dv_mvd/seed_99/test_predictions.jsonl"
   },
-  "dv_st_conf:s42": {
-   "id": "dv_st_conf:s42",
-   "run": "dv_st_conf",
+  "dv_mvd_all:s42": {
+   "id": "dv_mvd_all:s42",
+   "run": "dv_mvd_all",
    "seed": 42,
-   "aug": "data/aug/dv_st_conf.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_st_conf --seeds 42 --aug_path data/aug/dv_st_conf.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --rerank_scorer outputs/dv_st_scorer/checkpoint --lr 1e-4",
+   "aug": "data/aug/dv_mvd_all.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_mvd_all --seeds 42 --aug_path data/aug/dv_mvd_all.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 1e-4",
    "examples": null,
-   "est_min": 75,
+   "est_min": 70,
    "after": [
-    "st_select"
+    "mvd_select"
    ],
    "outputs": [
-    "outputs/dv_st_conf/seed_42"
+    "outputs/dv_mvd_all/seed_42"
    ],
-   "done": "outputs/dv_st_conf/seed_42/test_predictions.jsonl"
+   "done": "outputs/dv_mvd_all/seed_42/test_predictions.jsonl"
   },
-  "dv_st_conf:s123": {
-   "id": "dv_st_conf:s123",
-   "run": "dv_st_conf",
+  "dv_mvd_all:s123": {
+   "id": "dv_mvd_all:s123",
+   "run": "dv_mvd_all",
    "seed": 123,
-   "aug": "data/aug/dv_st_conf.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_st_conf --seeds 123 --aug_path data/aug/dv_st_conf.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --rerank_scorer outputs/dv_st_scorer/checkpoint --lr 1e-4",
+   "aug": "data/aug/dv_mvd_all.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_mvd_all --seeds 123 --aug_path data/aug/dv_mvd_all.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 1e-4",
    "examples": null,
-   "est_min": 75,
+   "est_min": 70,
    "after": [
-    "st_select"
+    "mvd_select"
    ],
    "outputs": [
-    "outputs/dv_st_conf/seed_123"
+    "outputs/dv_mvd_all/seed_123"
    ],
-   "done": "outputs/dv_st_conf/seed_123/test_predictions.jsonl"
+   "done": "outputs/dv_mvd_all/seed_123/test_predictions.jsonl"
   },
-  "dv_st_conf:s2024": {
-   "id": "dv_st_conf:s2024",
-   "run": "dv_st_conf",
+  "dv_mvd_all:s2024": {
+   "id": "dv_mvd_all:s2024",
+   "run": "dv_mvd_all",
    "seed": 2024,
-   "aug": "data/aug/dv_st_conf.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_st_conf --seeds 2024 --aug_path data/aug/dv_st_conf.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --rerank_scorer outputs/dv_st_scorer/checkpoint --lr 1e-4",
+   "aug": "data/aug/dv_mvd_all.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_mvd_all --seeds 2024 --aug_path data/aug/dv_mvd_all.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 1e-4",
    "examples": null,
-   "est_min": 75,
+   "est_min": 70,
    "after": [
-    "st_select"
+    "mvd_select"
    ],
    "outputs": [
-    "outputs/dv_st_conf/seed_2024"
+    "outputs/dv_mvd_all/seed_2024"
    ],
-   "done": "outputs/dv_st_conf/seed_2024/test_predictions.jsonl"
+   "done": "outputs/dv_mvd_all/seed_2024/test_predictions.jsonl"
   }
  }
 }
