@@ -1,0 +1,15 @@
+{
+ "in": "data/aug/st_inner/scored.jsonl",
+ "conf": 0.7,
+ "band": "0.1,0.4",
+ "n_max": 10000,
+ "n_out": 2015,
+ "quads_out": 5273,
+ "stats": {
+  "n": 12217,
+  "confidence < 0.70": 5498,
+  "no grounded quad": 2,
+  "after confidence": 6717,
+  "in band": 2015
+ }
+}
