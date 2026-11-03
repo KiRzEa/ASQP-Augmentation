@@ -1,0 +1,20 @@
+{
+ "in": "data/aug/mvd_inner/views_0.jsonl,data/aug/mvd_inner/views_1.jsonl",
+ "vote_min": "majority",
+ "consensus": false,
+ "n_max": 2015,
+ "n_out": 2015,
+ "quads_out": 5545,
+ "stats": {
+  "n": 12217,
+  "no grounded majority quad": 21,
+  "kept": 12196
+ },
+ "implicit_types": {
+  "EA-EO": 4916,
+  "IA-IO": 93,
+  "IA-EO": 251,
+  "EA-IO": 285
+ },
+ "seed": 13
+}
