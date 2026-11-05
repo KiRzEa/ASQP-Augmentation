@@ -1,0 +1,21 @@
+{
+ "in": "data/aug/ens_inner/s42.jsonl",
+ "vote_min": "majority",
+ "consensus": false,
+ "n_max": 20000,
+ "n_views": 1,
+ "n_out": 12215,
+ "quads_out": 36114,
+ "stats": {
+  "n": 12217,
+  "no grounded majority quad": 2,
+  "kept": 12215
+ },
+ "implicit_types": {
+  "EA-EO": 31746,
+  "IA-EO": 1813,
+  "EA-IO": 1889,
+  "IA-IO": 666
+ },
+ "seed": 13
+}

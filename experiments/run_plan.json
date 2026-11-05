@@ -1,119 +1,162 @@
 {
- "round": "p6",
+ "round": "p7",
  "rounds": [
-  "p6"
+  "p7"
  ],
  "budget_hours": 10.5,
  "gpus": 2,
  "min_per_example": 0.01826697892271663,
  "n_calibrated": 145,
- "created": "2026-11-04 19:51",
+ "created": "2026-11-05 19:46",
  "sessions": [
   {
    "session": 1,
    "jobs": [
-    "dv_ens_full_pos:s42",
-    "dv_ens_full_pos:s123",
-    "dv_ens_full_pos:s2024",
-    "dv_ens_full_pos:s7",
-    "dv_ens_full_pos_soup"
+    "dv_ens_full:s42",
+    "dv_ens_full:s123",
+    "dv_ens_full:s2024",
+    "dv_single_full_pos:s42",
+    "dv_single_full_pos:s123",
+    "dv_single_full_pos:s2024",
+    "dv_ens_4k_pos:s42",
+    "dv_ens_4k_pos:s123"
    ],
-   "est_hours": 8.08
+   "est_hours": 10.5
   },
   {
    "session": 2,
    "jobs": [
-    "dv_ens_full_pos:s99"
+    "dv_ens_4k_pos:s2024"
    ],
-   "est_hours": 3.83
+   "est_hours": 1.5
   }
  ],
  "jobs": {
-  "dv_ens_full_pos:s42": {
-   "id": "dv_ens_full_pos:s42",
-   "run": "dv_ens_full_pos",
+  "dv_ens_full:s42": {
+   "id": "dv_ens_full:s42",
+   "run": "dv_ens_full",
    "seed": 42,
    "aug": "data/aug/dv_ens_full.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_ens_full_pos --seeds 42 --aug_path data/aug/dv_ens_full.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 1e-4 --tuple_order text --keep_ckpt",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_ens_full --seeds 42 --aug_path data/aug/dv_ens_full.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 1e-4",
    "examples": null,
-   "est_min": 230,
+   "est_min": 180,
    "after": [],
    "outputs": [
-    "outputs/dv_ens_full_pos/seed_42"
+    "outputs/dv_ens_full/seed_42"
    ],
-   "done": "outputs/dv_ens_full_pos/seed_42/test_predictions.jsonl"
+   "done": "outputs/dv_ens_full/seed_42/test_predictions.jsonl"
   },
-  "dv_ens_full_pos:s123": {
-   "id": "dv_ens_full_pos:s123",
-   "run": "dv_ens_full_pos",
+  "dv_ens_full:s123": {
+   "id": "dv_ens_full:s123",
+   "run": "dv_ens_full",
    "seed": 123,
    "aug": "data/aug/dv_ens_full.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_ens_full_pos --seeds 123 --aug_path data/aug/dv_ens_full.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 1e-4 --tuple_order text --keep_ckpt",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_ens_full --seeds 123 --aug_path data/aug/dv_ens_full.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 1e-4",
    "examples": null,
-   "est_min": 230,
+   "est_min": 180,
    "after": [],
    "outputs": [
-    "outputs/dv_ens_full_pos/seed_123"
+    "outputs/dv_ens_full/seed_123"
    ],
-   "done": "outputs/dv_ens_full_pos/seed_123/test_predictions.jsonl"
+   "done": "outputs/dv_ens_full/seed_123/test_predictions.jsonl"
   },
-  "dv_ens_full_pos:s2024": {
-   "id": "dv_ens_full_pos:s2024",
-   "run": "dv_ens_full_pos",
+  "dv_ens_full:s2024": {
+   "id": "dv_ens_full:s2024",
+   "run": "dv_ens_full",
    "seed": 2024,
    "aug": "data/aug/dv_ens_full.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_ens_full_pos --seeds 2024 --aug_path data/aug/dv_ens_full.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 1e-4 --tuple_order text --keep_ckpt",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_ens_full --seeds 2024 --aug_path data/aug/dv_ens_full.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 1e-4",
    "examples": null,
-   "est_min": 230,
+   "est_min": 180,
    "after": [],
    "outputs": [
-    "outputs/dv_ens_full_pos/seed_2024"
+    "outputs/dv_ens_full/seed_2024"
    ],
-   "done": "outputs/dv_ens_full_pos/seed_2024/test_predictions.jsonl"
+   "done": "outputs/dv_ens_full/seed_2024/test_predictions.jsonl"
   },
-  "dv_ens_full_pos:s7": {
-   "id": "dv_ens_full_pos:s7",
-   "run": "dv_ens_full_pos",
-   "seed": 7,
-   "aug": "data/aug/dv_ens_full.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_ens_full_pos --seeds 7 --aug_path data/aug/dv_ens_full.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 1e-4 --tuple_order text --keep_ckpt",
+  "dv_single_full_pos:s42": {
+   "id": "dv_single_full_pos:s42",
+   "run": "dv_single_full_pos",
+   "seed": 42,
+   "aug": "data/aug/dv_single_full.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_single_full_pos --seeds 42 --aug_path data/aug/dv_single_full.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 1e-4 --tuple_order text",
    "examples": null,
-   "est_min": 230,
+   "est_min": 180,
    "after": [],
    "outputs": [
-    "outputs/dv_ens_full_pos/seed_7"
+    "outputs/dv_single_full_pos/seed_42"
    ],
-   "done": "outputs/dv_ens_full_pos/seed_7/test_predictions.jsonl"
+   "done": "outputs/dv_single_full_pos/seed_42/test_predictions.jsonl"
   },
-  "dv_ens_full_pos:s99": {
-   "id": "dv_ens_full_pos:s99",
-   "run": "dv_ens_full_pos",
-   "seed": 99,
-   "aug": "data/aug/dv_ens_full.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_ens_full_pos --seeds 99 --aug_path data/aug/dv_ens_full.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 1e-4 --tuple_order text --keep_ckpt",
+  "dv_single_full_pos:s123": {
+   "id": "dv_single_full_pos:s123",
+   "run": "dv_single_full_pos",
+   "seed": 123,
+   "aug": "data/aug/dv_single_full.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_single_full_pos --seeds 123 --aug_path data/aug/dv_single_full.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 1e-4 --tuple_order text",
    "examples": null,
-   "est_min": 230,
+   "est_min": 180,
    "after": [],
    "outputs": [
-    "outputs/dv_ens_full_pos/seed_99"
+    "outputs/dv_single_full_pos/seed_123"
    ],
-   "done": "outputs/dv_ens_full_pos/seed_99/test_predictions.jsonl"
+   "done": "outputs/dv_single_full_pos/seed_123/test_predictions.jsonl"
   },
-  "dv_ens_full_pos_soup": {
-   "id": "dv_ens_full_pos_soup",
-   "command": "python -u src/soup.py --ckpts outputs/dv_ens_full_pos/seed_42/checkpoint,outputs/dv_ens_full_pos/seed_123/checkpoint,outputs/dv_ens_full_pos/seed_2024/checkpoint,outputs/dv_ens_full_pos/seed_7/checkpoint --out_dir outputs/dv_ens_full_pos_soup --test_path data/restaurant_v1/inner_dev.jsonl && rm -rf outputs/dv_ens_full_pos/seed_42/checkpoint outputs/dv_ens_full_pos/seed_123/checkpoint outputs/dv_ens_full_pos/seed_2024/checkpoint outputs/dv_ens_full_pos/seed_7/checkpoint",
-   "est_min": 25,
-   "outputs": [
-    "outputs/dv_ens_full_pos_soup"
-   ],
-   "done": "outputs/dv_ens_full_pos_soup/greedy/metrics.json",
+  "dv_single_full_pos:s2024": {
+   "id": "dv_single_full_pos:s2024",
+   "run": "dv_single_full_pos",
+   "seed": 2024,
+   "aug": "data/aug/dv_single_full.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_single_full_pos --seeds 2024 --aug_path data/aug/dv_single_full.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 1e-4 --tuple_order text",
    "examples": null,
-   "after": [
-    "dv_ens_full_pos:s42",
-    "dv_ens_full_pos:s123",
-    "dv_ens_full_pos:s2024",
-    "dv_ens_full_pos:s7"
-   ]
+   "est_min": 180,
+   "after": [],
+   "outputs": [
+    "outputs/dv_single_full_pos/seed_2024"
+   ],
+   "done": "outputs/dv_single_full_pos/seed_2024/test_predictions.jsonl"
+  },
+  "dv_ens_4k_pos:s42": {
+   "id": "dv_ens_4k_pos:s42",
+   "run": "dv_ens_4k_pos",
+   "seed": 42,
+   "aug": "data/aug/dv_ens_2x.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_ens_4k_pos --seeds 42 --aug_path data/aug/dv_ens_2x.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 1e-4 --tuple_order text",
+   "examples": null,
+   "est_min": 90,
+   "after": [],
+   "outputs": [
+    "outputs/dv_ens_4k_pos/seed_42"
+   ],
+   "done": "outputs/dv_ens_4k_pos/seed_42/test_predictions.jsonl"
+  },
+  "dv_ens_4k_pos:s123": {
+   "id": "dv_ens_4k_pos:s123",
+   "run": "dv_ens_4k_pos",
+   "seed": 123,
+   "aug": "data/aug/dv_ens_2x.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_ens_4k_pos --seeds 123 --aug_path data/aug/dv_ens_2x.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 1e-4 --tuple_order text",
+   "examples": null,
+   "est_min": 90,
+   "after": [],
+   "outputs": [
+    "outputs/dv_ens_4k_pos/seed_123"
+   ],
+   "done": "outputs/dv_ens_4k_pos/seed_123/test_predictions.jsonl"
+  },
+  "dv_ens_4k_pos:s2024": {
+   "id": "dv_ens_4k_pos:s2024",
+   "run": "dv_ens_4k_pos",
+   "seed": 2024,
+   "aug": "data/aug/dv_ens_2x.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_ens_4k_pos --seeds 2024 --aug_path data/aug/dv_ens_2x.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 1e-4 --tuple_order text",
+   "examples": null,
+   "est_min": 90,
+   "after": [],
+   "outputs": [
+    "outputs/dv_ens_4k_pos/seed_2024"
+   ],
+   "done": "outputs/dv_ens_4k_pos/seed_2024/test_predictions.jsonl"
   }
  }
 }
