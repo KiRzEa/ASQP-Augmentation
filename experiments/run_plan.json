@@ -31,6 +31,18 @@
     "cf_rc:s99"
    ],
    "est_hours": 9.43
+  },
+  {
+   "session": 5,
+   "jobs": [
+    "dv_ens_4k_pos:s7",
+    "dv_ens_4k_pos:s99",
+    "dv_ens_full:s7",
+    "dv_ens_full:s99",
+    "dv_single_full_pos:s7",
+    "dv_single_full_pos:s99"
+   ],
+   "est_hours": 7.5
   }
  ],
  "jobs": {
@@ -272,6 +284,91 @@
     "outputs/cf_rc/seed_99"
    ],
    "done": "outputs/cf_rc/seed_99/test_predictions.jsonl"
+  },
+  "dv_ens_full:s7": {
+   "id": "dv_ens_full:s7",
+   "run": "dv_ens_full",
+   "seed": 7,
+   "aug": "data/aug/dv_ens_full.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_ens_full --seeds 7 --aug_path data/aug/dv_ens_full.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 1e-4",
+   "examples": null,
+   "est_min": 180,
+   "after": [],
+   "outputs": [
+    "outputs/dv_ens_full/seed_7"
+   ],
+   "done": "outputs/dv_ens_full/seed_7/test_predictions.jsonl"
+  },
+  "dv_ens_full:s99": {
+   "id": "dv_ens_full:s99",
+   "run": "dv_ens_full",
+   "seed": 99,
+   "aug": "data/aug/dv_ens_full.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_ens_full --seeds 99 --aug_path data/aug/dv_ens_full.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 1e-4",
+   "examples": null,
+   "est_min": 180,
+   "after": [],
+   "outputs": [
+    "outputs/dv_ens_full/seed_99"
+   ],
+   "done": "outputs/dv_ens_full/seed_99/test_predictions.jsonl"
+  },
+  "dv_single_full_pos:s7": {
+   "id": "dv_single_full_pos:s7",
+   "run": "dv_single_full_pos",
+   "seed": 7,
+   "aug": "data/aug/dv_single_full.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_single_full_pos --seeds 7 --aug_path data/aug/dv_single_full.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 1e-4 --tuple_order text",
+   "examples": null,
+   "est_min": 180,
+   "after": [],
+   "outputs": [
+    "outputs/dv_single_full_pos/seed_7"
+   ],
+   "done": "outputs/dv_single_full_pos/seed_7/test_predictions.jsonl"
+  },
+  "dv_single_full_pos:s99": {
+   "id": "dv_single_full_pos:s99",
+   "run": "dv_single_full_pos",
+   "seed": 99,
+   "aug": "data/aug/dv_single_full.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_single_full_pos --seeds 99 --aug_path data/aug/dv_single_full.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 1e-4 --tuple_order text",
+   "examples": null,
+   "est_min": 180,
+   "after": [],
+   "outputs": [
+    "outputs/dv_single_full_pos/seed_99"
+   ],
+   "done": "outputs/dv_single_full_pos/seed_99/test_predictions.jsonl"
+  },
+  "dv_ens_4k_pos:s7": {
+   "id": "dv_ens_4k_pos:s7",
+   "run": "dv_ens_4k_pos",
+   "seed": 7,
+   "aug": "data/aug/dv_ens_2x.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_ens_4k_pos --seeds 7 --aug_path data/aug/dv_ens_2x.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 1e-4 --tuple_order text",
+   "examples": null,
+   "est_min": 90,
+   "after": [],
+   "outputs": [
+    "outputs/dv_ens_4k_pos/seed_7"
+   ],
+   "done": "outputs/dv_ens_4k_pos/seed_7/test_predictions.jsonl"
+  },
+  "dv_ens_4k_pos:s99": {
+   "id": "dv_ens_4k_pos:s99",
+   "run": "dv_ens_4k_pos",
+   "seed": 99,
+   "aug": "data/aug/dv_ens_2x.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_ens_4k_pos --seeds 99 --aug_path data/aug/dv_ens_2x.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 1e-4 --tuple_order text",
+   "examples": null,
+   "est_min": 90,
+   "after": [],
+   "outputs": [
+    "outputs/dv_ens_4k_pos/seed_99"
+   ],
+   "done": "outputs/dv_ens_4k_pos/seed_99/test_predictions.jsonl"
   }
- }
+ },
+ "note": "session 4 = last confirmatory session (cf); session 5 = p7 pilot ablations, seeds 7 and 99 (inner_dev; zip is tagged cf_s5)"
 }
