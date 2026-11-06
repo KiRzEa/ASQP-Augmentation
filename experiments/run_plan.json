@@ -43,6 +43,26 @@
     "dv_single_full_pos:s99"
    ],
    "est_hours": 7.5
+  },
+  {
+   "session": 6,
+   "jobs": [
+    "cf_single_full_pos:s42",
+    "cf_single_full_pos:s123",
+    "cf_single_full_pos:s2024",
+    "cf_ens_full:s42"
+   ],
+   "est_hours": 7.0
+  },
+  {
+   "session": 7,
+   "jobs": [
+    "cf_single_full_pos:s7",
+    "cf_single_full_pos:s99",
+    "cf_ens_full:s123",
+    "cf_ens_full:s2024"
+   ],
+   "est_hours": 7.0
   }
  ],
  "jobs": {
@@ -368,7 +388,119 @@
     "outputs/dv_ens_4k_pos/seed_99"
    ],
    "done": "outputs/dv_ens_4k_pos/seed_99/test_predictions.jsonl"
+  },
+  "cf_single_full_pos:s42": {
+   "id": "cf_single_full_pos:s42",
+   "run": "cf_single_full_pos",
+   "seed": 42,
+   "aug": "data/aug/cf_single_full.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/cf_single_full_pos --seeds 42 --aug_path data/aug/cf_single_full.jsonl --train_path data/restaurant_v1/train.jsonl --test_path data/restaurant_v1/test.jsonl --lr 1e-4 --tuple_order text",
+   "examples": null,
+   "est_min": 210,
+   "after": [],
+   "outputs": [
+    "outputs/cf_single_full_pos/seed_42"
+   ],
+   "done": "outputs/cf_single_full_pos/seed_42/test_predictions.jsonl"
+  },
+  "cf_single_full_pos:s123": {
+   "id": "cf_single_full_pos:s123",
+   "run": "cf_single_full_pos",
+   "seed": 123,
+   "aug": "data/aug/cf_single_full.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/cf_single_full_pos --seeds 123 --aug_path data/aug/cf_single_full.jsonl --train_path data/restaurant_v1/train.jsonl --test_path data/restaurant_v1/test.jsonl --lr 1e-4 --tuple_order text",
+   "examples": null,
+   "est_min": 210,
+   "after": [],
+   "outputs": [
+    "outputs/cf_single_full_pos/seed_123"
+   ],
+   "done": "outputs/cf_single_full_pos/seed_123/test_predictions.jsonl"
+  },
+  "cf_single_full_pos:s2024": {
+   "id": "cf_single_full_pos:s2024",
+   "run": "cf_single_full_pos",
+   "seed": 2024,
+   "aug": "data/aug/cf_single_full.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/cf_single_full_pos --seeds 2024 --aug_path data/aug/cf_single_full.jsonl --train_path data/restaurant_v1/train.jsonl --test_path data/restaurant_v1/test.jsonl --lr 1e-4 --tuple_order text",
+   "examples": null,
+   "est_min": 210,
+   "after": [],
+   "outputs": [
+    "outputs/cf_single_full_pos/seed_2024"
+   ],
+   "done": "outputs/cf_single_full_pos/seed_2024/test_predictions.jsonl"
+  },
+  "cf_single_full_pos:s7": {
+   "id": "cf_single_full_pos:s7",
+   "run": "cf_single_full_pos",
+   "seed": 7,
+   "aug": "data/aug/cf_single_full.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/cf_single_full_pos --seeds 7 --aug_path data/aug/cf_single_full.jsonl --train_path data/restaurant_v1/train.jsonl --test_path data/restaurant_v1/test.jsonl --lr 1e-4 --tuple_order text",
+   "examples": null,
+   "est_min": 210,
+   "after": [],
+   "outputs": [
+    "outputs/cf_single_full_pos/seed_7"
+   ],
+   "done": "outputs/cf_single_full_pos/seed_7/test_predictions.jsonl"
+  },
+  "cf_single_full_pos:s99": {
+   "id": "cf_single_full_pos:s99",
+   "run": "cf_single_full_pos",
+   "seed": 99,
+   "aug": "data/aug/cf_single_full.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/cf_single_full_pos --seeds 99 --aug_path data/aug/cf_single_full.jsonl --train_path data/restaurant_v1/train.jsonl --test_path data/restaurant_v1/test.jsonl --lr 1e-4 --tuple_order text",
+   "examples": null,
+   "est_min": 210,
+   "after": [],
+   "outputs": [
+    "outputs/cf_single_full_pos/seed_99"
+   ],
+   "done": "outputs/cf_single_full_pos/seed_99/test_predictions.jsonl"
+  },
+  "cf_ens_full:s42": {
+   "id": "cf_ens_full:s42",
+   "run": "cf_ens_full",
+   "seed": 42,
+   "aug": "data/aug/cf_ens_full.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/cf_ens_full --seeds 42 --aug_path data/aug/cf_ens_full.jsonl --train_path data/restaurant_v1/train.jsonl --test_path data/restaurant_v1/test.jsonl --lr 1e-4",
+   "examples": null,
+   "est_min": 210,
+   "after": [],
+   "outputs": [
+    "outputs/cf_ens_full/seed_42"
+   ],
+   "done": "outputs/cf_ens_full/seed_42/test_predictions.jsonl"
+  },
+  "cf_ens_full:s123": {
+   "id": "cf_ens_full:s123",
+   "run": "cf_ens_full",
+   "seed": 123,
+   "aug": "data/aug/cf_ens_full.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/cf_ens_full --seeds 123 --aug_path data/aug/cf_ens_full.jsonl --train_path data/restaurant_v1/train.jsonl --test_path data/restaurant_v1/test.jsonl --lr 1e-4",
+   "examples": null,
+   "est_min": 210,
+   "after": [],
+   "outputs": [
+    "outputs/cf_ens_full/seed_123"
+   ],
+   "done": "outputs/cf_ens_full/seed_123/test_predictions.jsonl"
+  },
+  "cf_ens_full:s2024": {
+   "id": "cf_ens_full:s2024",
+   "run": "cf_ens_full",
+   "seed": 2024,
+   "aug": "data/aug/cf_ens_full.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/cf_ens_full --seeds 2024 --aug_path data/aug/cf_ens_full.jsonl --train_path data/restaurant_v1/train.jsonl --test_path data/restaurant_v1/test.jsonl --lr 1e-4",
+   "examples": null,
+   "est_min": 210,
+   "after": [],
+   "outputs": [
+    "outputs/cf_ens_full/seed_2024"
+   ],
+   "done": "outputs/cf_ens_full/seed_2024/test_predictions.jsonl"
   }
  },
- "note": "session 4 = last confirmatory session (cf); session 5 = p7 pilot ablations, seeds 7 and 99 (inner_dev; zip is tagged cf_s5)"
+ "note": "session 4 = last confirmatory session (cf); session 5 = p7 pilot ablations seeds 7/99 (inner_dev); sessions 6-7 = confirmatory ablations on test (A1 single teacher x5, A2 default order x3)"
 }
