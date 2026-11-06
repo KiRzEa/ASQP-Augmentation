@@ -1,162 +1,734 @@
 {
- "round": "p7",
+ "round": "cf",
  "rounds": [
-  "p7"
+  "cf"
  ],
  "budget_hours": 10.5,
  "gpus": 2,
  "min_per_example": 0.01826697892271663,
  "n_calibrated": 145,
- "created": "2026-11-05 19:46",
+ "created": "2026-11-06 12:36",
  "sessions": [
   {
    "session": 1,
    "jobs": [
-    "dv_ens_full:s42",
-    "dv_ens_full:s123",
-    "dv_ens_full:s2024",
-    "dv_single_full_pos:s42",
-    "dv_single_full_pos:s123",
-    "dv_single_full_pos:s2024",
-    "dv_ens_4k_pos:s42",
-    "dv_ens_4k_pos:s123"
+    "cf_ens_full_pos:s42",
+    "cf_ens_full_pos:s123",
+    "cf_none:s42",
+    "cf_none:s123",
+    "cf_none:s2024",
+    "cf_none:s7",
+    "cf_none:s99",
+    "cf_label_s42",
+    "cf_label_s123",
+    "cf_label_s2024",
+    "cf_label_s7",
+    "cf_label_s99",
+    "cf_select",
+    "cf_ada_joint:s2024",
+    "cf_ada_joint:s7",
+    "cf_ada_joint:s99",
+    "cf_concat:s42",
+    "cf_none:s17",
+    "cf_rc:s123"
    ],
-   "est_hours": 10.5
+   "est_hours": 10.49
   },
   {
    "session": 2,
    "jobs": [
-    "dv_ens_4k_pos:s2024"
+    "cf_mvp:s42",
+    "cf_mvp:s123",
+    "cf_mvp:s2024",
+    "cf_mvp:s7",
+    "cf_mvp:s99",
+    "order_scores_train",
+    "cf_ada_joint:s42",
+    "cf_ada_joint:s123",
+    "cf_none:s11",
+    "cf_none:s13",
+    "cf_rc:s42"
    ],
-   "est_hours": 1.5
+   "est_hours": 10.49
+  },
+  {
+   "session": 3,
+   "jobs": [
+    "cf_concat:s123",
+    "cf_concat:s2024",
+    "cf_concat:s7",
+    "cf_concat:s99",
+    "cf_eda:s42",
+    "cf_eda:s123",
+    "cf_eda:s2024",
+    "cf_eda:s7",
+    "cf_eda:s99",
+    "cf_genda:s42",
+    "cf_genda:s123",
+    "cf_genda:s2024",
+    "cf_genda:s7",
+    "cf_genda:s99",
+    "cf_rc:s2024",
+    "cf_rc:s7"
+   ],
+   "est_hours": 10.45
   }
  ],
  "jobs": {
-  "dv_ens_full:s42": {
-   "id": "dv_ens_full:s42",
-   "run": "dv_ens_full",
+  "cf_none:s42": {
+   "id": "cf_none:s42",
+   "run": "cf_none",
    "seed": 42,
-   "aug": "data/aug/dv_ens_full.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_ens_full --seeds 42 --aug_path data/aug/dv_ens_full.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 1e-4",
-   "examples": null,
-   "est_min": 180,
+   "aug": null,
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/cf_none --seeds 42 --train_path data/restaurant_v1/train.jsonl --test_path data/restaurant_v1/test.jsonl --lr 1e-4 --keep_ckpt",
+   "examples": 2135,
+   "est_min": 39.0,
    "after": [],
    "outputs": [
-    "outputs/dv_ens_full/seed_42"
+    "outputs/cf_none/seed_42"
    ],
-   "done": "outputs/dv_ens_full/seed_42/test_predictions.jsonl"
+   "done": "outputs/cf_none/seed_42/test_predictions.jsonl"
   },
-  "dv_ens_full:s123": {
-   "id": "dv_ens_full:s123",
-   "run": "dv_ens_full",
+  "cf_none:s123": {
+   "id": "cf_none:s123",
+   "run": "cf_none",
    "seed": 123,
-   "aug": "data/aug/dv_ens_full.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_ens_full --seeds 123 --aug_path data/aug/dv_ens_full.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 1e-4",
-   "examples": null,
-   "est_min": 180,
+   "aug": null,
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/cf_none --seeds 123 --train_path data/restaurant_v1/train.jsonl --test_path data/restaurant_v1/test.jsonl --lr 1e-4 --keep_ckpt",
+   "examples": 2135,
+   "est_min": 39.0,
    "after": [],
    "outputs": [
-    "outputs/dv_ens_full/seed_123"
+    "outputs/cf_none/seed_123"
    ],
-   "done": "outputs/dv_ens_full/seed_123/test_predictions.jsonl"
+   "done": "outputs/cf_none/seed_123/test_predictions.jsonl"
   },
-  "dv_ens_full:s2024": {
-   "id": "dv_ens_full:s2024",
-   "run": "dv_ens_full",
+  "cf_none:s2024": {
+   "id": "cf_none:s2024",
+   "run": "cf_none",
    "seed": 2024,
-   "aug": "data/aug/dv_ens_full.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_ens_full --seeds 2024 --aug_path data/aug/dv_ens_full.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 1e-4",
-   "examples": null,
-   "est_min": 180,
+   "aug": null,
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/cf_none --seeds 2024 --train_path data/restaurant_v1/train.jsonl --test_path data/restaurant_v1/test.jsonl --lr 1e-4 --keep_ckpt",
+   "examples": 2135,
+   "est_min": 39.0,
    "after": [],
    "outputs": [
-    "outputs/dv_ens_full/seed_2024"
+    "outputs/cf_none/seed_2024"
    ],
-   "done": "outputs/dv_ens_full/seed_2024/test_predictions.jsonl"
+   "done": "outputs/cf_none/seed_2024/test_predictions.jsonl"
   },
-  "dv_single_full_pos:s42": {
-   "id": "dv_single_full_pos:s42",
-   "run": "dv_single_full_pos",
+  "cf_none:s7": {
+   "id": "cf_none:s7",
+   "run": "cf_none",
+   "seed": 7,
+   "aug": null,
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/cf_none --seeds 7 --train_path data/restaurant_v1/train.jsonl --test_path data/restaurant_v1/test.jsonl --lr 1e-4 --keep_ckpt",
+   "examples": 2135,
+   "est_min": 39.0,
+   "after": [],
+   "outputs": [
+    "outputs/cf_none/seed_7"
+   ],
+   "done": "outputs/cf_none/seed_7/test_predictions.jsonl"
+  },
+  "cf_none:s99": {
+   "id": "cf_none:s99",
+   "run": "cf_none",
+   "seed": 99,
+   "aug": null,
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/cf_none --seeds 99 --train_path data/restaurant_v1/train.jsonl --test_path data/restaurant_v1/test.jsonl --lr 1e-4 --keep_ckpt",
+   "examples": 2135,
+   "est_min": 39.0,
+   "after": [],
+   "outputs": [
+    "outputs/cf_none/seed_99"
+   ],
+   "done": "outputs/cf_none/seed_99/test_predictions.jsonl"
+  },
+  "cf_none:s11": {
+   "id": "cf_none:s11",
+   "run": "cf_none",
+   "seed": 11,
+   "aug": null,
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/cf_none --seeds 11 --train_path data/restaurant_v1/train.jsonl --test_path data/restaurant_v1/test.jsonl --lr 1e-4",
+   "examples": 2135,
+   "est_min": 39.0,
+   "after": [],
+   "outputs": [
+    "outputs/cf_none/seed_11"
+   ],
+   "done": "outputs/cf_none/seed_11/test_predictions.jsonl"
+  },
+  "cf_none:s13": {
+   "id": "cf_none:s13",
+   "run": "cf_none",
+   "seed": 13,
+   "aug": null,
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/cf_none --seeds 13 --train_path data/restaurant_v1/train.jsonl --test_path data/restaurant_v1/test.jsonl --lr 1e-4",
+   "examples": 2135,
+   "est_min": 39.0,
+   "after": [],
+   "outputs": [
+    "outputs/cf_none/seed_13"
+   ],
+   "done": "outputs/cf_none/seed_13/test_predictions.jsonl"
+  },
+  "cf_none:s17": {
+   "id": "cf_none:s17",
+   "run": "cf_none",
+   "seed": 17,
+   "aug": null,
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/cf_none --seeds 17 --train_path data/restaurant_v1/train.jsonl --test_path data/restaurant_v1/test.jsonl --lr 1e-4",
+   "examples": 2135,
+   "est_min": 39.0,
+   "after": [],
+   "outputs": [
+    "outputs/cf_none/seed_17"
+   ],
+   "done": "outputs/cf_none/seed_17/test_predictions.jsonl"
+  },
+  "cf_label_s42": {
+   "id": "cf_label_s42",
+   "command": "python -u src/aug/mvd.py label --ckpt outputs/cf_none/seed_42/checkpoint --in data/aug/st_pool_train.jsonl --out data/aug/ens_train/s42.jsonl",
+   "est_min": 30,
+   "outputs": [
+    "data/aug/ens_train/s42.jsonl"
+   ],
+   "done": "data/aug/ens_train/s42.jsonl",
+   "examples": null,
+   "after": [
+    "cf_none:s42"
+   ]
+  },
+  "cf_label_s123": {
+   "id": "cf_label_s123",
+   "command": "python -u src/aug/mvd.py label --ckpt outputs/cf_none/seed_123/checkpoint --in data/aug/st_pool_train.jsonl --out data/aug/ens_train/s123.jsonl",
+   "est_min": 30,
+   "outputs": [
+    "data/aug/ens_train/s123.jsonl"
+   ],
+   "done": "data/aug/ens_train/s123.jsonl",
+   "examples": null,
+   "after": [
+    "cf_none:s123"
+   ]
+  },
+  "cf_label_s2024": {
+   "id": "cf_label_s2024",
+   "command": "python -u src/aug/mvd.py label --ckpt outputs/cf_none/seed_2024/checkpoint --in data/aug/st_pool_train.jsonl --out data/aug/ens_train/s2024.jsonl",
+   "est_min": 30,
+   "outputs": [
+    "data/aug/ens_train/s2024.jsonl"
+   ],
+   "done": "data/aug/ens_train/s2024.jsonl",
+   "examples": null,
+   "after": [
+    "cf_none:s2024"
+   ]
+  },
+  "cf_label_s7": {
+   "id": "cf_label_s7",
+   "command": "python -u src/aug/mvd.py label --ckpt outputs/cf_none/seed_7/checkpoint --in data/aug/st_pool_train.jsonl --out data/aug/ens_train/s7.jsonl",
+   "est_min": 30,
+   "outputs": [
+    "data/aug/ens_train/s7.jsonl"
+   ],
+   "done": "data/aug/ens_train/s7.jsonl",
+   "examples": null,
+   "after": [
+    "cf_none:s7"
+   ]
+  },
+  "cf_label_s99": {
+   "id": "cf_label_s99",
+   "command": "python -u src/aug/mvd.py label --ckpt outputs/cf_none/seed_99/checkpoint --in data/aug/st_pool_train.jsonl --out data/aug/ens_train/s99.jsonl",
+   "est_min": 30,
+   "outputs": [
+    "data/aug/ens_train/s99.jsonl"
+   ],
+   "done": "data/aug/ens_train/s99.jsonl",
+   "examples": null,
+   "after": [
+    "cf_none:s99"
+   ]
+  },
+  "cf_select": {
+   "id": "cf_select",
+   "command": "python src/aug/mvd.py select --in data/aug/ens_train/s42.jsonl,data/aug/ens_train/s123.jsonl,data/aug/ens_train/s2024.jsonl,data/aug/ens_train/s7.jsonl,data/aug/ens_train/s99.jsonl --n 20000 --out data/aug/cf_ens_full.jsonl && rm -rf outputs/cf_none/seed_42/checkpoint outputs/cf_none/seed_123/checkpoint outputs/cf_none/seed_2024/checkpoint outputs/cf_none/seed_7/checkpoint outputs/cf_none/seed_99/checkpoint",
+   "est_min": 2,
+   "outputs": [
+    "data/aug/cf_ens_full.jsonl",
+    "data/aug/cf_ens_full.report.json"
+   ],
+   "done": "data/aug/cf_ens_full.jsonl",
+   "examples": null,
+   "after": [
+    "cf_label_s42",
+    "cf_label_s123",
+    "cf_label_s2024",
+    "cf_label_s7",
+    "cf_label_s99"
+   ]
+  },
+  "cf_ens_full_pos:s42": {
+   "id": "cf_ens_full_pos:s42",
+   "run": "cf_ens_full_pos",
    "seed": 42,
-   "aug": "data/aug/dv_single_full.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_single_full_pos --seeds 42 --aug_path data/aug/dv_single_full.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 1e-4 --tuple_order text",
+   "aug": "data/aug/cf_ens_full.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/cf_ens_full_pos --seeds 42 --aug_path data/aug/cf_ens_full.jsonl --train_path data/restaurant_v1/train.jsonl --test_path data/restaurant_v1/test.jsonl --lr 1e-4 --tuple_order text",
    "examples": null,
-   "est_min": 180,
-   "after": [],
-   "outputs": [
-    "outputs/dv_single_full_pos/seed_42"
+   "est_min": 210,
+   "after": [
+    "cf_select"
    ],
-   "done": "outputs/dv_single_full_pos/seed_42/test_predictions.jsonl"
+   "outputs": [
+    "outputs/cf_ens_full_pos/seed_42"
+   ],
+   "done": "outputs/cf_ens_full_pos/seed_42/test_predictions.jsonl"
   },
-  "dv_single_full_pos:s123": {
-   "id": "dv_single_full_pos:s123",
-   "run": "dv_single_full_pos",
+  "cf_ens_full_pos:s123": {
+   "id": "cf_ens_full_pos:s123",
+   "run": "cf_ens_full_pos",
    "seed": 123,
-   "aug": "data/aug/dv_single_full.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_single_full_pos --seeds 123 --aug_path data/aug/dv_single_full.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 1e-4 --tuple_order text",
+   "aug": "data/aug/cf_ens_full.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/cf_ens_full_pos --seeds 123 --aug_path data/aug/cf_ens_full.jsonl --train_path data/restaurant_v1/train.jsonl --test_path data/restaurant_v1/test.jsonl --lr 1e-4 --tuple_order text",
    "examples": null,
-   "est_min": 180,
-   "after": [],
-   "outputs": [
-    "outputs/dv_single_full_pos/seed_123"
+   "est_min": 210,
+   "after": [
+    "cf_select"
    ],
-   "done": "outputs/dv_single_full_pos/seed_123/test_predictions.jsonl"
-  },
-  "dv_single_full_pos:s2024": {
-   "id": "dv_single_full_pos:s2024",
-   "run": "dv_single_full_pos",
-   "seed": 2024,
-   "aug": "data/aug/dv_single_full.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_single_full_pos --seeds 2024 --aug_path data/aug/dv_single_full.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 1e-4 --tuple_order text",
-   "examples": null,
-   "est_min": 180,
-   "after": [],
    "outputs": [
-    "outputs/dv_single_full_pos/seed_2024"
+    "outputs/cf_ens_full_pos/seed_123"
    ],
-   "done": "outputs/dv_single_full_pos/seed_2024/test_predictions.jsonl"
+   "done": "outputs/cf_ens_full_pos/seed_123/test_predictions.jsonl"
   },
-  "dv_ens_4k_pos:s42": {
-   "id": "dv_ens_4k_pos:s42",
-   "run": "dv_ens_4k_pos",
+  "cf_ada_joint:s42": {
+   "id": "cf_ada_joint:s42",
+   "run": "cf_ada_joint",
    "seed": 42,
-   "aug": "data/aug/dv_ens_2x.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_ens_4k_pos --seeds 42 --aug_path data/aug/dv_ens_2x.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 1e-4 --tuple_order text",
-   "examples": null,
-   "est_min": 90,
+   "aug": "data/aug/ada_joint.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/cf_ada_joint --seeds 42 --aug_path data/aug/ada_joint.jsonl --train_path data/restaurant_v1/train.jsonl --test_path data/restaurant_v1/test.jsonl --lr 1e-4 --batch_size 8 --grad_accum 2",
+   "examples": 5767,
+   "est_min": 105.3,
    "after": [],
    "outputs": [
-    "outputs/dv_ens_4k_pos/seed_42"
+    "outputs/cf_ada_joint/seed_42"
    ],
-   "done": "outputs/dv_ens_4k_pos/seed_42/test_predictions.jsonl"
+   "done": "outputs/cf_ada_joint/seed_42/test_predictions.jsonl"
   },
-  "dv_ens_4k_pos:s123": {
-   "id": "dv_ens_4k_pos:s123",
-   "run": "dv_ens_4k_pos",
+  "cf_ada_joint:s123": {
+   "id": "cf_ada_joint:s123",
+   "run": "cf_ada_joint",
    "seed": 123,
-   "aug": "data/aug/dv_ens_2x.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_ens_4k_pos --seeds 123 --aug_path data/aug/dv_ens_2x.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 1e-4 --tuple_order text",
-   "examples": null,
-   "est_min": 90,
+   "aug": "data/aug/ada_joint.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/cf_ada_joint --seeds 123 --aug_path data/aug/ada_joint.jsonl --train_path data/restaurant_v1/train.jsonl --test_path data/restaurant_v1/test.jsonl --lr 1e-4 --batch_size 8 --grad_accum 2",
+   "examples": 5767,
+   "est_min": 105.3,
    "after": [],
    "outputs": [
-    "outputs/dv_ens_4k_pos/seed_123"
+    "outputs/cf_ada_joint/seed_123"
    ],
-   "done": "outputs/dv_ens_4k_pos/seed_123/test_predictions.jsonl"
+   "done": "outputs/cf_ada_joint/seed_123/test_predictions.jsonl"
   },
-  "dv_ens_4k_pos:s2024": {
-   "id": "dv_ens_4k_pos:s2024",
-   "run": "dv_ens_4k_pos",
+  "cf_ada_joint:s2024": {
+   "id": "cf_ada_joint:s2024",
+   "run": "cf_ada_joint",
    "seed": 2024,
-   "aug": "data/aug/dv_ens_2x.jsonl",
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/dv_ens_4k_pos --seeds 2024 --aug_path data/aug/dv_ens_2x.jsonl --train_path data/restaurant_v1/inner_train.jsonl --test_path data/restaurant_v1/inner_dev.jsonl --lr 1e-4 --tuple_order text",
-   "examples": null,
-   "est_min": 90,
+   "aug": "data/aug/ada_joint.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/cf_ada_joint --seeds 2024 --aug_path data/aug/ada_joint.jsonl --train_path data/restaurant_v1/train.jsonl --test_path data/restaurant_v1/test.jsonl --lr 1e-4 --batch_size 8 --grad_accum 2",
+   "examples": 5767,
+   "est_min": 105.3,
    "after": [],
    "outputs": [
-    "outputs/dv_ens_4k_pos/seed_2024"
+    "outputs/cf_ada_joint/seed_2024"
    ],
-   "done": "outputs/dv_ens_4k_pos/seed_2024/test_predictions.jsonl"
+   "done": "outputs/cf_ada_joint/seed_2024/test_predictions.jsonl"
+  },
+  "cf_ada_joint:s7": {
+   "id": "cf_ada_joint:s7",
+   "run": "cf_ada_joint",
+   "seed": 7,
+   "aug": "data/aug/ada_joint.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/cf_ada_joint --seeds 7 --aug_path data/aug/ada_joint.jsonl --train_path data/restaurant_v1/train.jsonl --test_path data/restaurant_v1/test.jsonl --lr 1e-4 --batch_size 8 --grad_accum 2",
+   "examples": 5767,
+   "est_min": 105.3,
+   "after": [],
+   "outputs": [
+    "outputs/cf_ada_joint/seed_7"
+   ],
+   "done": "outputs/cf_ada_joint/seed_7/test_predictions.jsonl"
+  },
+  "cf_ada_joint:s99": {
+   "id": "cf_ada_joint:s99",
+   "run": "cf_ada_joint",
+   "seed": 99,
+   "aug": "data/aug/ada_joint.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/cf_ada_joint --seeds 99 --aug_path data/aug/ada_joint.jsonl --train_path data/restaurant_v1/train.jsonl --test_path data/restaurant_v1/test.jsonl --lr 1e-4 --batch_size 8 --grad_accum 2",
+   "examples": 5767,
+   "est_min": 105.3,
+   "after": [],
+   "outputs": [
+    "outputs/cf_ada_joint/seed_99"
+   ],
+   "done": "outputs/cf_ada_joint/seed_99/test_predictions.jsonl"
+  },
+  "cf_concat:s42": {
+   "id": "cf_concat:s42",
+   "run": "cf_concat",
+   "seed": 42,
+   "aug": "data/aug/concat.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/cf_concat --seeds 42 --aug_path data/aug/concat.jsonl --train_path data/restaurant_v1/train.jsonl --test_path data/restaurant_v1/test.jsonl --lr 1e-4 --batch_size 8 --grad_accum 2",
+   "examples": 5767,
+   "est_min": 105.3,
+   "after": [],
+   "outputs": [
+    "outputs/cf_concat/seed_42"
+   ],
+   "done": "outputs/cf_concat/seed_42/test_predictions.jsonl"
+  },
+  "cf_concat:s123": {
+   "id": "cf_concat:s123",
+   "run": "cf_concat",
+   "seed": 123,
+   "aug": "data/aug/concat.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/cf_concat --seeds 123 --aug_path data/aug/concat.jsonl --train_path data/restaurant_v1/train.jsonl --test_path data/restaurant_v1/test.jsonl --lr 1e-4 --batch_size 8 --grad_accum 2",
+   "examples": 5767,
+   "est_min": 105.3,
+   "after": [],
+   "outputs": [
+    "outputs/cf_concat/seed_123"
+   ],
+   "done": "outputs/cf_concat/seed_123/test_predictions.jsonl"
+  },
+  "cf_concat:s2024": {
+   "id": "cf_concat:s2024",
+   "run": "cf_concat",
+   "seed": 2024,
+   "aug": "data/aug/concat.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/cf_concat --seeds 2024 --aug_path data/aug/concat.jsonl --train_path data/restaurant_v1/train.jsonl --test_path data/restaurant_v1/test.jsonl --lr 1e-4 --batch_size 8 --grad_accum 2",
+   "examples": 5767,
+   "est_min": 105.3,
+   "after": [],
+   "outputs": [
+    "outputs/cf_concat/seed_2024"
+   ],
+   "done": "outputs/cf_concat/seed_2024/test_predictions.jsonl"
+  },
+  "cf_concat:s7": {
+   "id": "cf_concat:s7",
+   "run": "cf_concat",
+   "seed": 7,
+   "aug": "data/aug/concat.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/cf_concat --seeds 7 --aug_path data/aug/concat.jsonl --train_path data/restaurant_v1/train.jsonl --test_path data/restaurant_v1/test.jsonl --lr 1e-4 --batch_size 8 --grad_accum 2",
+   "examples": 5767,
+   "est_min": 105.3,
+   "after": [],
+   "outputs": [
+    "outputs/cf_concat/seed_7"
+   ],
+   "done": "outputs/cf_concat/seed_7/test_predictions.jsonl"
+  },
+  "cf_concat:s99": {
+   "id": "cf_concat:s99",
+   "run": "cf_concat",
+   "seed": 99,
+   "aug": "data/aug/concat.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/cf_concat --seeds 99 --aug_path data/aug/concat.jsonl --train_path data/restaurant_v1/train.jsonl --test_path data/restaurant_v1/test.jsonl --lr 1e-4 --batch_size 8 --grad_accum 2",
+   "examples": 5767,
+   "est_min": 105.3,
+   "after": [],
+   "outputs": [
+    "outputs/cf_concat/seed_99"
+   ],
+   "done": "outputs/cf_concat/seed_99/test_predictions.jsonl"
+  },
+  "cf_eda:s42": {
+   "id": "cf_eda:s42",
+   "run": "cf_eda",
+   "seed": 42,
+   "aug": "data/aug/eda.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/cf_eda --seeds 42 --aug_path data/aug/eda.jsonl --train_path data/restaurant_v1/train.jsonl --test_path data/restaurant_v1/test.jsonl --lr 1e-4",
+   "examples": 4270,
+   "est_min": 78.0,
+   "after": [],
+   "outputs": [
+    "outputs/cf_eda/seed_42"
+   ],
+   "done": "outputs/cf_eda/seed_42/test_predictions.jsonl"
+  },
+  "cf_eda:s123": {
+   "id": "cf_eda:s123",
+   "run": "cf_eda",
+   "seed": 123,
+   "aug": "data/aug/eda.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/cf_eda --seeds 123 --aug_path data/aug/eda.jsonl --train_path data/restaurant_v1/train.jsonl --test_path data/restaurant_v1/test.jsonl --lr 1e-4",
+   "examples": 4270,
+   "est_min": 78.0,
+   "after": [],
+   "outputs": [
+    "outputs/cf_eda/seed_123"
+   ],
+   "done": "outputs/cf_eda/seed_123/test_predictions.jsonl"
+  },
+  "cf_eda:s2024": {
+   "id": "cf_eda:s2024",
+   "run": "cf_eda",
+   "seed": 2024,
+   "aug": "data/aug/eda.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/cf_eda --seeds 2024 --aug_path data/aug/eda.jsonl --train_path data/restaurant_v1/train.jsonl --test_path data/restaurant_v1/test.jsonl --lr 1e-4",
+   "examples": 4270,
+   "est_min": 78.0,
+   "after": [],
+   "outputs": [
+    "outputs/cf_eda/seed_2024"
+   ],
+   "done": "outputs/cf_eda/seed_2024/test_predictions.jsonl"
+  },
+  "cf_eda:s7": {
+   "id": "cf_eda:s7",
+   "run": "cf_eda",
+   "seed": 7,
+   "aug": "data/aug/eda.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/cf_eda --seeds 7 --aug_path data/aug/eda.jsonl --train_path data/restaurant_v1/train.jsonl --test_path data/restaurant_v1/test.jsonl --lr 1e-4",
+   "examples": 4270,
+   "est_min": 78.0,
+   "after": [],
+   "outputs": [
+    "outputs/cf_eda/seed_7"
+   ],
+   "done": "outputs/cf_eda/seed_7/test_predictions.jsonl"
+  },
+  "cf_eda:s99": {
+   "id": "cf_eda:s99",
+   "run": "cf_eda",
+   "seed": 99,
+   "aug": "data/aug/eda.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/cf_eda --seeds 99 --aug_path data/aug/eda.jsonl --train_path data/restaurant_v1/train.jsonl --test_path data/restaurant_v1/test.jsonl --lr 1e-4",
+   "examples": 4270,
+   "est_min": 78.0,
+   "after": [],
+   "outputs": [
+    "outputs/cf_eda/seed_99"
+   ],
+   "done": "outputs/cf_eda/seed_99/test_predictions.jsonl"
+  },
+  "cf_genda:s42": {
+   "id": "cf_genda:s42",
+   "run": "cf_genda",
+   "seed": 42,
+   "aug": "data/aug/genda.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/cf_genda --seeds 42 --aug_path data/aug/genda.jsonl --train_path data/restaurant_v1/train.jsonl --test_path data/restaurant_v1/test.jsonl --lr 1e-4",
+   "examples": 4270,
+   "est_min": 78.0,
+   "after": [],
+   "outputs": [
+    "outputs/cf_genda/seed_42"
+   ],
+   "done": "outputs/cf_genda/seed_42/test_predictions.jsonl"
+  },
+  "cf_genda:s123": {
+   "id": "cf_genda:s123",
+   "run": "cf_genda",
+   "seed": 123,
+   "aug": "data/aug/genda.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/cf_genda --seeds 123 --aug_path data/aug/genda.jsonl --train_path data/restaurant_v1/train.jsonl --test_path data/restaurant_v1/test.jsonl --lr 1e-4",
+   "examples": 4270,
+   "est_min": 78.0,
+   "after": [],
+   "outputs": [
+    "outputs/cf_genda/seed_123"
+   ],
+   "done": "outputs/cf_genda/seed_123/test_predictions.jsonl"
+  },
+  "cf_genda:s2024": {
+   "id": "cf_genda:s2024",
+   "run": "cf_genda",
+   "seed": 2024,
+   "aug": "data/aug/genda.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/cf_genda --seeds 2024 --aug_path data/aug/genda.jsonl --train_path data/restaurant_v1/train.jsonl --test_path data/restaurant_v1/test.jsonl --lr 1e-4",
+   "examples": 4270,
+   "est_min": 78.0,
+   "after": [],
+   "outputs": [
+    "outputs/cf_genda/seed_2024"
+   ],
+   "done": "outputs/cf_genda/seed_2024/test_predictions.jsonl"
+  },
+  "cf_genda:s7": {
+   "id": "cf_genda:s7",
+   "run": "cf_genda",
+   "seed": 7,
+   "aug": "data/aug/genda.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/cf_genda --seeds 7 --aug_path data/aug/genda.jsonl --train_path data/restaurant_v1/train.jsonl --test_path data/restaurant_v1/test.jsonl --lr 1e-4",
+   "examples": 4270,
+   "est_min": 78.0,
+   "after": [],
+   "outputs": [
+    "outputs/cf_genda/seed_7"
+   ],
+   "done": "outputs/cf_genda/seed_7/test_predictions.jsonl"
+  },
+  "cf_genda:s99": {
+   "id": "cf_genda:s99",
+   "run": "cf_genda",
+   "seed": 99,
+   "aug": "data/aug/genda.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/cf_genda --seeds 99 --aug_path data/aug/genda.jsonl --train_path data/restaurant_v1/train.jsonl --test_path data/restaurant_v1/test.jsonl --lr 1e-4",
+   "examples": 4270,
+   "est_min": 78.0,
+   "after": [],
+   "outputs": [
+    "outputs/cf_genda/seed_99"
+   ],
+   "done": "outputs/cf_genda/seed_99/test_predictions.jsonl"
+  },
+  "cf_rc:s42": {
+   "id": "cf_rc:s42",
+   "run": "cf_rc",
+   "seed": 42,
+   "aug": null,
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/cf_rc --seeds 42 --train_path data/aug/rc_train.jsonl --test_path data/restaurant_v1/test.jsonl --lr 1e-4",
+   "examples": 1440,
+   "est_min": 26.3,
+   "after": [],
+   "outputs": [
+    "outputs/cf_rc/seed_42"
+   ],
+   "done": "outputs/cf_rc/seed_42/test_predictions.jsonl"
+  },
+  "cf_rc:s123": {
+   "id": "cf_rc:s123",
+   "run": "cf_rc",
+   "seed": 123,
+   "aug": null,
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/cf_rc --seeds 123 --train_path data/aug/rc_train.jsonl --test_path data/restaurant_v1/test.jsonl --lr 1e-4",
+   "examples": 1440,
+   "est_min": 26.3,
+   "after": [],
+   "outputs": [
+    "outputs/cf_rc/seed_123"
+   ],
+   "done": "outputs/cf_rc/seed_123/test_predictions.jsonl"
+  },
+  "cf_rc:s2024": {
+   "id": "cf_rc:s2024",
+   "run": "cf_rc",
+   "seed": 2024,
+   "aug": null,
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/cf_rc --seeds 2024 --train_path data/aug/rc_train.jsonl --test_path data/restaurant_v1/test.jsonl --lr 1e-4",
+   "examples": 1440,
+   "est_min": 26.3,
+   "after": [],
+   "outputs": [
+    "outputs/cf_rc/seed_2024"
+   ],
+   "done": "outputs/cf_rc/seed_2024/test_predictions.jsonl"
+  },
+  "cf_rc:s7": {
+   "id": "cf_rc:s7",
+   "run": "cf_rc",
+   "seed": 7,
+   "aug": null,
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/cf_rc --seeds 7 --train_path data/aug/rc_train.jsonl --test_path data/restaurant_v1/test.jsonl --lr 1e-4",
+   "examples": 1440,
+   "est_min": 26.3,
+   "after": [],
+   "outputs": [
+    "outputs/cf_rc/seed_7"
+   ],
+   "done": "outputs/cf_rc/seed_7/test_predictions.jsonl"
+  },
+  "order_scores_train": {
+   "id": "order_scores_train",
+   "command": "python -u src/aug/order_scores.py --train_path data/restaurant_v1/train.jsonl --out data/aug/order_scores_train.json",
+   "est_min": 10,
+   "outputs": [
+    "data/aug/order_scores_train.json"
+   ],
+   "done": "data/aug/order_scores_train.json",
+   "examples": null,
+   "after": []
+  },
+  "cf_mvp:s42": {
+   "id": "cf_mvp:s42",
+   "run": "cf_mvp",
+   "seed": 42,
+   "aug": null,
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/cf_mvp --seeds 42 --train_path data/restaurant_v1/train.jsonl --test_path data/restaurant_v1/test.jsonl --lr 1e-4 --order_mode mvp --order_scores data/aug/order_scores_train.json --top_k 5",
+   "examples": null,
+   "est_min": 185,
+   "after": [
+    "order_scores_train"
+   ],
+   "outputs": [
+    "outputs/cf_mvp/seed_42"
+   ],
+   "done": "outputs/cf_mvp/seed_42/test_predictions.jsonl"
+  },
+  "cf_mvp:s123": {
+   "id": "cf_mvp:s123",
+   "run": "cf_mvp",
+   "seed": 123,
+   "aug": null,
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/cf_mvp --seeds 123 --train_path data/restaurant_v1/train.jsonl --test_path data/restaurant_v1/test.jsonl --lr 1e-4 --order_mode mvp --order_scores data/aug/order_scores_train.json --top_k 5",
+   "examples": null,
+   "est_min": 185,
+   "after": [
+    "order_scores_train"
+   ],
+   "outputs": [
+    "outputs/cf_mvp/seed_123"
+   ],
+   "done": "outputs/cf_mvp/seed_123/test_predictions.jsonl"
+  },
+  "cf_mvp:s2024": {
+   "id": "cf_mvp:s2024",
+   "run": "cf_mvp",
+   "seed": 2024,
+   "aug": null,
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/cf_mvp --seeds 2024 --train_path data/restaurant_v1/train.jsonl --test_path data/restaurant_v1/test.jsonl --lr 1e-4 --order_mode mvp --order_scores data/aug/order_scores_train.json --top_k 5",
+   "examples": null,
+   "est_min": 185,
+   "after": [
+    "order_scores_train"
+   ],
+   "outputs": [
+    "outputs/cf_mvp/seed_2024"
+   ],
+   "done": "outputs/cf_mvp/seed_2024/test_predictions.jsonl"
+  },
+  "cf_mvp:s7": {
+   "id": "cf_mvp:s7",
+   "run": "cf_mvp",
+   "seed": 7,
+   "aug": null,
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/cf_mvp --seeds 7 --train_path data/restaurant_v1/train.jsonl --test_path data/restaurant_v1/test.jsonl --lr 1e-4 --order_mode mvp --order_scores data/aug/order_scores_train.json --top_k 5",
+   "examples": null,
+   "est_min": 185,
+   "after": [
+    "order_scores_train"
+   ],
+   "outputs": [
+    "outputs/cf_mvp/seed_7"
+   ],
+   "done": "outputs/cf_mvp/seed_7/test_predictions.jsonl"
+  },
+  "cf_mvp:s99": {
+   "id": "cf_mvp:s99",
+   "run": "cf_mvp",
+   "seed": 99,
+   "aug": null,
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/cf_mvp --seeds 99 --train_path data/restaurant_v1/train.jsonl --test_path data/restaurant_v1/test.jsonl --lr 1e-4 --order_mode mvp --order_scores data/aug/order_scores_train.json --top_k 5",
+   "examples": null,
+   "est_min": 185,
+   "after": [
+    "order_scores_train"
+   ],
+   "outputs": [
+    "outputs/cf_mvp/seed_99"
+   ],
+   "done": "outputs/cf_mvp/seed_99/test_predictions.jsonl"
   }
- }
+ },
+ "note": "session 1 = teacher chain (run first); session 4 re-planned after session 1 is ingested: its jobs (cf_none:s19, cf_none:s23, cf_pos:s11, cf_pos:s123, cf_pos:s13, cf_pos:s17, cf_pos:s19, cf_pos:s2024, cf_pos:s23, cf_pos:s42, cf_pos:s7, cf_pos:s99, cf_rc:s99) + held cf_ens_full_pos s2024/s7/s99 + soup"
 }
