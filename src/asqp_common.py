@@ -28,6 +28,33 @@ CATEGORY_VI = {
 POLARITY_VI = {"positive": "tích cực", "negative": "tiêu cực", "neutral": "trung lập"}
 VI_CATEGORY = {v: k for k, v in CATEGORY_VI.items()}
 VI_POLARITY = {v: k for k, v in POLARITY_VI.items()}
+# Label words used in targets (Paraphrase verbalisation). Default: Vietnamese, as above. set_label_words("en", cats)
+# switches to English ACOS words; the dicts are changed in place so every importer sees the same words.
+CAT_WORDS, WORD_CAT = dict(CATEGORY_VI), dict(VI_CATEGORY)
+POL_WORDS, WORD_POL = dict(POLARITY_VI), dict(VI_POLARITY)
+
+
+def english_category(c):
+    """ACOS category -> words: LAPTOP#OPERATION_PERFORMANCE -> "laptop operation performance"."""
+    return re.sub(r"[#_]+", " ", c).lower().strip()
+
+
+def set_label_words(lang, categories=()):
+    """vi: the Vietnamese words above (default). en: English ACOS words for the given categories (category in lower
+    case with # and _ as spaces; polarity = positive / negative / neutral)."""
+    if lang == "vi":
+        words, pol = dict(CATEGORY_VI), dict(POLARITY_VI)
+    elif lang == "en":
+        words = {c: english_category(c) for c in sorted(set(categories))}
+        if len(set(words.values())) != len(words):
+            raise SystemExit("two ACOS categories map to the same words")
+        pol = {"positive": "positive", "negative": "negative", "neutral": "neutral"}
+    else:
+        raise SystemExit(f"unknown label language {lang}")
+    for d, new in ((CAT_WORDS, words), (POL_WORDS, pol)):
+        d.clear(); d.update(new)
+    WORD_CAT.clear(); WORD_CAT.update({v: k for k, v in words.items()})
+    WORD_POL.clear(); WORD_POL.update({v: k for k, v in pol.items()})
 SEP = " [SSEP] "
 QUAD_RE = re.compile(r"\[A\](.*?)\[O\](.*?)\[C\](.*?)\[S\](.*)$")
 ORDER = "AOCS"  # element order of the default target; other orders are the views of --views (multi-view)
@@ -83,7 +110,7 @@ def quads_to_target(quads, order=ORDER):
     order permutes the four marked elements (default AOCS = the template above)."""
     parts = []
     for q in quads:
-        v = {"A": q["aspect"], "O": q["opinion"], "C": CATEGORY_VI[q["category"]], "S": POLARITY_VI[q["polarity"]]}
+        v = {"A": q["aspect"], "O": q["opinion"], "C": CAT_WORDS[q["category"]], "S": POL_WORDS[q["polarity"]]}
         parts.append(" ".join(f"[{e}] {v[e]}" for e in order))
     return SEP.join(parts)
 
@@ -117,10 +144,10 @@ def target_to_quads(text, order=ORDER):
                 continue
             g = dict(zip(order, (clean_span(x) for x in m.groups())))
         a, o, c, s = g["A"], g["O"], g["C"], g["S"]
-        if c not in VI_CATEGORY or s not in VI_POLARITY or not a or not o:
+        if c not in WORD_CAT or s not in WORD_POL or not a or not o:
             invalid += 1
             continue
-        quads.add((VI_CATEGORY[c], a, o, VI_POLARITY[s]))
+        quads.add((WORD_CAT[c], a, o, WORD_POL[s]))
     return quads, invalid
 
 

@@ -1,0 +1,69 @@
+{
+ "rest/train": {
+  "sentences": 1530,
+  "quads": 2484,
+  "quads_per_sentence": 1.62,
+  "categories": 12,
+  "EA-EO": 1661,
+  "duplicate quads (kept)": 2,
+  "IA-IO": 233,
+  "IA-EO": 374,
+  "EA-IO": 216,
+  "empty span -> null": 1
+ },
+ "rest/dev": {
+  "sentences": 171,
+  "quads": 261,
+  "quads_per_sentence": 1.53,
+  "categories": 13,
+  "IA-IO": 26,
+  "duplicate quads (kept)": 1,
+  "EA-EO": 173,
+  "IA-EO": 34,
+  "EA-IO": 28
+ },
+ "rest/test": {
+  "sentences": 583,
+  "quads": 916,
+  "quads_per_sentence": 1.57,
+  "categories": 12,
+  "IA-EO": 122,
+  "duplicate quads (kept)": 0,
+  "EA-EO": 596,
+  "EA-IO": 107,
+  "IA-IO": 91
+ },
+ "laptop/train": {
+  "sentences": 2934,
+  "quads": 4172,
+  "quads_per_sentence": 1.42,
+  "categories": 114,
+  "EA-IO": 895,
+  "duplicate quads (kept)": 9,
+  "IA-IO": 253,
+  "IA-EO": 678,
+  "EA-EO": 2346
+ },
+ "laptop/dev": {
+  "sentences": 326,
+  "quads": 440,
+  "quads_per_sentence": 1.35,
+  "categories": 71,
+  "EA-EO": 259,
+  "duplicate quads (kept)": 1,
+  "EA-IO": 93,
+  "IA-IO": 23,
+  "IA-EO": 65
+ },
+ "laptop/test": {
+  "sentences": 816,
+  "quads": 1161,
+  "quads_per_sentence": 1.42,
+  "categories": 81,
+  "EA-EO": 673,
+  "duplicate quads (kept)": 5,
+  "EA-IO": 253,
+  "IA-EO": 169,
+  "IA-IO": 66
+ }
+}

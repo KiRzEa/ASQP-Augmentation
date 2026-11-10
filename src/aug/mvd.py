@@ -28,7 +28,7 @@ import time
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from asqp_common import implicit_type, load_jsonl  # noqa: E402
+from asqp_common import implicit_type, load_jsonl, set_label_words  # noqa: E402
 from aug.st_scorer import as_quads, found, halving_on_oom, load, write_jsonl  # noqa: E402
 
 
@@ -49,6 +49,7 @@ def cmd_label(a):
         i, n = (int(v) for v in a.shard.split("/"))
         rows = rows[i::n]
     cfg = json.load(open(a.run_config or Path(a.ckpt).parent / "run_config.json"))
+    set_label_words(cfg["args"].get("lang", "vi"), cfg["args"].get("label_categories") or ())  # teacher's label words
     args = argparse.Namespace(view_orders=cfg["view_orders"], target_orders=None, vote_min=0, num_beams=1,
                               eval_batch_size=a.batch_size, max_source_len=cfg["args"]["max_source_len"],
                               gen_max_len=cfg["args"]["gen_max_len"])

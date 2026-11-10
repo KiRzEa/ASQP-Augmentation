@@ -1,0 +1,2 @@
+Source: https://github.com/NUSTM/ACOS (commit 45d179a3dcc6a3dedd848d81b16f2552454805fe, 2022-10-20), data/ folder unchanged.
+Cai, Xia, Yu. Aspect-Category-Opinion-Sentiment Quadruple Extraction with Implicit Aspects and Opinions. ACL 2021.

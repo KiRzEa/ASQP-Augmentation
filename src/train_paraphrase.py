@@ -62,8 +62,8 @@ from torch.utils.data import DataLoader
 from transformers import AutoModelForSeq2SeqLM, AutoTokenizer, get_linear_schedule_with_warmup
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from asqp_common import (ORDER, VIEWS, load_jsonl, quad_tuple, quads_to_target, score, target_to_quads, text_order,  # noqa: E402
-                         view_prefix)
+from asqp_common import (ORDER, VIEWS, load_jsonl, quad_tuple, quads_to_target, score, set_label_words,  # noqa: E402
+                         target_to_quads, text_order, view_prefix)
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -90,6 +90,9 @@ def parse_args():
     ap.add_argument("--output_dir", required=True)
     ap.add_argument("--seeds", default="42,123,2024,7,99")
     ap.add_argument("--model_name", default="VietAI/vit5-base")
+    ap.add_argument("--lang", choices=["vi", "en"], default="vi",
+                    help="label words in targets: vi (default, Vi-AbSQA) or en (ACOS: categories of train/dev/test "
+                         "in lower case, positive/negative/neutral); use an English backbone with en, e.g. t5-base")
     # Paraphrase defaults (Zhang et al., 2021): AdamW, lr 3e-4, batch 16, 20 epochs, linear schedule
     ap.add_argument("--epochs", type=int, default=20)
     ap.add_argument("--max_steps", type=int, default=0, help="if > 0, train exactly this many optimiser steps (step-matched control)")
@@ -410,6 +413,10 @@ def main():
     device = torch.device("cpu" if args.cpu or not torch.cuda.is_available() else "cuda")
     data = {k: load_jsonl(getattr(args, f"{k}_path")) for k in ("train", "dev", "test")}
     aug = [x for p in args.aug_path for x in load_jsonl(p)]
+    # label inventory = the categories of the dataset's annotation (all three splits), not only those seen in train
+    args.label_categories = sorted({q["category"] for v in data.values() for x in v for q in x["quads"]}) \
+        if args.lang == "en" else None
+    set_label_words(args.lang, args.label_categories or ())
     if args.limit:
         data = {k: v[:args.limit] for k, v in data.items()}
         aug = aug[:args.limit]

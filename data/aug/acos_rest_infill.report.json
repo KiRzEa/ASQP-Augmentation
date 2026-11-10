@@ -1,0 +1,60 @@
+{
+ "n": 14300,
+ "args": {
+  "out": "data/aug/acos_rest_infill.jsonl",
+  "n": 14300,
+  "mode": "infill",
+  "lang": "en",
+  "domain": "restaurant",
+  "mask_ratio": 0.4,
+  "max_jaccard_train": 0.0,
+  "shots": 6,
+  "per_call": 10,
+  "llm_model": "gpt-4.1-mini-2025-04-14",
+  "llm_temperature": 1.0,
+  "llm_workers": 8,
+  "min_words": 4,
+  "max_words": 110,
+  "max_jaccard": 0.5,
+  "seed": 13,
+  "max_calls": 0,
+  "train_path": "data/acos/rest/train.jsonl",
+  "dev_path": "data/acos/rest/dev.jsonl",
+  "test_path": "data/acos/rest/test.jsonl"
+ },
+ "stats": {
+  "calls": 1699,
+  "prompt_tokens": 473520,
+  "completion_tokens": 260571,
+  "lines": 16920,
+  "drop_near_train": 201,
+  "drop_length": 832,
+  "api_calls": 1695,
+  "drop_infill_changed_visible": 1135,
+  "drop_exact_duplicate": 447,
+  "drop_call_line_mismatch": 7,
+  "drop_near_dev_test": 2
+ },
+ "texts": {
+  "n": 14300,
+  "words_mean": 14.0106993006993,
+  "words_median": 13.0,
+  "words_p10": 6,
+  "words_p90": 22,
+  "emoji_share": 0.0,
+  "comma_share": 0.2728671328671329,
+  "commas_per_review": 0.3471328671328671,
+  "slang_share": 0.0
+ },
+ "train_texts": {
+  "n": 1530,
+  "words_mean": 15.249673202614378,
+  "words_median": 13.0,
+  "words_p10": 5,
+  "words_p90": 28,
+  "emoji_share": 0.0,
+  "comma_share": 0.35294117647058826,
+  "commas_per_review": 0.5313725490196078,
+  "slang_share": 0.0
+ }
+}

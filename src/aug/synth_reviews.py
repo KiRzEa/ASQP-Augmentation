@@ -19,6 +19,10 @@ Filters: lines that are too short/long, exact duplicates (also of train), near-d
 >= --max_jaccard) of a train/dev/test review; dev/test are used only for this contamination check, and the
 report counts every drop. Calls are cached in <out>.llm_cache.jsonl (resumable).
 Writes <out> and <out>.report.json (sizes, drops, tokens, length/emoji statistics vs train).
+--lang en (English ACOS data, infill only): the same procedure with an English prompt; the outputs are re-tokenised
+the ACOS way (lower case, every non-alphanumeric character a separate token, e.g. "it ' s") before every check, and
+profiles are drawn only from reviews with at least one explicit span (a review without one has nothing to hide, so
+its output could only be dropped as a copy). --lang vi (default) is unchanged.
 """
 import argparse
 import collections
@@ -55,7 +59,19 @@ INFILL = """Dưới đây là các review quán ăn thật, mỗi review bị ch
 Trả về đúng {k} dòng theo thứ tự, mỗi dòng là review đã điền đầy đủ (không còn [___]), không đánh số, không giải thích."""
 
 
-def mask(x, ratio, rng):
+INFILL_EN = """Below are real {domain} reviews; in each, some passages are hidden as [___]. For each review, fill every [___] with NEW content that differs from what the original probably said (another dish or part, another aspect, another opinion; praise may become criticism), so that the whole review is natural and keeps the voice of the visible text; each filled passage should be about as long as the word count in brackets. Keep EVERY visible part EXACTLY as written, all lower case.
+{specs}
+Return exactly {k} lines in order, each line one fully filled review (no [___] left), no numbering, no explanations."""
+
+ACOS_TOKEN = re.compile(r"[^\W_]+|\S")
+
+
+def acos_tokenise(t):
+    """ACOS style: lower case, runs of letters/digits, every other non-space character a token of its own."""
+    return " ".join(ACOS_TOKEN.findall(t.lower()))
+
+
+def mask(x, ratio, rng, unit="từ"):
     """Hide whole opinion units of a training review until ~ratio of its words are hidden.
     Returns (template with [___ (n từ)] blanks, visible chunks that must appear verbatim in the filled review)."""
     text = x["text"]
@@ -84,7 +100,7 @@ def mask(x, ratio, rng):
     for a, b in hidden:
         if text[pos:a].strip():
             out.append(text[pos:a].strip()); chunks.append(text[pos:a].strip())
-        out.append(f"[___ ({max(1, len(text[a:b].split()))} từ)]")
+        out.append(f"[___ ({max(1, len(text[a:b].split()))} {unit})]")
         pos = b
     if text[pos:].strip():
         out.append(text[pos:].strip()); chunks.append(text[pos:].strip())
@@ -171,6 +187,8 @@ def main():
     ap.add_argument("--out", required=True)
     ap.add_argument("--n", type=int, default=20000, help="reviews to keep")
     ap.add_argument("--mode", choices=["free", "plan", "restyle", "infill"], default="infill")
+    ap.add_argument("--lang", choices=["vi", "en"], default="vi", help="en: English ACOS data (infill only)")
+    ap.add_argument("--domain", default="restaurant", help="en: review domain named in the prompt")
     ap.add_argument("--mask_ratio", type=float, default=0.4, help="infill: share of the words hidden")
     ap.add_argument("--max_jaccard_train", type=float, default=0.0,
                     help="near-duplicate threshold against train; 0 = --max_jaccard (infill default 0.8: it keeps "
@@ -189,6 +207,11 @@ def main():
     ap.add_argument("--dev_path", default=str(ROOT / "data/restaurant_v1/dev.jsonl"))
     ap.add_argument("--test_path", default=str(ROOT / "data/restaurant_v1/test.jsonl"))
     a = ap.parse_args()
+    if a.lang == "en" and a.mode != "infill":
+        raise SystemExit("--lang en supports --mode infill only")
+    global norm
+    if a.lang == "en":
+        norm = acos_tokenise
     load_env(ROOT / ".env")
     train_items = load_jsonl(a.train_path)
     train = [x["text"] for x in train_items]
@@ -198,6 +221,8 @@ def main():
             acount[q["category"]][q["aspect"]] += 1
     aspects = {c: (list(cn), list(cn.values())) for c, cn in acount.items()}
     heldout = [x["text"] for p in (a.dev_path, a.test_path) for x in load_jsonl(p)]
+    profile_items = train_items if a.lang == "vi" else [
+        x for x in train_items if any(q.get(f + "_offsets") for q in x["quads"] for f in ("aspect", "opinion"))]
     nd_train, nd_held = NearDup([norm(t) for t in train]), NearDup([norm(t) for t in heldout])
     seen = {norm(t) for t in train}
     jac_train = a.max_jaccard_train or (0.8 if a.mode == "infill" else a.max_jaccard)
@@ -210,11 +235,13 @@ def main():
 
     def prompt(i):
         rng = random.Random(a.seed * 1_000_003 + i)
-        profiles = rng.sample(train_items, a.per_call)
+        profiles = rng.sample(profile_items, a.per_call)
         if a.mode == "infill":
-            ms = [mask(x, a.mask_ratio, rng) for x in profiles]
-            return INFILL.format(k=a.per_call, specs="\n".join(f"{j + 1}. {m[0]}" for j, m in enumerate(ms))), \
-                [m[1] for m in ms]
+            ms = [mask(x, a.mask_ratio, rng, "từ" if a.lang == "vi" else "words") for x in profiles]
+            specs = "\n".join(f"{j + 1}. {m[0]}" for j, m in enumerate(ms))
+            tpl = INFILL.format(k=a.per_call, specs=specs) if a.lang == "vi" else \
+                INFILL_EN.format(k=a.per_call, specs=specs, domain=a.domain)
+            return tpl, [m[1] for m in ms]
         if a.mode == "restyle":
             return RESTYLE.format(k=a.per_call, specs="\n".join(
                 f"{j + 1}. câu mẫu: {x['text']}\n   dàn ý: {plan(x, aspects, rng)}" for j, x in enumerate(profiles))), None
@@ -258,7 +285,7 @@ def main():
                 for li, line in enumerate(lines):
                     t = re.sub(r"^\s*(?:[-*•]|\d+[.)])\s*", "", line)
                     t = re.sub(r"[\"“”]", "", t)
-                    t = norm(t).rstrip(".").strip()
+                    t = norm(t).rstrip(".").strip() if a.lang == "vi" else norm(t)
                     if not t:
                         continue
                     st["lines"] += 1
@@ -269,7 +296,8 @@ def main():
                     elif nd_held.max_jaccard(t) >= a.max_jaccard:
                         st["drop_near_dev_test"] += 1
                     elif visible is not None and (
-                            "[___" in t or not all(norm(c).rstrip(".") in t for c in visible[li])):
+                            "[ _ _ _" in t or "[___" in t or
+                            not all((norm(c).rstrip(".") if a.lang == "vi" else norm(c)) in t for c in visible[li])):
                         st["drop_infill_changed_visible"] += 1
                     elif nd_train.max_jaccard(t) >= jac_train:
                         st["drop_near_train"] += 1

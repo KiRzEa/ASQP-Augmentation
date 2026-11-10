@@ -1,0 +1,60 @@
+{
+ "n": 27500,
+ "args": {
+  "out": "data/aug/acos_laptop_infill.jsonl",
+  "n": 27500,
+  "mode": "infill",
+  "lang": "en",
+  "domain": "laptop",
+  "mask_ratio": 0.4,
+  "max_jaccard_train": 0.0,
+  "shots": 6,
+  "per_call": 10,
+  "llm_model": "gpt-4.1-mini-2025-04-14",
+  "llm_temperature": 1.0,
+  "llm_workers": 8,
+  "min_words": 4,
+  "max_words": 110,
+  "max_jaccard": 0.5,
+  "seed": 13,
+  "max_calls": 0,
+  "train_path": "data/acos/laptop/train.jsonl",
+  "dev_path": "data/acos/laptop/dev.jsonl",
+  "test_path": "data/acos/laptop/test.jsonl"
+ },
+ "stats": {
+  "api_calls": 3337,
+  "calls": 3337,
+  "prompt_tokens": 923587,
+  "completion_tokens": 523361,
+  "lines": 33220,
+  "drop_infill_changed_visible": 2940,
+  "drop_length": 1276,
+  "drop_near_train": 437,
+  "drop_exact_duplicate": 1060,
+  "drop_near_dev_test": 5,
+  "drop_call_line_mismatch": 15
+ },
+ "texts": {
+  "n": 27500,
+  "words_mean": 14.2588,
+  "words_median": 13.0,
+  "words_p10": 6,
+  "words_p90": 22,
+  "emoji_share": 0.0,
+  "comma_share": 0.2854909090909091,
+  "commas_per_review": 0.36105454545454546,
+  "slang_share": 0.0
+ },
+ "train_texts": {
+  "n": 2934,
+  "words_mean": 15.781186094069529,
+  "words_median": 14.0,
+  "words_p10": 6,
+  "words_p90": 28,
+  "emoji_share": 0.0,
+  "comma_share": 0.35957736877982277,
+  "commas_per_review": 0.5429447852760736,
+  "slang_share": 0.0
+ }
+}

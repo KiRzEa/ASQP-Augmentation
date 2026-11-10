@@ -141,3 +141,20 @@ python3 src/aug/st_scorer.py pool --train_path data/restaurant_v1/train.jsonl --
 ```
 Reranking with the scorer at inference: `--rerank_scorer <scorer checkpoint>` (metrics `test_rerank`).
 Deviations from each paper: notes (local).
+
+## English ACOS (round ac)
+Data: `data/acos/raw/` = github.com/NUSTM/ACOS `data/` unchanged (`SOURCE.txt`); `scripts/prepare_acos.py` converts it
+1:1 to `data/acos/{rest,laptop}/{train,dev,test}.jsonl` (no cleaning; one empty span written as null).
+```bash
+# local, GPT (key in .env): pool by English infilling, then keep texts whose source is in train
+python3 src/aug/synth_reviews.py --lang en --domain restaurant --n 14300 --max_words 110 \
+  --train_path data/acos/rest/train.jsonl --dev_path data/acos/rest/dev.jsonl --test_path data/acos/rest/test.jsonl \
+  --out data/aug/acos_rest_infill.jsonl
+python3 src/aug/st_scorer.py pool --train_path data/acos/rest/train.jsonl --syn data/aug/acos_rest_infill.jsonl \
+  --real data/acos/rest/train.jsonl,data/acos/rest/dev.jsonl,data/acos/rest/test.jsonl --out data/aug/acos_rest_pool_train.jsonl
+# Kaggle: every training job of round ac adds
+#   --lang en --model_name google-t5/t5-base --train_path/--dev_path/--test_path data/acos/<d>/...
+```
+`--lang en` (train_paraphrase.py) writes English label words in the targets (category in lower case with # and _ as
+spaces, polarity positive/negative/neutral; label inventory = categories of the three splits, stored in run_config);
+`mvd.py label` reads the teacher's label words from its run_config. `--lang vi` (default) is byte-identical to before.
