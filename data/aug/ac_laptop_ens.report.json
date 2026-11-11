@@ -1,0 +1,21 @@
+{
+ "in": "data/aug/ac_ens/laptop_s42.jsonl,data/aug/ac_ens/laptop_s123.jsonl,data/aug/ac_ens/laptop_s2024.jsonl,data/aug/ac_ens/laptop_s7.jsonl,data/aug/ac_ens/laptop_s99.jsonl",
+ "vote_min": "majority",
+ "consensus": false,
+ "n_max": 100000,
+ "n_views": 5,
+ "n_out": 19004,
+ "quads_out": 26758,
+ "stats": {
+  "n": 21095,
+  "no grounded majority quad": 2091,
+  "kept": 19004
+ },
+ "implicit_types": {
+  "EA-EO": 18352,
+  "IA-IO": 473,
+  "EA-IO": 4244,
+  "IA-EO": 3689
+ },
+ "seed": 13
+}
