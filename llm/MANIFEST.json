@@ -1,0 +1,14 @@
+{
+ "data/restaurant_v1/train.jsonl": "70817da60c9cbacfdac338c3e226c8cbd9fa36e5cf6090ea939bcfd957aa2893",
+ "data/restaurant_v1/dev.jsonl": "92271d03c514a322133274b11ac55ec797c2b3baba85e117c7d41cdc0022ab60",
+ "data/restaurant_v1/test.jsonl": "af473471041942de23d7fd76ea46bf3bfac74841ca321121d87aba67a5d52c08",
+ "data/acos/rest/train.jsonl": "afa112c3ce6db4ece8aef50845c2d0e517f0f76879b2dbe7ceb66ed3312e0d7f",
+ "data/acos/rest/dev.jsonl": "531d89e1a65d1bab0d4f6e28f9fad5600aca796098317de47c0263a460a4661b",
+ "data/acos/rest/test.jsonl": "a4a763dcc8cf865018ebefb12d147523010f1135453dbe71e926a6b4c5b0ffa9",
+ "data/acos/laptop/train.jsonl": "32dbb77d96f516fce9b4b9b7dfb87bae151261ebfb25e951b67ff4e2b19c2771",
+ "data/acos/laptop/dev.jsonl": "30db781e85e3f838655ae1149dfa14d4cb57b4c43d595e8cc5ce4f659192b34c",
+ "data/acos/laptop/test.jsonl": "c8ddcf439b307969c26e1851331eda72db87c1317dd0c605c38c2abc87e0760b",
+ "data/aug/st_pool_train.jsonl": "eb08fb5005c7d78cd68c3294703fa416d0f0a1645aa175ac6fc89e748074b01f",
+ "data/aug/acos_rest_pool_train.jsonl": "75ee4752a6b2baf30147cb218b8839947c2f697f0ef95fd79625d3d376f63a9f",
+ "data/aug/acos_laptop_pool_train.jsonl": "6d0e432dceaa231f1430b415e1d6064a642663eecbba0c57722a28e24d58950b"
+}

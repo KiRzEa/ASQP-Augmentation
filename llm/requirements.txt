@@ -1,0 +1,8 @@
+# Installed offline from llm/wheels (see llm/setup.sh). torch is NOT installed here: the server's own torch with
+# CUDA is used (tested with torch 2.8.0+cu128). Exact versions: the code was tested with these.
+transformers==4.57.6
+peft==0.17.1
+accelerate==1.10.1
+tokenizers==0.22.2
+safetensors==0.7.0
+huggingface-hub==0.36.2

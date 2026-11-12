@@ -30,3 +30,8 @@ session_*.zip
 session_*.log
 experiments/README.md
 runs_inbox/*.zip
+
+# offline LLM package (llm/build_package.sh)
+llm/wheels/
+dist/
+.venv-asqp/
