@@ -1,0 +1,15 @@
+{
+ "method": "eda",
+ "seed": 13,
+ "n": 2934,
+ "quads": 4180,
+ "alpha": 0.1,
+ "p_sub": null,
+ "attempts": 3000,
+ "stats": {
+  "rs": 1002,
+  "rd": 965,
+  "failed": 66,
+  "ri": 967
+ }
+}

@@ -1,0 +1,13 @@
+{
+ "method": "concat",
+ "seed": 13,
+ "n": 2648,
+ "quads": 8655,
+ "alpha": null,
+ "p_sub": null,
+ "attempts": 2651,
+ "stats": {
+  "concat": 2648,
+  "failed": 3
+ }
+}

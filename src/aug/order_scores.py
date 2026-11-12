@@ -1,6 +1,8 @@
 """Score the 24 element orders of the target with the pre-trained (not fine-tuned) model, for order-based baselines.
 
     python src/aug/order_scores.py --train_path data/restaurant_v1/train.jsonl --out data/aug/order_scores_train.json
+    python src/aug/order_scores.py --lang en --model_name google-t5/t5-base --train_path data/acos/rest/train.jsonl \
+        --out data/aug/acos_rest_order_scores.json                      (English ACOS label words)
 
 For every training review and every permutation of (A, O, C, S), the target is written in that order with the
 element markers replaced by spaces (quads still joined by [SSEP]) and fed to the decoder with teacher forcing:
@@ -22,14 +24,14 @@ from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(ROOT / "src"))
-from asqp_common import CATEGORY_VI, POLARITY_VI, SEP, load_jsonl  # noqa: E402
+from asqp_common import CAT_WORDS, POL_WORDS, SEP, load_jsonl, set_label_words  # noqa: E402
 
 ORDERS = ["".join(p) for p in itertools.permutations("AOCS")]
 
 
 def plain_target(quads, order):
     """Target in the given order without element markers (as both papers score it)."""
-    v = lambda q: {"A": q["aspect"], "O": q["opinion"], "C": CATEGORY_VI[q["category"]], "S": POLARITY_VI[q["polarity"]]}
+    v = lambda q: {"A": q["aspect"], "O": q["opinion"], "C": CAT_WORDS[q["category"]], "S": POL_WORDS[q["polarity"]]}
     return SEP.join(" ".join(v(q)[e] for e in order) for q in quads)
 
 
@@ -41,11 +43,14 @@ def main():
     ap.add_argument("--model_name", default="VietAI/vit5-base")
     ap.add_argument("--batch_size", type=int, default=48)
     ap.add_argument("--limit", type=int, default=0)
+    ap.add_argument("--lang", choices=["vi", "en"], default="vi",
+                    help="label words of the target: vi (default) or en (English ACOS words, as train_paraphrase --lang en)")
     a = ap.parse_args()
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     tok = AutoTokenizer.from_pretrained(a.model_name)
     model = AutoModelForSeq2SeqLM.from_pretrained(a.model_name).to(device).eval()
     items = load_jsonl(a.train_path)[:a.limit or None]
+    set_label_words(a.lang, sorted({q["category"] for x in items for q in x["quads"]}))
     pairs = [(x, o) for x in items for o in ORDERS]
     ent, lp = [], []
     for i in range(0, len(pairs), a.batch_size):
@@ -66,7 +71,7 @@ def main():
     k = len(ORDERS)
     inst = {x["id"]: {"entropy": ent[j * k:(j + 1) * k], "logprob": lp[j * k:(j + 1) * k]} for j, x in enumerate(items)}
     mean = lambda key, o: sum(v[key][o] for v in inst.values()) / len(inst)
-    out = {"model": a.model_name, "train_path": a.train_path, "orders": ORDERS,
+    out = {"model": a.model_name, "train_path": a.train_path, "lang": a.lang, "orders": ORDERS,
            "dataset": {key: {o: mean(key, j) for j, o in enumerate(ORDERS)} for key in ("entropy", "logprob")},
            "instance": inst}
     Path(a.out).parent.mkdir(parents=True, exist_ok=True)

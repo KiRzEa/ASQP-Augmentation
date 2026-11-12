@@ -1,0 +1,19 @@
+{
+ "train_path": "data/acos/rest/train.jsonl",
+ "seed": 13,
+ "sets": {
+  "I": 182,
+  "E": 841,
+  "M": 507
+ },
+ "pairs_I_E": 182,
+ "pairs_with_M": 507,
+ "alone": {
+  "I": 0,
+  "E": 152,
+  "M": 0
+ },
+ "n_out": 841,
+ "quads_in": 2484,
+ "quads_out": 2484
+}

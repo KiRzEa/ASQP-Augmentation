@@ -1,6 +1,8 @@
 """Quad-to-text augmentation with a fine-tuned ViT5 generator (GenDA-style). Needs a GPU: run on Kaggle.
 
     python -u src/aug/genda.py --out data/aug/genda.jsonl
+    python -u src/aug/genda.py --lang en --model_name google-t5/t5-base --train_path data/acos/rest/train.jsonl \
+        --dev_path data/acos/rest/dev.jsonl --out data/aug/acos_rest_genda.jsonl        (English ACOS)
 
 1. Train ViT5-base to write a review from its quads (input = the marked-template target used by Paraphrase,
    output = the review text) on train; the epoch with the lowest dev loss is kept.
@@ -25,7 +27,7 @@ from transformers import AutoModelForSeq2SeqLM, AutoTokenizer, get_linear_schedu
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from asqp_common import load_jsonl, quads_to_target  # noqa: E402
+from asqp_common import load_jsonl, quads_to_target, set_label_words  # noqa: E402
 from quadra import relocate  # noqa: E402
 from quadsets import sample  # noqa: E402
 
@@ -50,12 +52,16 @@ def main():
     ap.add_argument("--cpu", action="store_true")
     ap.add_argument("--train_path", default=str(ROOT / "data/restaurant_v1/train.jsonl"))
     ap.add_argument("--dev_path", default=str(ROOT / "data/restaurant_v1/dev.jsonl"))
+    ap.add_argument("--lang", choices=["vi", "en"], default="vi",
+                    help="label words of the generator input: vi (default) or en (English ACOS words; use an English "
+                         "model, e.g. --model_name google-t5/t5-base)")
     a = ap.parse_args()
     random.seed(a.seed); np.random.seed(a.seed); torch.manual_seed(a.seed); torch.cuda.manual_seed_all(a.seed)
     device = torch.device("cpu" if a.cpu or not torch.cuda.is_available() else "cuda")
     print(f"device {device}" + (f" ({torch.cuda.get_device_name(device)})" if device.type == "cuda" else " — NO GPU"), flush=True)
     t0 = time.time()
     train, dev = load_jsonl(a.train_path), load_jsonl(a.dev_path)
+    set_label_words(a.lang, sorted({q["category"] for x in train + dev for q in x["quads"]}))
     n = a.n or len(train)
     if a.limit:
         train, dev, n = train[:a.limit], dev[:a.limit], min(n, a.limit)

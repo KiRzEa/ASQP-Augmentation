@@ -5,11 +5,11 @@
 # `sessions` và `est_hours` do `python3 scripts/kaggle_queue.py plan` tự ghi theo
 # experiments/run_plan.json; workflow chặn release nếu hai file lệch nhau.
 notebook: asqp-ci             # tách khỏi notebook `asqp` chạy tay: saveKernel thay source bằng launcher
-sessions: [3, 4]
+sessions: [1, 2, 3]
 accelerator: gpu
 internet: true                # clone repo, tải ViT5/T5 từ Hugging Face
 budget_hours: 10.5            # = budget_hours của plan; truyền vào lệnh run qua BUDGET_HOURS
-est_hours: 10.0
+est_hours: 10.45
 
 # run_kaggle.sh tự `pip install -r requirements.txt` và chặn host không có GPU.
 setup: ""

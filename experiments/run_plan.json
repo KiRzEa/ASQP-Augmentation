@@ -1,177 +1,1023 @@
 {
- "round": "ac",
+ "round": "al",
  "rounds": [
-  "ac"
+  "al"
  ],
  "budget_hours": 10.5,
  "gpus": 2,
  "min_per_example": 0.017012538837421508,
  "n_calibrated": 230,
- "created": "2026-11-11 09:54",
+ "created": "2026-11-13 00:10",
  "sessions": [
+  {
+   "session": 1,
+   "jobs": [
+    "al_laptop_mvp:s42",
+    "al_laptop_mvp:s123",
+    "al_laptop_mvp:s2024",
+    "al_laptop_mvp:s7",
+    "al_laptop_mvp:s99",
+    "al_laptop_order_scores",
+    "al_rest_mvp:s42",
+    "al_rest_mvp:s123",
+    "al_rest_mvp:s2024",
+    "al_rest_mvp:s7",
+    "al_rest_mvp:s99",
+    "al_rest_order_scores",
+    "al_laptop_genda:s42",
+    "al_laptop_genda:s123",
+    "al_laptop_genda:s2024",
+    "al_laptop_genda:s7",
+    "al_laptop_genda:s99",
+    "al_laptop_genda_gen",
+    "al_rest_eda:s42"
+   ],
+   "est_hours": 10.43
+  },
+  {
+   "session": 2,
+   "jobs": [
+    "al_rest_genda:s42",
+    "al_rest_genda:s123",
+    "al_rest_genda:s2024",
+    "al_rest_genda:s7",
+    "al_rest_genda:s99",
+    "al_rest_genda_gen",
+    "al_laptop_ada_joint:s42",
+    "al_laptop_ada_joint:s123",
+    "al_laptop_ada_joint:s2024",
+    "al_laptop_ada_joint:s7",
+    "al_laptop_ada_joint:s99",
+    "al_laptop_concat:s42",
+    "al_laptop_concat:s123",
+    "al_laptop_concat:s2024",
+    "al_laptop_concat:s7",
+    "al_laptop_concat:s99",
+    "al_rest_eda:s123",
+    "al_laptop_rc:s42"
+   ],
+   "est_hours": 10.45
+  },
   {
    "session": 3,
    "jobs": [
-    "ac_laptop_ens_pos:s42",
-    "ac_laptop_ens_pos:s123",
-    "ac_laptop_ens_pos:s2024",
-    "ac_laptop_ens_pos:s7"
+    "al_rest_ada_joint:s42",
+    "al_rest_ada_joint:s123",
+    "al_rest_ada_joint:s2024",
+    "al_rest_ada_joint:s7",
+    "al_rest_ada_joint:s99",
+    "al_rest_concat:s42",
+    "al_rest_concat:s123",
+    "al_rest_concat:s2024",
+    "al_rest_concat:s7",
+    "al_rest_concat:s99",
+    "al_laptop_eda:s42",
+    "al_laptop_eda:s123",
+    "al_laptop_eda:s2024",
+    "al_laptop_eda:s7",
+    "al_laptop_eda:s99",
+    "al_rest_eda:s2024",
+    "al_rest_eda:s7",
+    "al_rest_eda:s99",
+    "al_laptop_rc:s123",
+    "al_laptop_rc:s2024",
+    "al_laptop_rc:s7",
+    "al_laptop_rc:s99",
+    "al_rest_rc:s42",
+    "al_rest_rc:s123",
+    "al_rest_rc:s2024",
+    "al_rest_rc:s7",
+    "al_rest_rc:s99"
    ],
-   "est_hours": 9.33
-  },
-  {
-   "session": 4,
-   "jobs": [
-    "ac_laptop_ens_pos:s99",
-    "ac_rest_ens_pos:s42",
-    "ac_rest_ens_pos:s123",
-    "ac_rest_ens_pos:s2024",
-    "ac_rest_ens_pos:s7",
-    "ac_rest_ens_pos:s99"
-   ],
-   "est_hours": 10.0
+   "est_hours": 8.1
   }
  ],
  "jobs": {
-  "ac_rest_ens_pos:s42": {
-   "id": "ac_rest_ens_pos:s42",
-   "run": "ac_rest_ens_pos",
+  "al_rest_ada_joint:s42": {
+   "id": "al_rest_ada_joint:s42",
+   "run": "al_rest_ada_joint",
+   "seed": 42,
+   "aug": "data/aug/acos_rest_ada_joint.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_rest_ada_joint --seeds 42 --aug_path data/aug/acos_rest_ada_joint.jsonl --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/rest/train.jsonl --dev_path data/acos/rest/dev.jsonl --test_path data/acos/rest/test.jsonl --batch_size 8 --grad_accum 2",
+   "examples": null,
+   "est_min": 46,
+   "after": [],
+   "outputs": [
+    "outputs/al_rest_ada_joint/seed_42"
+   ],
+   "done": "outputs/al_rest_ada_joint/seed_42/test_predictions.jsonl"
+  },
+  "al_rest_ada_joint:s123": {
+   "id": "al_rest_ada_joint:s123",
+   "run": "al_rest_ada_joint",
+   "seed": 123,
+   "aug": "data/aug/acos_rest_ada_joint.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_rest_ada_joint --seeds 123 --aug_path data/aug/acos_rest_ada_joint.jsonl --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/rest/train.jsonl --dev_path data/acos/rest/dev.jsonl --test_path data/acos/rest/test.jsonl --batch_size 8 --grad_accum 2",
+   "examples": null,
+   "est_min": 46,
+   "after": [],
+   "outputs": [
+    "outputs/al_rest_ada_joint/seed_123"
+   ],
+   "done": "outputs/al_rest_ada_joint/seed_123/test_predictions.jsonl"
+  },
+  "al_rest_ada_joint:s2024": {
+   "id": "al_rest_ada_joint:s2024",
+   "run": "al_rest_ada_joint",
+   "seed": 2024,
+   "aug": "data/aug/acos_rest_ada_joint.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_rest_ada_joint --seeds 2024 --aug_path data/aug/acos_rest_ada_joint.jsonl --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/rest/train.jsonl --dev_path data/acos/rest/dev.jsonl --test_path data/acos/rest/test.jsonl --batch_size 8 --grad_accum 2",
+   "examples": null,
+   "est_min": 46,
+   "after": [],
+   "outputs": [
+    "outputs/al_rest_ada_joint/seed_2024"
+   ],
+   "done": "outputs/al_rest_ada_joint/seed_2024/test_predictions.jsonl"
+  },
+  "al_rest_ada_joint:s7": {
+   "id": "al_rest_ada_joint:s7",
+   "run": "al_rest_ada_joint",
+   "seed": 7,
+   "aug": "data/aug/acos_rest_ada_joint.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_rest_ada_joint --seeds 7 --aug_path data/aug/acos_rest_ada_joint.jsonl --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/rest/train.jsonl --dev_path data/acos/rest/dev.jsonl --test_path data/acos/rest/test.jsonl --batch_size 8 --grad_accum 2",
+   "examples": null,
+   "est_min": 46,
+   "after": [],
+   "outputs": [
+    "outputs/al_rest_ada_joint/seed_7"
+   ],
+   "done": "outputs/al_rest_ada_joint/seed_7/test_predictions.jsonl"
+  },
+  "al_rest_ada_joint:s99": {
+   "id": "al_rest_ada_joint:s99",
+   "run": "al_rest_ada_joint",
+   "seed": 99,
+   "aug": "data/aug/acos_rest_ada_joint.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_rest_ada_joint --seeds 99 --aug_path data/aug/acos_rest_ada_joint.jsonl --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/rest/train.jsonl --dev_path data/acos/rest/dev.jsonl --test_path data/acos/rest/test.jsonl --batch_size 8 --grad_accum 2",
+   "examples": null,
+   "est_min": 46,
+   "after": [],
+   "outputs": [
+    "outputs/al_rest_ada_joint/seed_99"
+   ],
+   "done": "outputs/al_rest_ada_joint/seed_99/test_predictions.jsonl"
+  },
+  "al_rest_concat:s42": {
+   "id": "al_rest_concat:s42",
+   "run": "al_rest_concat",
+   "seed": 42,
+   "aug": "data/aug/acos_rest_concat.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_rest_concat --seeds 42 --aug_path data/aug/acos_rest_concat.jsonl --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/rest/train.jsonl --dev_path data/acos/rest/dev.jsonl --test_path data/acos/rest/test.jsonl --batch_size 8 --grad_accum 2",
+   "examples": null,
+   "est_min": 46,
+   "after": [],
+   "outputs": [
+    "outputs/al_rest_concat/seed_42"
+   ],
+   "done": "outputs/al_rest_concat/seed_42/test_predictions.jsonl"
+  },
+  "al_rest_concat:s123": {
+   "id": "al_rest_concat:s123",
+   "run": "al_rest_concat",
+   "seed": 123,
+   "aug": "data/aug/acos_rest_concat.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_rest_concat --seeds 123 --aug_path data/aug/acos_rest_concat.jsonl --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/rest/train.jsonl --dev_path data/acos/rest/dev.jsonl --test_path data/acos/rest/test.jsonl --batch_size 8 --grad_accum 2",
+   "examples": null,
+   "est_min": 46,
+   "after": [],
+   "outputs": [
+    "outputs/al_rest_concat/seed_123"
+   ],
+   "done": "outputs/al_rest_concat/seed_123/test_predictions.jsonl"
+  },
+  "al_rest_concat:s2024": {
+   "id": "al_rest_concat:s2024",
+   "run": "al_rest_concat",
+   "seed": 2024,
+   "aug": "data/aug/acos_rest_concat.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_rest_concat --seeds 2024 --aug_path data/aug/acos_rest_concat.jsonl --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/rest/train.jsonl --dev_path data/acos/rest/dev.jsonl --test_path data/acos/rest/test.jsonl --batch_size 8 --grad_accum 2",
+   "examples": null,
+   "est_min": 46,
+   "after": [],
+   "outputs": [
+    "outputs/al_rest_concat/seed_2024"
+   ],
+   "done": "outputs/al_rest_concat/seed_2024/test_predictions.jsonl"
+  },
+  "al_rest_concat:s7": {
+   "id": "al_rest_concat:s7",
+   "run": "al_rest_concat",
+   "seed": 7,
+   "aug": "data/aug/acos_rest_concat.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_rest_concat --seeds 7 --aug_path data/aug/acos_rest_concat.jsonl --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/rest/train.jsonl --dev_path data/acos/rest/dev.jsonl --test_path data/acos/rest/test.jsonl --batch_size 8 --grad_accum 2",
+   "examples": null,
+   "est_min": 46,
+   "after": [],
+   "outputs": [
+    "outputs/al_rest_concat/seed_7"
+   ],
+   "done": "outputs/al_rest_concat/seed_7/test_predictions.jsonl"
+  },
+  "al_rest_concat:s99": {
+   "id": "al_rest_concat:s99",
+   "run": "al_rest_concat",
+   "seed": 99,
+   "aug": "data/aug/acos_rest_concat.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_rest_concat --seeds 99 --aug_path data/aug/acos_rest_concat.jsonl --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/rest/train.jsonl --dev_path data/acos/rest/dev.jsonl --test_path data/acos/rest/test.jsonl --batch_size 8 --grad_accum 2",
+   "examples": null,
+   "est_min": 46,
+   "after": [],
+   "outputs": [
+    "outputs/al_rest_concat/seed_99"
+   ],
+   "done": "outputs/al_rest_concat/seed_99/test_predictions.jsonl"
+  },
+  "al_rest_eda:s42": {
+   "id": "al_rest_eda:s42",
+   "run": "al_rest_eda",
+   "seed": 42,
+   "aug": "data/aug/acos_rest_eda.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_rest_eda --seeds 42 --aug_path data/aug/acos_rest_eda.jsonl --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/rest/train.jsonl --dev_path data/acos/rest/dev.jsonl --test_path data/acos/rest/test.jsonl",
+   "examples": null,
+   "est_min": 29,
+   "after": [],
+   "outputs": [
+    "outputs/al_rest_eda/seed_42"
+   ],
+   "done": "outputs/al_rest_eda/seed_42/test_predictions.jsonl"
+  },
+  "al_rest_eda:s123": {
+   "id": "al_rest_eda:s123",
+   "run": "al_rest_eda",
+   "seed": 123,
+   "aug": "data/aug/acos_rest_eda.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_rest_eda --seeds 123 --aug_path data/aug/acos_rest_eda.jsonl --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/rest/train.jsonl --dev_path data/acos/rest/dev.jsonl --test_path data/acos/rest/test.jsonl",
+   "examples": null,
+   "est_min": 29,
+   "after": [],
+   "outputs": [
+    "outputs/al_rest_eda/seed_123"
+   ],
+   "done": "outputs/al_rest_eda/seed_123/test_predictions.jsonl"
+  },
+  "al_rest_eda:s2024": {
+   "id": "al_rest_eda:s2024",
+   "run": "al_rest_eda",
+   "seed": 2024,
+   "aug": "data/aug/acos_rest_eda.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_rest_eda --seeds 2024 --aug_path data/aug/acos_rest_eda.jsonl --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/rest/train.jsonl --dev_path data/acos/rest/dev.jsonl --test_path data/acos/rest/test.jsonl",
+   "examples": null,
+   "est_min": 29,
+   "after": [],
+   "outputs": [
+    "outputs/al_rest_eda/seed_2024"
+   ],
+   "done": "outputs/al_rest_eda/seed_2024/test_predictions.jsonl"
+  },
+  "al_rest_eda:s7": {
+   "id": "al_rest_eda:s7",
+   "run": "al_rest_eda",
+   "seed": 7,
+   "aug": "data/aug/acos_rest_eda.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_rest_eda --seeds 7 --aug_path data/aug/acos_rest_eda.jsonl --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/rest/train.jsonl --dev_path data/acos/rest/dev.jsonl --test_path data/acos/rest/test.jsonl",
+   "examples": null,
+   "est_min": 29,
+   "after": [],
+   "outputs": [
+    "outputs/al_rest_eda/seed_7"
+   ],
+   "done": "outputs/al_rest_eda/seed_7/test_predictions.jsonl"
+  },
+  "al_rest_eda:s99": {
+   "id": "al_rest_eda:s99",
+   "run": "al_rest_eda",
+   "seed": 99,
+   "aug": "data/aug/acos_rest_eda.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_rest_eda --seeds 99 --aug_path data/aug/acos_rest_eda.jsonl --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/rest/train.jsonl --dev_path data/acos/rest/dev.jsonl --test_path data/acos/rest/test.jsonl",
+   "examples": null,
+   "est_min": 29,
+   "after": [],
+   "outputs": [
+    "outputs/al_rest_eda/seed_99"
+   ],
+   "done": "outputs/al_rest_eda/seed_99/test_predictions.jsonl"
+  },
+  "al_rest_rc:s42": {
+   "id": "al_rest_rc:s42",
+   "run": "al_rest_rc",
    "seed": 42,
    "aug": null,
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/ac_rest_ens_pos --seeds 42 --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/rest/train.jsonl --dev_path data/acos/rest/dev.jsonl --test_path data/acos/rest/test.jsonl --tuple_order text --aug_path data/aug/ac_rest_ens.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_rest_rc --seeds 42 --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/aug/acos_rest_rc_train.jsonl --dev_path data/acos/rest/dev.jsonl --test_path data/acos/rest/test.jsonl",
    "examples": null,
-   "est_min": 160,
+   "est_min": 20,
    "after": [],
    "outputs": [
-    "outputs/ac_rest_ens_pos/seed_42"
+    "outputs/al_rest_rc/seed_42"
    ],
-   "done": "outputs/ac_rest_ens_pos/seed_42/test_predictions.jsonl"
+   "done": "outputs/al_rest_rc/seed_42/test_predictions.jsonl"
   },
-  "ac_rest_ens_pos:s123": {
-   "id": "ac_rest_ens_pos:s123",
-   "run": "ac_rest_ens_pos",
+  "al_rest_rc:s123": {
+   "id": "al_rest_rc:s123",
+   "run": "al_rest_rc",
    "seed": 123,
    "aug": null,
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/ac_rest_ens_pos --seeds 123 --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/rest/train.jsonl --dev_path data/acos/rest/dev.jsonl --test_path data/acos/rest/test.jsonl --tuple_order text --aug_path data/aug/ac_rest_ens.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_rest_rc --seeds 123 --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/aug/acos_rest_rc_train.jsonl --dev_path data/acos/rest/dev.jsonl --test_path data/acos/rest/test.jsonl",
    "examples": null,
-   "est_min": 160,
+   "est_min": 20,
    "after": [],
    "outputs": [
-    "outputs/ac_rest_ens_pos/seed_123"
+    "outputs/al_rest_rc/seed_123"
    ],
-   "done": "outputs/ac_rest_ens_pos/seed_123/test_predictions.jsonl"
+   "done": "outputs/al_rest_rc/seed_123/test_predictions.jsonl"
   },
-  "ac_rest_ens_pos:s2024": {
-   "id": "ac_rest_ens_pos:s2024",
-   "run": "ac_rest_ens_pos",
+  "al_rest_rc:s2024": {
+   "id": "al_rest_rc:s2024",
+   "run": "al_rest_rc",
    "seed": 2024,
    "aug": null,
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/ac_rest_ens_pos --seeds 2024 --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/rest/train.jsonl --dev_path data/acos/rest/dev.jsonl --test_path data/acos/rest/test.jsonl --tuple_order text --aug_path data/aug/ac_rest_ens.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_rest_rc --seeds 2024 --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/aug/acos_rest_rc_train.jsonl --dev_path data/acos/rest/dev.jsonl --test_path data/acos/rest/test.jsonl",
    "examples": null,
-   "est_min": 160,
+   "est_min": 20,
    "after": [],
    "outputs": [
-    "outputs/ac_rest_ens_pos/seed_2024"
+    "outputs/al_rest_rc/seed_2024"
    ],
-   "done": "outputs/ac_rest_ens_pos/seed_2024/test_predictions.jsonl"
+   "done": "outputs/al_rest_rc/seed_2024/test_predictions.jsonl"
   },
-  "ac_rest_ens_pos:s7": {
-   "id": "ac_rest_ens_pos:s7",
-   "run": "ac_rest_ens_pos",
+  "al_rest_rc:s7": {
+   "id": "al_rest_rc:s7",
+   "run": "al_rest_rc",
    "seed": 7,
    "aug": null,
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/ac_rest_ens_pos --seeds 7 --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/rest/train.jsonl --dev_path data/acos/rest/dev.jsonl --test_path data/acos/rest/test.jsonl --tuple_order text --aug_path data/aug/ac_rest_ens.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_rest_rc --seeds 7 --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/aug/acos_rest_rc_train.jsonl --dev_path data/acos/rest/dev.jsonl --test_path data/acos/rest/test.jsonl",
    "examples": null,
-   "est_min": 160,
+   "est_min": 20,
    "after": [],
    "outputs": [
-    "outputs/ac_rest_ens_pos/seed_7"
+    "outputs/al_rest_rc/seed_7"
    ],
-   "done": "outputs/ac_rest_ens_pos/seed_7/test_predictions.jsonl"
+   "done": "outputs/al_rest_rc/seed_7/test_predictions.jsonl"
   },
-  "ac_rest_ens_pos:s99": {
-   "id": "ac_rest_ens_pos:s99",
-   "run": "ac_rest_ens_pos",
+  "al_rest_rc:s99": {
+   "id": "al_rest_rc:s99",
+   "run": "al_rest_rc",
    "seed": 99,
    "aug": null,
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/ac_rest_ens_pos --seeds 99 --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/rest/train.jsonl --dev_path data/acos/rest/dev.jsonl --test_path data/acos/rest/test.jsonl --tuple_order text --aug_path data/aug/ac_rest_ens.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_rest_rc --seeds 99 --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/aug/acos_rest_rc_train.jsonl --dev_path data/acos/rest/dev.jsonl --test_path data/acos/rest/test.jsonl",
    "examples": null,
-   "est_min": 160,
+   "est_min": 20,
    "after": [],
    "outputs": [
-    "outputs/ac_rest_ens_pos/seed_99"
+    "outputs/al_rest_rc/seed_99"
    ],
-   "done": "outputs/ac_rest_ens_pos/seed_99/test_predictions.jsonl"
+   "done": "outputs/al_rest_rc/seed_99/test_predictions.jsonl"
   },
-  "ac_laptop_ens_pos:s42": {
-   "id": "ac_laptop_ens_pos:s42",
-   "run": "ac_laptop_ens_pos",
+  "al_rest_genda_gen": {
+   "id": "al_rest_genda_gen",
+   "command": "python -u src/aug/genda.py --lang en --model_name google-t5/t5-base --train_path data/acos/rest/train.jsonl --dev_path data/acos/rest/dev.jsonl --out data/aug/acos_rest_genda.jsonl",
+   "est_min": 20,
+   "outputs": [
+    "data/aug/acos_rest_genda.jsonl",
+    "data/aug/acos_rest_genda.report.json"
+   ],
+   "done": "data/aug/acos_rest_genda.jsonl",
+   "examples": null,
+   "after": []
+  },
+  "al_rest_genda:s42": {
+   "id": "al_rest_genda:s42",
+   "run": "al_rest_genda",
+   "seed": 42,
+   "aug": "data/aug/acos_rest_genda.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_rest_genda --seeds 42 --aug_path data/aug/acos_rest_genda.jsonl --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/rest/train.jsonl --dev_path data/acos/rest/dev.jsonl --test_path data/acos/rest/test.jsonl",
+   "examples": null,
+   "est_min": 29,
+   "after": [
+    "al_rest_genda_gen"
+   ],
+   "outputs": [
+    "outputs/al_rest_genda/seed_42"
+   ],
+   "done": "outputs/al_rest_genda/seed_42/test_predictions.jsonl"
+  },
+  "al_rest_genda:s123": {
+   "id": "al_rest_genda:s123",
+   "run": "al_rest_genda",
+   "seed": 123,
+   "aug": "data/aug/acos_rest_genda.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_rest_genda --seeds 123 --aug_path data/aug/acos_rest_genda.jsonl --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/rest/train.jsonl --dev_path data/acos/rest/dev.jsonl --test_path data/acos/rest/test.jsonl",
+   "examples": null,
+   "est_min": 29,
+   "after": [
+    "al_rest_genda_gen"
+   ],
+   "outputs": [
+    "outputs/al_rest_genda/seed_123"
+   ],
+   "done": "outputs/al_rest_genda/seed_123/test_predictions.jsonl"
+  },
+  "al_rest_genda:s2024": {
+   "id": "al_rest_genda:s2024",
+   "run": "al_rest_genda",
+   "seed": 2024,
+   "aug": "data/aug/acos_rest_genda.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_rest_genda --seeds 2024 --aug_path data/aug/acos_rest_genda.jsonl --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/rest/train.jsonl --dev_path data/acos/rest/dev.jsonl --test_path data/acos/rest/test.jsonl",
+   "examples": null,
+   "est_min": 29,
+   "after": [
+    "al_rest_genda_gen"
+   ],
+   "outputs": [
+    "outputs/al_rest_genda/seed_2024"
+   ],
+   "done": "outputs/al_rest_genda/seed_2024/test_predictions.jsonl"
+  },
+  "al_rest_genda:s7": {
+   "id": "al_rest_genda:s7",
+   "run": "al_rest_genda",
+   "seed": 7,
+   "aug": "data/aug/acos_rest_genda.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_rest_genda --seeds 7 --aug_path data/aug/acos_rest_genda.jsonl --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/rest/train.jsonl --dev_path data/acos/rest/dev.jsonl --test_path data/acos/rest/test.jsonl",
+   "examples": null,
+   "est_min": 29,
+   "after": [
+    "al_rest_genda_gen"
+   ],
+   "outputs": [
+    "outputs/al_rest_genda/seed_7"
+   ],
+   "done": "outputs/al_rest_genda/seed_7/test_predictions.jsonl"
+  },
+  "al_rest_genda:s99": {
+   "id": "al_rest_genda:s99",
+   "run": "al_rest_genda",
+   "seed": 99,
+   "aug": "data/aug/acos_rest_genda.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_rest_genda --seeds 99 --aug_path data/aug/acos_rest_genda.jsonl --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/rest/train.jsonl --dev_path data/acos/rest/dev.jsonl --test_path data/acos/rest/test.jsonl",
+   "examples": null,
+   "est_min": 29,
+   "after": [
+    "al_rest_genda_gen"
+   ],
+   "outputs": [
+    "outputs/al_rest_genda/seed_99"
+   ],
+   "done": "outputs/al_rest_genda/seed_99/test_predictions.jsonl"
+  },
+  "al_rest_order_scores": {
+   "id": "al_rest_order_scores",
+   "command": "python -u src/aug/order_scores.py --lang en --model_name google-t5/t5-base --train_path data/acos/rest/train.jsonl --out data/aug/acos_rest_order_scores.json",
+   "est_min": 5,
+   "outputs": [
+    "data/aug/acos_rest_order_scores.json"
+   ],
+   "done": "data/aug/acos_rest_order_scores.json",
+   "examples": null,
+   "after": []
+  },
+  "al_rest_mvp:s42": {
+   "id": "al_rest_mvp:s42",
+   "run": "al_rest_mvp",
    "seed": 42,
    "aug": null,
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/ac_laptop_ens_pos --seeds 42 --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/laptop/train.jsonl --dev_path data/acos/laptop/dev.jsonl --test_path data/acos/laptop/test.jsonl --tuple_order text --aug_path data/aug/ac_laptop_ens.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_rest_mvp --seeds 42 --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/rest/train.jsonl --dev_path data/acos/rest/dev.jsonl --test_path data/acos/rest/test.jsonl --order_mode mvp --order_scores data/aug/acos_rest_order_scores.json --top_k 5",
    "examples": null,
-   "est_min": 280,
-   "after": [],
-   "outputs": [
-    "outputs/ac_laptop_ens_pos/seed_42"
+   "est_min": 70,
+   "after": [
+    "al_rest_order_scores"
    ],
-   "done": "outputs/ac_laptop_ens_pos/seed_42/test_predictions.jsonl"
+   "outputs": [
+    "outputs/al_rest_mvp/seed_42"
+   ],
+   "done": "outputs/al_rest_mvp/seed_42/test_predictions.jsonl"
   },
-  "ac_laptop_ens_pos:s123": {
-   "id": "ac_laptop_ens_pos:s123",
-   "run": "ac_laptop_ens_pos",
+  "al_rest_mvp:s123": {
+   "id": "al_rest_mvp:s123",
+   "run": "al_rest_mvp",
    "seed": 123,
    "aug": null,
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/ac_laptop_ens_pos --seeds 123 --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/laptop/train.jsonl --dev_path data/acos/laptop/dev.jsonl --test_path data/acos/laptop/test.jsonl --tuple_order text --aug_path data/aug/ac_laptop_ens.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_rest_mvp --seeds 123 --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/rest/train.jsonl --dev_path data/acos/rest/dev.jsonl --test_path data/acos/rest/test.jsonl --order_mode mvp --order_scores data/aug/acos_rest_order_scores.json --top_k 5",
    "examples": null,
-   "est_min": 280,
-   "after": [],
-   "outputs": [
-    "outputs/ac_laptop_ens_pos/seed_123"
+   "est_min": 70,
+   "after": [
+    "al_rest_order_scores"
    ],
-   "done": "outputs/ac_laptop_ens_pos/seed_123/test_predictions.jsonl"
+   "outputs": [
+    "outputs/al_rest_mvp/seed_123"
+   ],
+   "done": "outputs/al_rest_mvp/seed_123/test_predictions.jsonl"
   },
-  "ac_laptop_ens_pos:s2024": {
-   "id": "ac_laptop_ens_pos:s2024",
-   "run": "ac_laptop_ens_pos",
+  "al_rest_mvp:s2024": {
+   "id": "al_rest_mvp:s2024",
+   "run": "al_rest_mvp",
    "seed": 2024,
    "aug": null,
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/ac_laptop_ens_pos --seeds 2024 --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/laptop/train.jsonl --dev_path data/acos/laptop/dev.jsonl --test_path data/acos/laptop/test.jsonl --tuple_order text --aug_path data/aug/ac_laptop_ens.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_rest_mvp --seeds 2024 --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/rest/train.jsonl --dev_path data/acos/rest/dev.jsonl --test_path data/acos/rest/test.jsonl --order_mode mvp --order_scores data/aug/acos_rest_order_scores.json --top_k 5",
    "examples": null,
-   "est_min": 280,
-   "after": [],
-   "outputs": [
-    "outputs/ac_laptop_ens_pos/seed_2024"
+   "est_min": 70,
+   "after": [
+    "al_rest_order_scores"
    ],
-   "done": "outputs/ac_laptop_ens_pos/seed_2024/test_predictions.jsonl"
+   "outputs": [
+    "outputs/al_rest_mvp/seed_2024"
+   ],
+   "done": "outputs/al_rest_mvp/seed_2024/test_predictions.jsonl"
   },
-  "ac_laptop_ens_pos:s7": {
-   "id": "ac_laptop_ens_pos:s7",
-   "run": "ac_laptop_ens_pos",
+  "al_rest_mvp:s7": {
+   "id": "al_rest_mvp:s7",
+   "run": "al_rest_mvp",
    "seed": 7,
    "aug": null,
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/ac_laptop_ens_pos --seeds 7 --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/laptop/train.jsonl --dev_path data/acos/laptop/dev.jsonl --test_path data/acos/laptop/test.jsonl --tuple_order text --aug_path data/aug/ac_laptop_ens.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_rest_mvp --seeds 7 --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/rest/train.jsonl --dev_path data/acos/rest/dev.jsonl --test_path data/acos/rest/test.jsonl --order_mode mvp --order_scores data/aug/acos_rest_order_scores.json --top_k 5",
    "examples": null,
-   "est_min": 280,
-   "after": [],
-   "outputs": [
-    "outputs/ac_laptop_ens_pos/seed_7"
+   "est_min": 70,
+   "after": [
+    "al_rest_order_scores"
    ],
-   "done": "outputs/ac_laptop_ens_pos/seed_7/test_predictions.jsonl"
+   "outputs": [
+    "outputs/al_rest_mvp/seed_7"
+   ],
+   "done": "outputs/al_rest_mvp/seed_7/test_predictions.jsonl"
   },
-  "ac_laptop_ens_pos:s99": {
-   "id": "ac_laptop_ens_pos:s99",
-   "run": "ac_laptop_ens_pos",
+  "al_rest_mvp:s99": {
+   "id": "al_rest_mvp:s99",
+   "run": "al_rest_mvp",
    "seed": 99,
    "aug": null,
-   "command": "python -u src/train_paraphrase.py --output_dir outputs/ac_laptop_ens_pos --seeds 99 --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/laptop/train.jsonl --dev_path data/acos/laptop/dev.jsonl --test_path data/acos/laptop/test.jsonl --tuple_order text --aug_path data/aug/ac_laptop_ens.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_rest_mvp --seeds 99 --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/rest/train.jsonl --dev_path data/acos/rest/dev.jsonl --test_path data/acos/rest/test.jsonl --order_mode mvp --order_scores data/aug/acos_rest_order_scores.json --top_k 5",
    "examples": null,
-   "est_min": 280,
+   "est_min": 70,
+   "after": [
+    "al_rest_order_scores"
+   ],
+   "outputs": [
+    "outputs/al_rest_mvp/seed_99"
+   ],
+   "done": "outputs/al_rest_mvp/seed_99/test_predictions.jsonl"
+  },
+  "al_laptop_ada_joint:s42": {
+   "id": "al_laptop_ada_joint:s42",
+   "run": "al_laptop_ada_joint",
+   "seed": 42,
+   "aug": "data/aug/acos_laptop_ada_joint.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_laptop_ada_joint --seeds 42 --aug_path data/aug/acos_laptop_ada_joint.jsonl --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/laptop/train.jsonl --dev_path data/acos/laptop/dev.jsonl --test_path data/acos/laptop/test.jsonl --batch_size 8 --grad_accum 2",
+   "examples": null,
+   "est_min": 103,
    "after": [],
    "outputs": [
-    "outputs/ac_laptop_ens_pos/seed_99"
+    "outputs/al_laptop_ada_joint/seed_42"
    ],
-   "done": "outputs/ac_laptop_ens_pos/seed_99/test_predictions.jsonl"
+   "done": "outputs/al_laptop_ada_joint/seed_42/test_predictions.jsonl"
+  },
+  "al_laptop_ada_joint:s123": {
+   "id": "al_laptop_ada_joint:s123",
+   "run": "al_laptop_ada_joint",
+   "seed": 123,
+   "aug": "data/aug/acos_laptop_ada_joint.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_laptop_ada_joint --seeds 123 --aug_path data/aug/acos_laptop_ada_joint.jsonl --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/laptop/train.jsonl --dev_path data/acos/laptop/dev.jsonl --test_path data/acos/laptop/test.jsonl --batch_size 8 --grad_accum 2",
+   "examples": null,
+   "est_min": 103,
+   "after": [],
+   "outputs": [
+    "outputs/al_laptop_ada_joint/seed_123"
+   ],
+   "done": "outputs/al_laptop_ada_joint/seed_123/test_predictions.jsonl"
+  },
+  "al_laptop_ada_joint:s2024": {
+   "id": "al_laptop_ada_joint:s2024",
+   "run": "al_laptop_ada_joint",
+   "seed": 2024,
+   "aug": "data/aug/acos_laptop_ada_joint.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_laptop_ada_joint --seeds 2024 --aug_path data/aug/acos_laptop_ada_joint.jsonl --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/laptop/train.jsonl --dev_path data/acos/laptop/dev.jsonl --test_path data/acos/laptop/test.jsonl --batch_size 8 --grad_accum 2",
+   "examples": null,
+   "est_min": 103,
+   "after": [],
+   "outputs": [
+    "outputs/al_laptop_ada_joint/seed_2024"
+   ],
+   "done": "outputs/al_laptop_ada_joint/seed_2024/test_predictions.jsonl"
+  },
+  "al_laptop_ada_joint:s7": {
+   "id": "al_laptop_ada_joint:s7",
+   "run": "al_laptop_ada_joint",
+   "seed": 7,
+   "aug": "data/aug/acos_laptop_ada_joint.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_laptop_ada_joint --seeds 7 --aug_path data/aug/acos_laptop_ada_joint.jsonl --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/laptop/train.jsonl --dev_path data/acos/laptop/dev.jsonl --test_path data/acos/laptop/test.jsonl --batch_size 8 --grad_accum 2",
+   "examples": null,
+   "est_min": 103,
+   "after": [],
+   "outputs": [
+    "outputs/al_laptop_ada_joint/seed_7"
+   ],
+   "done": "outputs/al_laptop_ada_joint/seed_7/test_predictions.jsonl"
+  },
+  "al_laptop_ada_joint:s99": {
+   "id": "al_laptop_ada_joint:s99",
+   "run": "al_laptop_ada_joint",
+   "seed": 99,
+   "aug": "data/aug/acos_laptop_ada_joint.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_laptop_ada_joint --seeds 99 --aug_path data/aug/acos_laptop_ada_joint.jsonl --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/laptop/train.jsonl --dev_path data/acos/laptop/dev.jsonl --test_path data/acos/laptop/test.jsonl --batch_size 8 --grad_accum 2",
+   "examples": null,
+   "est_min": 103,
+   "after": [],
+   "outputs": [
+    "outputs/al_laptop_ada_joint/seed_99"
+   ],
+   "done": "outputs/al_laptop_ada_joint/seed_99/test_predictions.jsonl"
+  },
+  "al_laptop_concat:s42": {
+   "id": "al_laptop_concat:s42",
+   "run": "al_laptop_concat",
+   "seed": 42,
+   "aug": "data/aug/acos_laptop_concat.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_laptop_concat --seeds 42 --aug_path data/aug/acos_laptop_concat.jsonl --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/laptop/train.jsonl --dev_path data/acos/laptop/dev.jsonl --test_path data/acos/laptop/test.jsonl --batch_size 8 --grad_accum 2",
+   "examples": null,
+   "est_min": 103,
+   "after": [],
+   "outputs": [
+    "outputs/al_laptop_concat/seed_42"
+   ],
+   "done": "outputs/al_laptop_concat/seed_42/test_predictions.jsonl"
+  },
+  "al_laptop_concat:s123": {
+   "id": "al_laptop_concat:s123",
+   "run": "al_laptop_concat",
+   "seed": 123,
+   "aug": "data/aug/acos_laptop_concat.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_laptop_concat --seeds 123 --aug_path data/aug/acos_laptop_concat.jsonl --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/laptop/train.jsonl --dev_path data/acos/laptop/dev.jsonl --test_path data/acos/laptop/test.jsonl --batch_size 8 --grad_accum 2",
+   "examples": null,
+   "est_min": 103,
+   "after": [],
+   "outputs": [
+    "outputs/al_laptop_concat/seed_123"
+   ],
+   "done": "outputs/al_laptop_concat/seed_123/test_predictions.jsonl"
+  },
+  "al_laptop_concat:s2024": {
+   "id": "al_laptop_concat:s2024",
+   "run": "al_laptop_concat",
+   "seed": 2024,
+   "aug": "data/aug/acos_laptop_concat.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_laptop_concat --seeds 2024 --aug_path data/aug/acos_laptop_concat.jsonl --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/laptop/train.jsonl --dev_path data/acos/laptop/dev.jsonl --test_path data/acos/laptop/test.jsonl --batch_size 8 --grad_accum 2",
+   "examples": null,
+   "est_min": 103,
+   "after": [],
+   "outputs": [
+    "outputs/al_laptop_concat/seed_2024"
+   ],
+   "done": "outputs/al_laptop_concat/seed_2024/test_predictions.jsonl"
+  },
+  "al_laptop_concat:s7": {
+   "id": "al_laptop_concat:s7",
+   "run": "al_laptop_concat",
+   "seed": 7,
+   "aug": "data/aug/acos_laptop_concat.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_laptop_concat --seeds 7 --aug_path data/aug/acos_laptop_concat.jsonl --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/laptop/train.jsonl --dev_path data/acos/laptop/dev.jsonl --test_path data/acos/laptop/test.jsonl --batch_size 8 --grad_accum 2",
+   "examples": null,
+   "est_min": 103,
+   "after": [],
+   "outputs": [
+    "outputs/al_laptop_concat/seed_7"
+   ],
+   "done": "outputs/al_laptop_concat/seed_7/test_predictions.jsonl"
+  },
+  "al_laptop_concat:s99": {
+   "id": "al_laptop_concat:s99",
+   "run": "al_laptop_concat",
+   "seed": 99,
+   "aug": "data/aug/acos_laptop_concat.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_laptop_concat --seeds 99 --aug_path data/aug/acos_laptop_concat.jsonl --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/laptop/train.jsonl --dev_path data/acos/laptop/dev.jsonl --test_path data/acos/laptop/test.jsonl --batch_size 8 --grad_accum 2",
+   "examples": null,
+   "est_min": 103,
+   "after": [],
+   "outputs": [
+    "outputs/al_laptop_concat/seed_99"
+   ],
+   "done": "outputs/al_laptop_concat/seed_99/test_predictions.jsonl"
+  },
+  "al_laptop_eda:s42": {
+   "id": "al_laptop_eda:s42",
+   "run": "al_laptop_eda",
+   "seed": 42,
+   "aug": "data/aug/acos_laptop_eda.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_laptop_eda --seeds 42 --aug_path data/aug/acos_laptop_eda.jsonl --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/laptop/train.jsonl --dev_path data/acos/laptop/dev.jsonl --test_path data/acos/laptop/test.jsonl",
+   "examples": null,
+   "est_min": 44,
+   "after": [],
+   "outputs": [
+    "outputs/al_laptop_eda/seed_42"
+   ],
+   "done": "outputs/al_laptop_eda/seed_42/test_predictions.jsonl"
+  },
+  "al_laptop_eda:s123": {
+   "id": "al_laptop_eda:s123",
+   "run": "al_laptop_eda",
+   "seed": 123,
+   "aug": "data/aug/acos_laptop_eda.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_laptop_eda --seeds 123 --aug_path data/aug/acos_laptop_eda.jsonl --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/laptop/train.jsonl --dev_path data/acos/laptop/dev.jsonl --test_path data/acos/laptop/test.jsonl",
+   "examples": null,
+   "est_min": 44,
+   "after": [],
+   "outputs": [
+    "outputs/al_laptop_eda/seed_123"
+   ],
+   "done": "outputs/al_laptop_eda/seed_123/test_predictions.jsonl"
+  },
+  "al_laptop_eda:s2024": {
+   "id": "al_laptop_eda:s2024",
+   "run": "al_laptop_eda",
+   "seed": 2024,
+   "aug": "data/aug/acos_laptop_eda.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_laptop_eda --seeds 2024 --aug_path data/aug/acos_laptop_eda.jsonl --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/laptop/train.jsonl --dev_path data/acos/laptop/dev.jsonl --test_path data/acos/laptop/test.jsonl",
+   "examples": null,
+   "est_min": 44,
+   "after": [],
+   "outputs": [
+    "outputs/al_laptop_eda/seed_2024"
+   ],
+   "done": "outputs/al_laptop_eda/seed_2024/test_predictions.jsonl"
+  },
+  "al_laptop_eda:s7": {
+   "id": "al_laptop_eda:s7",
+   "run": "al_laptop_eda",
+   "seed": 7,
+   "aug": "data/aug/acos_laptop_eda.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_laptop_eda --seeds 7 --aug_path data/aug/acos_laptop_eda.jsonl --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/laptop/train.jsonl --dev_path data/acos/laptop/dev.jsonl --test_path data/acos/laptop/test.jsonl",
+   "examples": null,
+   "est_min": 44,
+   "after": [],
+   "outputs": [
+    "outputs/al_laptop_eda/seed_7"
+   ],
+   "done": "outputs/al_laptop_eda/seed_7/test_predictions.jsonl"
+  },
+  "al_laptop_eda:s99": {
+   "id": "al_laptop_eda:s99",
+   "run": "al_laptop_eda",
+   "seed": 99,
+   "aug": "data/aug/acos_laptop_eda.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_laptop_eda --seeds 99 --aug_path data/aug/acos_laptop_eda.jsonl --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/laptop/train.jsonl --dev_path data/acos/laptop/dev.jsonl --test_path data/acos/laptop/test.jsonl",
+   "examples": null,
+   "est_min": 44,
+   "after": [],
+   "outputs": [
+    "outputs/al_laptop_eda/seed_99"
+   ],
+   "done": "outputs/al_laptop_eda/seed_99/test_predictions.jsonl"
+  },
+  "al_laptop_rc:s42": {
+   "id": "al_laptop_rc:s42",
+   "run": "al_laptop_rc",
+   "seed": 42,
+   "aug": null,
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_laptop_rc --seeds 42 --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/aug/acos_laptop_rc_train.jsonl --dev_path data/acos/laptop/dev.jsonl --test_path data/acos/laptop/test.jsonl",
+   "examples": null,
+   "est_min": 25,
+   "after": [],
+   "outputs": [
+    "outputs/al_laptop_rc/seed_42"
+   ],
+   "done": "outputs/al_laptop_rc/seed_42/test_predictions.jsonl"
+  },
+  "al_laptop_rc:s123": {
+   "id": "al_laptop_rc:s123",
+   "run": "al_laptop_rc",
+   "seed": 123,
+   "aug": null,
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_laptop_rc --seeds 123 --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/aug/acos_laptop_rc_train.jsonl --dev_path data/acos/laptop/dev.jsonl --test_path data/acos/laptop/test.jsonl",
+   "examples": null,
+   "est_min": 25,
+   "after": [],
+   "outputs": [
+    "outputs/al_laptop_rc/seed_123"
+   ],
+   "done": "outputs/al_laptop_rc/seed_123/test_predictions.jsonl"
+  },
+  "al_laptop_rc:s2024": {
+   "id": "al_laptop_rc:s2024",
+   "run": "al_laptop_rc",
+   "seed": 2024,
+   "aug": null,
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_laptop_rc --seeds 2024 --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/aug/acos_laptop_rc_train.jsonl --dev_path data/acos/laptop/dev.jsonl --test_path data/acos/laptop/test.jsonl",
+   "examples": null,
+   "est_min": 25,
+   "after": [],
+   "outputs": [
+    "outputs/al_laptop_rc/seed_2024"
+   ],
+   "done": "outputs/al_laptop_rc/seed_2024/test_predictions.jsonl"
+  },
+  "al_laptop_rc:s7": {
+   "id": "al_laptop_rc:s7",
+   "run": "al_laptop_rc",
+   "seed": 7,
+   "aug": null,
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_laptop_rc --seeds 7 --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/aug/acos_laptop_rc_train.jsonl --dev_path data/acos/laptop/dev.jsonl --test_path data/acos/laptop/test.jsonl",
+   "examples": null,
+   "est_min": 25,
+   "after": [],
+   "outputs": [
+    "outputs/al_laptop_rc/seed_7"
+   ],
+   "done": "outputs/al_laptop_rc/seed_7/test_predictions.jsonl"
+  },
+  "al_laptop_rc:s99": {
+   "id": "al_laptop_rc:s99",
+   "run": "al_laptop_rc",
+   "seed": 99,
+   "aug": null,
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_laptop_rc --seeds 99 --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/aug/acos_laptop_rc_train.jsonl --dev_path data/acos/laptop/dev.jsonl --test_path data/acos/laptop/test.jsonl",
+   "examples": null,
+   "est_min": 25,
+   "after": [],
+   "outputs": [
+    "outputs/al_laptop_rc/seed_99"
+   ],
+   "done": "outputs/al_laptop_rc/seed_99/test_predictions.jsonl"
+  },
+  "al_laptop_genda_gen": {
+   "id": "al_laptop_genda_gen",
+   "command": "python -u src/aug/genda.py --lang en --model_name google-t5/t5-base --train_path data/acos/laptop/train.jsonl --dev_path data/acos/laptop/dev.jsonl --out data/aug/acos_laptop_genda.jsonl",
+   "est_min": 35,
+   "outputs": [
+    "data/aug/acos_laptop_genda.jsonl",
+    "data/aug/acos_laptop_genda.report.json"
+   ],
+   "done": "data/aug/acos_laptop_genda.jsonl",
+   "examples": null,
+   "after": []
+  },
+  "al_laptop_genda:s42": {
+   "id": "al_laptop_genda:s42",
+   "run": "al_laptop_genda",
+   "seed": 42,
+   "aug": "data/aug/acos_laptop_genda.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_laptop_genda --seeds 42 --aug_path data/aug/acos_laptop_genda.jsonl --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/laptop/train.jsonl --dev_path data/acos/laptop/dev.jsonl --test_path data/acos/laptop/test.jsonl",
+   "examples": null,
+   "est_min": 44,
+   "after": [
+    "al_laptop_genda_gen"
+   ],
+   "outputs": [
+    "outputs/al_laptop_genda/seed_42"
+   ],
+   "done": "outputs/al_laptop_genda/seed_42/test_predictions.jsonl"
+  },
+  "al_laptop_genda:s123": {
+   "id": "al_laptop_genda:s123",
+   "run": "al_laptop_genda",
+   "seed": 123,
+   "aug": "data/aug/acos_laptop_genda.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_laptop_genda --seeds 123 --aug_path data/aug/acos_laptop_genda.jsonl --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/laptop/train.jsonl --dev_path data/acos/laptop/dev.jsonl --test_path data/acos/laptop/test.jsonl",
+   "examples": null,
+   "est_min": 44,
+   "after": [
+    "al_laptop_genda_gen"
+   ],
+   "outputs": [
+    "outputs/al_laptop_genda/seed_123"
+   ],
+   "done": "outputs/al_laptop_genda/seed_123/test_predictions.jsonl"
+  },
+  "al_laptop_genda:s2024": {
+   "id": "al_laptop_genda:s2024",
+   "run": "al_laptop_genda",
+   "seed": 2024,
+   "aug": "data/aug/acos_laptop_genda.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_laptop_genda --seeds 2024 --aug_path data/aug/acos_laptop_genda.jsonl --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/laptop/train.jsonl --dev_path data/acos/laptop/dev.jsonl --test_path data/acos/laptop/test.jsonl",
+   "examples": null,
+   "est_min": 44,
+   "after": [
+    "al_laptop_genda_gen"
+   ],
+   "outputs": [
+    "outputs/al_laptop_genda/seed_2024"
+   ],
+   "done": "outputs/al_laptop_genda/seed_2024/test_predictions.jsonl"
+  },
+  "al_laptop_genda:s7": {
+   "id": "al_laptop_genda:s7",
+   "run": "al_laptop_genda",
+   "seed": 7,
+   "aug": "data/aug/acos_laptop_genda.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_laptop_genda --seeds 7 --aug_path data/aug/acos_laptop_genda.jsonl --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/laptop/train.jsonl --dev_path data/acos/laptop/dev.jsonl --test_path data/acos/laptop/test.jsonl",
+   "examples": null,
+   "est_min": 44,
+   "after": [
+    "al_laptop_genda_gen"
+   ],
+   "outputs": [
+    "outputs/al_laptop_genda/seed_7"
+   ],
+   "done": "outputs/al_laptop_genda/seed_7/test_predictions.jsonl"
+  },
+  "al_laptop_genda:s99": {
+   "id": "al_laptop_genda:s99",
+   "run": "al_laptop_genda",
+   "seed": 99,
+   "aug": "data/aug/acos_laptop_genda.jsonl",
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_laptop_genda --seeds 99 --aug_path data/aug/acos_laptop_genda.jsonl --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/laptop/train.jsonl --dev_path data/acos/laptop/dev.jsonl --test_path data/acos/laptop/test.jsonl",
+   "examples": null,
+   "est_min": 44,
+   "after": [
+    "al_laptop_genda_gen"
+   ],
+   "outputs": [
+    "outputs/al_laptop_genda/seed_99"
+   ],
+   "done": "outputs/al_laptop_genda/seed_99/test_predictions.jsonl"
+  },
+  "al_laptop_order_scores": {
+   "id": "al_laptop_order_scores",
+   "command": "python -u src/aug/order_scores.py --lang en --model_name google-t5/t5-base --train_path data/acos/laptop/train.jsonl --out data/aug/acos_laptop_order_scores.json",
+   "est_min": 8,
+   "outputs": [
+    "data/aug/acos_laptop_order_scores.json"
+   ],
+   "done": "data/aug/acos_laptop_order_scores.json",
+   "examples": null,
+   "after": []
+  },
+  "al_laptop_mvp:s42": {
+   "id": "al_laptop_mvp:s42",
+   "run": "al_laptop_mvp",
+   "seed": 42,
+   "aug": null,
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_laptop_mvp --seeds 42 --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/laptop/train.jsonl --dev_path data/acos/laptop/dev.jsonl --test_path data/acos/laptop/test.jsonl --order_mode mvp --order_scores data/aug/acos_laptop_order_scores.json --top_k 5",
+   "examples": null,
+   "est_min": 121,
+   "after": [
+    "al_laptop_order_scores"
+   ],
+   "outputs": [
+    "outputs/al_laptop_mvp/seed_42"
+   ],
+   "done": "outputs/al_laptop_mvp/seed_42/test_predictions.jsonl"
+  },
+  "al_laptop_mvp:s123": {
+   "id": "al_laptop_mvp:s123",
+   "run": "al_laptop_mvp",
+   "seed": 123,
+   "aug": null,
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_laptop_mvp --seeds 123 --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/laptop/train.jsonl --dev_path data/acos/laptop/dev.jsonl --test_path data/acos/laptop/test.jsonl --order_mode mvp --order_scores data/aug/acos_laptop_order_scores.json --top_k 5",
+   "examples": null,
+   "est_min": 121,
+   "after": [
+    "al_laptop_order_scores"
+   ],
+   "outputs": [
+    "outputs/al_laptop_mvp/seed_123"
+   ],
+   "done": "outputs/al_laptop_mvp/seed_123/test_predictions.jsonl"
+  },
+  "al_laptop_mvp:s2024": {
+   "id": "al_laptop_mvp:s2024",
+   "run": "al_laptop_mvp",
+   "seed": 2024,
+   "aug": null,
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_laptop_mvp --seeds 2024 --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/laptop/train.jsonl --dev_path data/acos/laptop/dev.jsonl --test_path data/acos/laptop/test.jsonl --order_mode mvp --order_scores data/aug/acos_laptop_order_scores.json --top_k 5",
+   "examples": null,
+   "est_min": 121,
+   "after": [
+    "al_laptop_order_scores"
+   ],
+   "outputs": [
+    "outputs/al_laptop_mvp/seed_2024"
+   ],
+   "done": "outputs/al_laptop_mvp/seed_2024/test_predictions.jsonl"
+  },
+  "al_laptop_mvp:s7": {
+   "id": "al_laptop_mvp:s7",
+   "run": "al_laptop_mvp",
+   "seed": 7,
+   "aug": null,
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_laptop_mvp --seeds 7 --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/laptop/train.jsonl --dev_path data/acos/laptop/dev.jsonl --test_path data/acos/laptop/test.jsonl --order_mode mvp --order_scores data/aug/acos_laptop_order_scores.json --top_k 5",
+   "examples": null,
+   "est_min": 121,
+   "after": [
+    "al_laptop_order_scores"
+   ],
+   "outputs": [
+    "outputs/al_laptop_mvp/seed_7"
+   ],
+   "done": "outputs/al_laptop_mvp/seed_7/test_predictions.jsonl"
+  },
+  "al_laptop_mvp:s99": {
+   "id": "al_laptop_mvp:s99",
+   "run": "al_laptop_mvp",
+   "seed": 99,
+   "aug": null,
+   "command": "python -u src/train_paraphrase.py --output_dir outputs/al_laptop_mvp --seeds 99 --lang en --model_name google-t5/t5-base --lr 1e-4 --train_path data/acos/laptop/train.jsonl --dev_path data/acos/laptop/dev.jsonl --test_path data/acos/laptop/test.jsonl --order_mode mvp --order_scores data/aug/acos_laptop_order_scores.json --top_k 5",
+   "examples": null,
+   "est_min": 121,
+   "after": [
+    "al_laptop_order_scores"
+   ],
+   "outputs": [
+    "outputs/al_laptop_mvp/seed_99"
+   ],
+   "done": "outputs/al_laptop_mvp/seed_99/test_predictions.jsonl"
   }
  }
 }
