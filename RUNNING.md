@@ -54,7 +54,7 @@ python3 scripts/kaggle_queue.py plan --round r4              # -> experiments/ru
 git add experiments && git commit -m "Plan r4" && git push
 
 # Kaggle (GPU T4 x2, Internet on, Save & Run All), session N of the plan
-git clone https://github.com/KiRzEa/ASQP-Augmentation.git && cd ASQP-Augmentation
+git clone https://github.com/Heavenly-Secrets-Sect/ASQP-Augmentation.git && cd ASQP-Augmentation
 bash scripts/run_kaggle.sh 1                                 # -> results_r4_s1.zip, re-packed after every job
 
 # local, after downloading the zip(s) into runs_inbox/
@@ -65,6 +65,29 @@ On Kaggle each GPU runs one job at a time (longest first); a job that no longer 
 stays in the plan for the next session (re-plan after ingesting). Per job: log in `outputs/_logs/`, measured
 minutes in `outputs/_job_times/<round>_s<N>.tsv` (used by `plan` for the next estimates).
 Legacy: `scripts/kaggle_session.sh` (r1, r2) — kept for the `prep` and `quadra_data` jobs.
+
+### From a GitHub release (CI, bot message-talisman)
+Instead of starting sessions by hand, publish a release: `.github/workflows/kaggle-run.yml` sends the round to the
+Worker of `message-talisman`, which pushes each session of `kaggle-run.yml` as a version of the Kaggle notebook
+`asqp-ci` (separate from the hand-run notebook `asqp`) on a member account with GPU quota, starts waiting
+sessions when an account frees up, and posts every finished session and a round summary (with a download
+button) in the Discord channel `luyện-đan-phòng`.
+```bash
+python3 scripts/kaggle_queue.py plan --round <id>            # also writes sessions/est_hours into kaggle-run.yml
+git add experiments kaggle-run.yml && git commit -m "Plan <id>" && git push
+# GitHub -> Releases -> new release, tag <id> (re-send: <id>.<k>; infrastructure test: ci-smoke-<n>), Publish
+# local, after the round summary: download the zips into runs_inbox/, then ingest as above
+```
+- The workflow refuses a release whose `kaggle-run.yml` sessions differ from `experiments/run_plan.json`, whose
+  round is already `done` in `rounds.json`, or whose tag (other than `ci-smoke-*`) does not name the plan's round.
+- Pre-release = dry run (shows which account would run each session; nothing starts). Un-ticking pre-release and
+  saving does NOT trigger a run (GitHub sends `released`, the workflow listens to `published`): delete and
+  re-create the release, or run the workflow by hand without `dry_run`.
+- In CI the session zip goes to `$CI_OUTPUT_DIR` (`/kaggle/working`, the only zip there) after every job, and a
+  session with a failed or deferred job exits 1 (Kaggle `ERROR`, the bot reports ❌). No automatic retry: re-plan.
+- Rounds that need `OPENAI_API_KEY` cannot run through CI (the launcher passes no Kaggle secrets): run them by hand.
+- Needs the repo to be public and in the organisation `Heavenly-Secrets-Sect` (Worker `CI_ALLOWED_REPOS`), the
+  secret `CI_RUN_SECRET` and the variable `KAGGLE_BOT_URL` (no trailing `/`) at repo or organisation level.
 
 OpenAI key: each round in `rounds.json` states `openai_key` (also shown by `list`; `run` stops early if a round
 needs a key that is not set). Only rounds that generate data with GPT need it; training rounds do not.

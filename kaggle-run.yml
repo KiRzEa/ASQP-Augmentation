@@ -1,0 +1,20 @@
+# Khai báo chạy thực nghiệm trên Kaggle cho bot message-talisman.
+# Publish một release trên GitHub thì mỗi session dưới đây thành một version của notebook,
+# chạy trên account Kaggle còn quota (2 x T4).
+#
+# `sessions` và `est_hours` do `python3 scripts/kaggle_queue.py plan` tự ghi theo
+# experiments/run_plan.json; workflow chặn release nếu hai file lệch nhau.
+notebook: asqp-ci             # tách khỏi notebook `asqp` chạy tay: saveKernel thay source bằng launcher
+sessions: [3, 4]
+accelerator: gpu
+internet: true                # clone repo, tải ViT5/T5 từ Hugging Face
+budget_hours: 10.5            # = budget_hours của plan; truyền vào lệnh run qua BUDGET_HOURS
+est_hours: 10.0
+
+# run_kaggle.sh tự `pip install -r requirements.txt` và chặn host không có GPU.
+setup: ""
+
+# Repo được clone vào /kaggle/temp; zip kết quả ghi vào $CI_OUTPUT_DIR (/kaggle/working) sau mỗi job,
+# nên /kaggle/working chỉ có đúng một zip và session bị cắt vẫn giữ mọi job đã xong.
+# Round cần OPENAI_API_KEY không chạy được qua CI (launcher không truyền secret của Kaggle).
+run: BUDGET=${BUDGET_HOURS} bash scripts/run_kaggle.sh {session}

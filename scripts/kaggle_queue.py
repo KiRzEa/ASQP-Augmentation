@@ -42,6 +42,7 @@ ROUNDS = ROOT / "experiments/rounds.json"
 PLAN = ROOT / "experiments/run_plan.json"
 TIMES = ROOT / "outputs/_job_times"
 INBOX = ROOT / "runs_inbox"
+MANIFEST = ROOT / "kaggle-run.yml"  # CI manifest (Kaggle bot message-talisman); `plan` keeps its sessions in sync
 DEFAULT_MIN_PER_EXAMPLE = 0.019  # measured in r1/r2 on one T4: ~42 min for 2,135 examples
 
 
@@ -201,6 +202,7 @@ def cmd_plan(a):
                          for i, s in enumerate(sessions)],
             "jobs": jobs}
     PLAN.write_text(json.dumps(plan, indent=1, ensure_ascii=False))
+    sync_manifest(plan)
     print(f"{a.round}: {len(jobs)} jobs in {len(sessions)} session(s) of <= {a.budget_hours} h on {a.gpus} GPUs "
           f"({mpe:.4f} min/example, {n} measured jobs)")
     for s in plan["sessions"]:
@@ -208,9 +210,26 @@ def cmd_plan(a):
     print(f"wrote {PLAN.relative_to(ROOT)}; commit and push it before running on Kaggle")
 
 
+def sync_manifest(plan):
+    """Write the plan's session numbers and longest session estimate into kaggle-run.yml (the CI workflow refuses
+    a release whose manifest and plan disagree)."""
+    if not MANIFEST.exists():
+        return
+    text = MANIFEST.read_text()
+    nums = ", ".join(str(s["session"]) for s in plan["sessions"])
+    est = max((s["est_hours"] for s in plan["sessions"]), default=0)
+    text = re.sub(r"(?m)^sessions:.*$", f"sessions: [{nums}]", text)
+    text = re.sub(r"(?m)^est_hours:.*$", f"est_hours: {est}", text)
+    MANIFEST.write_text(text)
+    print(f"updated {MANIFEST.name}: sessions [{nums}], est_hours {est}")
+
+
 def pack(tag, files, lock):
+    """Zip the session's files; in CI (CI_OUTPUT_DIR set by the Kaggle launcher) the zip goes there, so
+    /kaggle/working holds exactly one zip; by hand it goes to the repo root as before."""
     with lock:
-        zpath = ROOT / f"results_{tag}.zip"
+        out = Path(os.environ["CI_OUTPUT_DIR"]) if os.environ.get("CI_OUTPUT_DIR") else ROOT
+        zpath = out / f"results_{tag}.zip"
         tmp = zpath.with_suffix(".zip.tmp")
         with zipfile.ZipFile(tmp, "w", zipfile.ZIP_DEFLATED) as z:
             for rel in sorted(set(files)):
@@ -340,6 +359,11 @@ def cmd_run(a):
     (sess_dir / "session.json").write_text(json.dumps(info, indent=1))
     pack(tag, files, lock)
     print(f"session {tag} done after {info['minutes']} min; download results_{tag}.zip into runs_inbox/", flush=True)
+    bad = sorted(j for j, st in state.items() if st != "ok")
+    print(f"CI_SUMMARY session {tag}: {sum(st == 'ok' for st in state.values())}/{len(sess['jobs'])} jobs ok"
+          + (f"; not ok: {', '.join(f'{j} ({state[j]})' for j in bad)}" if bad else ""), flush=True)
+    if bad and os.environ.get("CI_OUTPUT_DIR"):  # in CI a failed or deferred job marks the session ERROR on Kaggle
+        sys.exit(1)
 
 
 def cmd_ingest(a):
