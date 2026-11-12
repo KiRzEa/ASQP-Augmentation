@@ -49,7 +49,15 @@ jobs:
           done
           tag="${RELEASE_TAG:-}"
           case "$tag" in
-            ""|ci-smoke-*) echo "tag '$tag': bỏ qua kiểm tra round";;
+            "") echo "chạy tay: bỏ qua kiểm tra tag";;
+            ci-smoke-*)
+              # kaggle-run.yml luôn trỏ vào plan thật của round, nên một release ci-smoke thật sẽ chạy cả round
+              # dưới nhãn sai. Thử hạ tầng ở repo này chỉ bằng diễn tập.
+              [ "$dry" = "true" ] || {
+                echo "::error::tag '$tag' chỉ được dùng để diễn tập (pre-release, hoặc: gh workflow run kaggle-run.yml -f dry_run=true). Release thật sẽ chạy toàn bộ plan '$round'; muốn chạy round thì đặt tag '$round'."
+                exit 1
+              }
+              echo "tag '$tag': diễn tập hạ tầng";;
             *) base=${tag%%.*}
                [ "$base" = "$round" ] || {
                  echo "::error::release gắn tag '$tag' nhưng plan đang ở round '$round'. Đặt tag '$round' (hoặc '$round.<k>' khi gửi lại)."
