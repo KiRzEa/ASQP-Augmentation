@@ -1,0 +1,90 @@
+{
+ "n": 2934,
+ "quad_sets_tried": 3120,
+ "yield": 0.9403846153846154,
+ "quads": 3803,
+ "args": {
+  "out": "data/aug/acos_laptop_genda.jsonl",
+  "n": 0,
+  "model_name": "google-t5/t5-base",
+  "epochs": 10,
+  "batch_size": 16,
+  "lr": 0.0003,
+  "seed": 42,
+  "set_seed": 13,
+  "top_p": 0.9,
+  "num_return": 4,
+  "gen_batch": 32,
+  "max_len": 128,
+  "limit": 0,
+  "cpu": false,
+  "train_path": "data/acos/laptop/train.jsonl",
+  "dev_path": "data/acos/laptop/dev.jsonl",
+  "lang": "en"
+ },
+ "best_epoch": 2,
+ "best_dev_loss": 2.1312418200752954,
+ "history": [
+  {
+   "epoch": 1,
+   "train_loss": 2.487082977009856,
+   "dev_loss": 2.1478004563938486
+  },
+  {
+   "epoch": 2,
+   "train_loss": 2.0846804192532664,
+   "dev_loss": 2.1312418200752954
+  },
+  {
+   "epoch": 3,
+   "train_loss": 1.8324310377888058,
+   "dev_loss": 2.144657698544589
+  },
+  {
+   "epoch": 4,
+   "train_loss": 1.623930834557699,
+   "dev_loss": 2.1919618628241797
+  },
+  {
+   "epoch": 5,
+   "train_loss": 1.464777250652728,
+   "dev_loss": 2.2677051695910366
+  },
+  {
+   "epoch": 6,
+   "train_loss": 1.3187799683731536,
+   "dev_loss": 2.3403440822254526
+  },
+  {
+   "epoch": 7,
+   "train_loss": 1.2114154051827348,
+   "dev_loss": 2.406589150428772
+  },
+  {
+   "epoch": 8,
+   "train_loss": 1.123746873891872,
+   "dev_loss": 2.464800639586015
+  },
+  {
+   "epoch": 9,
+   "train_loss": 1.0516255873700846,
+   "dev_loss": 2.524290680885315
+  },
+  {
+   "epoch": 10,
+   "train_loss": 1.002500401566858,
+   "dev_loss": 2.562835704196583
+  }
+ ],
+ "data_sha256": {
+  "data/acos/laptop/train.jsonl": "32dbb77d96f516fce9b4b9b7dfb87bae151261ebfb25e951b67ff4e2b19c2771",
+  "data/acos/laptop/dev.jsonl": "30db781e85e3f838655ae1149dfa14d4cb57b4c43d595e8cc5ce4f659192b34c"
+ },
+ "gpu": "Tesla T4",
+ "versions": {
+  "python": "3.13.16",
+  "torch": "2.11.0+cu130",
+  "transformers": "4.57.6"
+ },
+ "minutes": 20.692035337289173
+}

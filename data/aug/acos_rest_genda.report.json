@@ -1,0 +1,90 @@
+{
+ "n": 1530,
+ "quad_sets_tried": 1635,
+ "yield": 0.9357798165137615,
+ "quads": 2273,
+ "args": {
+  "out": "data/aug/acos_rest_genda.jsonl",
+  "n": 0,
+  "model_name": "google-t5/t5-base",
+  "epochs": 10,
+  "batch_size": 16,
+  "lr": 0.0003,
+  "seed": 42,
+  "set_seed": 13,
+  "top_p": 0.9,
+  "num_return": 4,
+  "gen_batch": 32,
+  "max_len": 128,
+  "limit": 0,
+  "cpu": false,
+  "train_path": "data/acos/rest/train.jsonl",
+  "dev_path": "data/acos/rest/dev.jsonl",
+  "lang": "en"
+ },
+ "best_epoch": 2,
+ "best_dev_loss": 1.894573410352071,
+ "history": [
+  {
+   "epoch": 1,
+   "train_loss": 2.34372886021932,
+   "dev_loss": 1.9274320602416992
+  },
+  {
+   "epoch": 2,
+   "train_loss": 1.8826863206923008,
+   "dev_loss": 1.894573410352071
+  },
+  {
+   "epoch": 3,
+   "train_loss": 1.6218709374467533,
+   "dev_loss": 1.9059675534566243
+  },
+  {
+   "epoch": 4,
+   "train_loss": 1.4096304345875978,
+   "dev_loss": 2.0002302130063376
+  },
+  {
+   "epoch": 5,
+   "train_loss": 1.2374489971747,
+   "dev_loss": 2.055122137069702
+  },
+  {
+   "epoch": 6,
+   "train_loss": 1.0912104683617752,
+   "dev_loss": 2.123120427131653
+  },
+  {
+   "epoch": 7,
+   "train_loss": 0.9719836314519247,
+   "dev_loss": 2.1973474621772766
+  },
+  {
+   "epoch": 8,
+   "train_loss": 0.8918782044202089,
+   "dev_loss": 2.2603571017583213
+  },
+  {
+   "epoch": 9,
+   "train_loss": 0.8357716376582781,
+   "dev_loss": 2.3009374737739563
+  },
+  {
+   "epoch": 10,
+   "train_loss": 0.796276188765963,
+   "dev_loss": 2.322125812371572
+  }
+ ],
+ "data_sha256": {
+  "data/acos/rest/train.jsonl": "afa112c3ce6db4ece8aef50845c2d0e517f0f76879b2dbe7ceb66ed3312e0d7f",
+  "data/acos/rest/dev.jsonl": "531d89e1a65d1bab0d4f6e28f9fad5600aca796098317de47c0263a460a4661b"
+ },
+ "gpu": "Tesla T4",
+ "versions": {
+  "python": "3.13.16",
+  "torch": "2.11.0+cu130",
+  "transformers": "4.57.6"
+ },
+ "minutes": 10.669365207354227
+}
